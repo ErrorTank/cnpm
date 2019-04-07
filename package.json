@@ -15,6 +15,50 @@
   "bugs": {
     "url": "https://github.com/ErrorTank/cnpm/issues"
   },
-  "homepage": "https://github.com/ErrorTank/cnpm#readme"
+  "homepage": "https://github.com/ErrorTank/cnpm#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/plugin-transform-destructuring": "^7.4.3",
+    "@babel/plugin-transform-runtime": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-es2015": "^7.0.0-beta.53",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.5",
+    "css-loader": "^0.28.11",
+    "gulp": "^3.9.1",
+    "gulp-inject": "^4.3.2",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-sort": "^2.0.0",
+    "gulp-stylus": "^2.7.0",
+    "install": "^0.12.2",
+    "npm": "^6.9.0",
+    "style-loader": "^0.21.0",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
+    "webpack": "^4.24.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-merge": "^4.1.4"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.4.3",
+    "apollo-server-express": "^2.4.8",
+    "classnames": "^2.2.6",
+    "dotenv": "^6.2.0",
+    "express": "^4.15.2",
+    "graphql": "^14.2.1",
+    "history": "^4.7.2",
+    "jsonwebtoken": "^8.4.0",
+    "lodash": "^4.17.10",
+    "moment": "^2.22.1",
+    "mongoose": "^5.1.2",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-router-dom": "^4.2.2",
+    "react-transition-group": "^2.3.1",
+    "react-uid": "^2.2.0",
+    "uniquid": "^1.1.4",
+    "yup": "^0.26.10"
+  }
 }
-

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "env-cmd ./dev.env gulp dev",
     "wp": "webpack --watch",
-    "start": "nodemon server/server.js --exec babel-node --ignore react",
+    "start": "nodemon server/server.js --ext js,graphql --exec babel-node --ignore react",
     "test": "nodemon test.js",
     "generateDb": "node ./server/scripts/db-generator.js"
   },
@@ -53,6 +53,7 @@
     "env-cmd": "^8.0.2",
     "express": "^4.15.2",
     "graphql": "^14.2.1",
+    "graphql-import": "^0.7.1",
     "graphql-tools": "^4.0.4",
     "history": "^4.7.2",
     "jsonwebtoken": "^8.4.0",

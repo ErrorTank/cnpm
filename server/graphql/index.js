@@ -1,24 +1,27 @@
-const merge = require('lodash/merge');
-
+const { importSchema } = require('graphql-import');
 const { ApolloServer } = require('apollo-server-express');
-import { makeExecutableSchema } from 'graphql-tools';
-
+const { makeExecutableSchema } = require( 'graphql-tools');
+const {resolvers} = require("./resolvers");
+const typeDefs = importSchema('./server/graphql/schema/index.graphql');
 
 
 
 const initializeApolloServer = (app) => {
   const schema = makeExecutableSchema({
-    typeDefs: [],
-    resolvers: merge()
+    typeDefs,
+    resolvers
   });
-
+  console.log(process.env.NODE_ENV)
   const server = new ApolloServer({
     schema,
-    playground: {
-      endpoint: "/kappa"
-    }
+    playground: process.env.NODE_ENV === "development" ? {
+      endpoint: "/server/kappa",
+      settings: {
+        'editor.theme': 'dark'
+      }
+    } : false
   });
-  server.applyMiddleware({ app })
+  server.applyMiddleware({ app , path: "/server"})
 };
 
 module.exports = initializeApolloServer;

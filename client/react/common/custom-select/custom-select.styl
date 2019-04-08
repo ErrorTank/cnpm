@@ -1,0 +1,87 @@
+.k-custom-select {
+  width 100%
+  .bs-placeholder{
+    span{
+      max-width 100%
+      text-overflow ellipsis
+      overflow hidden
+      display inline-block
+    }
+  }
+  .dropdown-menu{
+    width 100%
+    ul{
+      transform none !important
+      top 0
+      li{
+        font-size 14px
+        padding 10px
+        cursor pointer
+        &:not(.active):hover{
+          background-color darken(white, 5%)
+        }
+        &.active{
+          background-color primary
+          color white
+          i{
+            color white
+          }
+          a{
+            background-color transparent
+          }
+        }
+        position relative
+        .item{
+          i{
+            position absolute
+            right 5px
+            top: 50%
+            transform translateY(-50%)
+            display none
+          }
+          &.active{
+            i{
+              display inline-block
+            }
+          }
+        }
+      }
+    }
+
+  }
+  label{
+    font-size 14px
+  }
+  .dropdown-toggle{
+    border none
+    width 100%
+    font-size 15px
+    text-align left
+    position relative
+    i{
+      font-size 16px
+      position absolute
+      right 6px
+      top 50%
+      transform translateY(-50%)
+    }
+    height auto !important
+    &:after{
+      content ""
+      display none
+    }
+  }
+  div.dropdown-menu {
+    max-height: 788.938px;
+
+    position: absolute;
+    will-change: transform;
+    top: 100%;
+    left: 0px;
+    .inner-dropdown{
+      overflow-y: auto;
+      max-height 100px
+    }
+
+  }
+}

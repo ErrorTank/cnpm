@@ -1,0 +1,38 @@
+.pagination {
+  .link {
+    font-size 13px;
+    cursor pointer;
+    background-color #ebe9f2
+    height 30px
+    padding 6.5px
+    text-align center
+    width 30px
+    color #898b96
+    border-radius 50%
+    margin-right 6px
+    no-select()
+
+    &:hover {
+      color white;
+      background-color #716aca
+    }
+    &.isDisabled{
+      opacity 0.3
+      pointer-events none
+    }
+  }
+
+  .link.page {
+    &.active {
+      color: white;
+      background-color #716aca
+    }
+  }
+  .editable-link{
+    border none
+    outline none
+    width 48px
+    border-radius 30px
+  }
+
+}

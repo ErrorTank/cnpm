@@ -7,7 +7,7 @@ export class FormTabs extends React.Component {
   };
 
   render() {
-    const {tabs = [], activeTab, onChangeTab, renderActions} = this.props;
+    const {tabs = [], activeTab, onChangeTab, renderActions = () => null} = this.props;
     return (
       <div className="m-portlet m-portlet--tabs form-tabs">
         <div className="m-portlet__head">

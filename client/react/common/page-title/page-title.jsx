@@ -6,7 +6,7 @@ export class PageTitle extends React.Component {
 
     let title = props.title;
     if (document.title != title) {
-      document.title = title + " | Hệ thống quản lý kỳ thi Olympic";
+      document.title = "Taka | " + title;
     }
   }
 

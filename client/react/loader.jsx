@@ -1,5 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {MainRoute} from "./routes/routes";
+import {authenLoader} from "../sercurity/authen-loader";
 
-ReactDOM.render(<MainRoute/>, document.getElementById("app"));
+authenLoader.init().then(() => {
+  ReactDOM.render(<MainRoute/>, document.getElementById("app"));
+});

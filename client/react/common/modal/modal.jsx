@@ -27,7 +27,7 @@ export class Modal extends React.Component {
            ref={(elem) => this.overlayElem = elem}
       >
         <div
-          className="modal-dialog modal-dialog-centered"
+          className="modal-overlay"
 
         >
           <div className="modal-content">

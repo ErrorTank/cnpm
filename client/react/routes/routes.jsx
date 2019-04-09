@@ -4,6 +4,8 @@ export const customHistory = createBrowserHistory();
 import {Route, Switch, Router, Redirect} from "react-router-dom"
 import {KComponent} from "../common/k-component";
 import {ModalsRegistry} from "../common/modal/modals";
+import {WithLocationRoute} from "./route-types/with-location-route";
+import {IndexRoute} from "./common/index-route/index-route";
 
 
 // const NotFoundRoute = () => {
@@ -45,7 +47,7 @@ export class MainRoute extends KComponent {
           history={customHistory}
         >
           <Switch>
-
+            <WithLocationRoute exact path="/" render={props => (<IndexRoute {...props}/>)}/>
           </Switch>
 
         </Router>

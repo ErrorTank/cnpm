@@ -7,6 +7,12 @@ yup.addMethod(yup.string, "isTax", function (message) {
   })
 });
 
+yup.addMethod(yup.string, "notHaveNumber", function (message) {
+  return this.test("notHaveNumber", message, function (val) {
+    return /\d/gi.test(val) === false
+  })
+});
+
 yup.addMethod(yup.object, "notEmpty", function (message = "no data") {
   return this.test("notEmpty", message, function (val) {
     return !isEmpty(val)

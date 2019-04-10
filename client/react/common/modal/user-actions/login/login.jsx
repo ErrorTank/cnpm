@@ -13,12 +13,12 @@ export class Login extends KComponent{
         this.state={
         };
         const loginSchema = yup.object().shape({
-            username: yup.string().min(6, "Tên đăng nhập lớn hơn 6 kí tự").max(20, "Tên đăng nhập nhỏ hơn 20 kí tự").onlyWord("Tên đăng nhập không được có kí tự đặc biệt").haveChar("Tên đăng nhập phải có kí tự alphabet").haveNumber("Tên đăng nhập phải có chữ số"),
+            email: yup.string().email("Email không hợp lệ").required("Email không được để trống"),
             password: yup.string().min(6, "Mật khẩu bắt buộc từ 6 ký tự trở lên").onlyWord("Mật khẩu không được có kí tự đặc biệt")
         });
         this.form = createSimpleForm(loginSchema, {
             initData: {
-                username: "",
+                email: "",
                 password: ""
             }
         });
@@ -36,14 +36,14 @@ export class Login extends KComponent{
         return(
             <div className={"login-panel"}>
                 <div className="m-form m-form--state">
-                    {this.form.enhanceComponent("username", ({error, onChange, onEnter,...others}) => (
+                    {this.form.enhanceComponent("email", ({error, onChange, onEnter,...others}) => (
                         <InputBase
                             className="registration-input pt-0"
                             error={error}
-                            id={"username"}
+                            id={"email"}
                             onKeyDown={onEnter}
                             type={"text"}
-                            label={"Tên đăng nhập"}
+                            label={"Email"}
                             onChange={e => {
 
                                 this.setState({error: ""});

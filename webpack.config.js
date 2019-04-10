@@ -3,7 +3,7 @@ const path = require("path");
 module.exports = {
     mode: "development",
     entry: {
-        loader: ["babel-polyfill", "./client/react/loader.jsx"]
+        loader: ["@babel/polyfill", "./client/react/loader.jsx"]
     },
     output: {
         filename: 'bundle.js',
@@ -22,7 +22,7 @@ module.exports = {
                     {
                         loader: 'babel-loader',
                         options: {
-                            presets: ["env", "stage-2", "react"]
+                            presets: ["@babel/preset-env",  "@babel/preset-react"]
                         }
                     }
                 ],

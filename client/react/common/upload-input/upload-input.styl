@@ -1,0 +1,46 @@
+.upload-input{
+  margin-top 30px !important
+  .form-control-feedback{
+    font-size 13px
+    margin-top 10px
+    color danger
+  }
+  .file-upload-wrap{
+    width 300px
+  }
+  .dz-preview{
+    .dz-remove{
+      color primary
+      font-size 15px
+      &:hover{
+        color darken(primary, 15%)
+        text-decoration underline
+      }
+    }
+    &:not(:first-of-type){
+      margin-top 20px
+    }
+  }
+  .dz-image{
+    text-align center
+    height 200px
+    position relative
+    overflow hidden
+
+    img{
+      position absolute
+      max-height  100%
+      top 50%
+      left 50%
+      transform translate(-50%, -50%)
+    }
+  }
+  .m-dropzone__msg{
+    h3{
+      font-size 17px !important
+    }
+    span{
+      font-size 12px !important
+    }
+  }
+}

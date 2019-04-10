@@ -1,0 +1,49 @@
+.btn-social{
+  width 100%
+  //height 40px
+  position relative
+  text-align left
+
+  margin-top 10px
+  font-size 15px
+  white-space nowrap
+  &.btn-google-login{
+    background-color gg
+    color white
+    &:hover{
+      background-color darken(gg, 15%)
+    }
+  }
+  &.btn-facebook-login{
+    background-color fb
+    color white
+    &:hover{
+      background-color darken(fb, 15%)
+    }
+  }
+  .social-icon{
+    vertical-align middle
+    width 40px
+    display inline-block
+    i{
+      font-size 25px
+
+    }
+  }
+  .line{
+    position absolute
+    top 0
+    left 45px
+    height 100%
+    width 1px
+    background-color tikiblack
+  }
+  .btn-text{
+    text-align center
+    //padding-left 50px
+    display inline-block
+    vertical-align middle
+    width calc(100% - 50px)
+  }
+
+}

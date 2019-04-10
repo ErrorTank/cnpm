@@ -3,6 +3,8 @@ import * as yup from "yup"
 import {createSimpleForm} from "../../../form-validator/form-validator";
 import {InputBase} from "../../../base-input/base-input";
 import {KComponent} from "../../../k-component";
+import {LoadingInline} from "../../../loading-inline/loading-inline";
+import {SocialAuthActions} from "../social-auth-actions/social-auth-actions";
 
 
 export class Login extends KComponent{
@@ -22,6 +24,7 @@ export class Login extends KComponent{
         });
         this.onUnmount(this.form.on("enter", () => this.handleLogin()));
         this.onUnmount(this.form.on("change", () => this.forceUpdate()));
+        this.form.validateData();
     };
 
     handleLogin = () => {
@@ -29,6 +32,7 @@ export class Login extends KComponent{
     };
 
     render(){
+        let canLogin = this.form.getInvalidPaths().length === 0;
         return(
             <div className={"login-panel"}>
                 <div className="m-form m-form--state">
@@ -66,6 +70,22 @@ export class Login extends KComponent{
                 </div>
                 <div className="forgot-password">
                     Quên mật khẩu? Nhấn vào <span>đây</span>
+                </div>
+                <div className="button-actions">
+                    <button type="button" className="btn registration-btn"
+                            disabled={!canLogin || this.state.loading}
+                            onClick={() => this.handleLogin()}
+                    >
+                        {this.state.loading ? (
+                            <LoadingInline
+                                className={"registration-loading"}
+                            />
+                        ) : "Đăng nhập"
+
+                        }
+
+                    </button>
+                    <SocialAuthActions/>
                 </div>
             </div>
         );

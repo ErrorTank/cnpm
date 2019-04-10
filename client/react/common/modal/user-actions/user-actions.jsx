@@ -28,7 +28,7 @@ export class UserActionsModal extends React.Component {
 
     render() {
         let {currentTab} = this.state;
-        console.log(currentTab);
+
         return (
             <div className="user-actions-modal">
                 <div className="left-side side">

@@ -1,4 +1,13 @@
 const path = require("path");
+const dotenv =require("dotenv");
+const webpack = require("webpack");
+
+const env = dotenv.config({path: "./env/dev.env"}).parsed;
+
+const envKeys = Object.keys(env).reduce((prev, next) => {
+    prev[`process.env.${next}`] = JSON.stringify(env[next]);
+    return prev;
+}, {});
 
 module.exports = {
     mode: "development",
@@ -14,6 +23,9 @@ module.exports = {
     resolve: {
         extensions: [".js", ".jsx", ".styl"]
     },
+    plugins: [
+        new webpack.DefinePlugin(envKeys)
+    ],
     module: {
         rules: [
             {

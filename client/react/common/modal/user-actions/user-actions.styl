@@ -4,6 +4,27 @@
   overflow hidden
   background-color: #f8f8f8
   height 600px
+  .registration-btn{
+    position relative
+    height 40px
+    font-size 15px
+    display flex
+    justify-content center
+    color #4a4a4a
+    &:disabled{
+      pointer-events none
+    }
+    width 100%
+    background-color tikiyellow
+    &:hover{
+      background-color darken(tikiyellow, 20%)
+    }
+    align-items center
+    .registration-loading{
+      color white
+      font-size 22px
+    }
+  }
   .registration-input{
     label{
       font-size 14px

@@ -1,4 +1,5 @@
 import React from "react";
+import classnames from "classnames"
 
 export class FormTabs extends React.Component {
   constructor(props) {
@@ -7,9 +8,9 @@ export class FormTabs extends React.Component {
   };
 
   render() {
-    const {tabs = [], activeTab, onChangeTab, renderActions = () => null} = this.props;
+    const {tabs = [], activeTab, onChangeTab, renderActions = () => null, className=""} = this.props;
     return (
-      <div className="m-portlet m-portlet--tabs form-tabs">
+      <div className={classnames("m-portlet m-portlet--tabs form-tabs", className)}>
         <div className="m-portlet__head">
           <div className="m-portlet__head-tools">
             <ul className="nav nav-tabs m-tabs m-tabs-line   m-tabs-line--left m-tabs-line--primary">

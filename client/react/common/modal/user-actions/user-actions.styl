@@ -1,7 +1,25 @@
 .user-actions-modal{
   white-space nowrap
+  border-radius 4px
+  overflow hidden
   background-color: #f8f8f8
   height 600px
+  .registration-input{
+    label{
+      font-size 14px
+      font-weight 500
+    }
+    .form-control-feedback
+    {
+      font-size 12px
+      margin-top 5px
+      font-weight 500
+    }
+    input{
+      font-size 14px
+
+    }
+  }
   .m-portlet__foot{
     border-top none !important
   }
@@ -9,17 +27,47 @@
     display inline-block
     vertical-align top
     height 100%
-
+    text-align left
   }
   .left-side{
     width 360px
     padding 40px 20px
     background-color white
+    height 100%
 
+    color tikiblack
+    .left-title{
+      font-size lg + 0.4rem
+    }
+    .left-description{
+      font-size sm
+      margin-top 15px
+      white-space normal
+    }
   }
   .right-side{
     width 500px
     margin 20px
+    height calc(100% - 40px)
+    .nav-item{
+
+      .nav-link{
+        padding 12px 25px
+        font-size sm
+        &:hover{
+          border-bottom-width 2px !important
+          border-bottom-color tikiblue !important
+          color tikiblue !important
+        }
+        &.active{
+          border-bottom-width 2px !important
+          border-bottom-color tikiblue !important
+          color tikiblue !important
+        }
+
+      }
+
+    }
   }
 
 }

@@ -1,9 +1,10 @@
 .user-actions-modal{
   white-space nowrap
   border-radius 4px
-  overflow hidden
+  //overflow hidden
   background-color: #f8f8f8
-  height 600px
+  height 750px
+
   .registration-btn{
     position relative
     height 40px
@@ -26,10 +27,36 @@
     }
   }
   .registration-input{
+    padding-bottom 0px !important
     label{
       font-size 14px
       font-weight 500
     }
+    .m-radio-list{
+      white-space nowrap
+      .m-radio{
+        display inline-block
+        width 50%
+        margin 0
+        & > input:checked ~ span:after{
+          border-color tikiblue !important
+
+          background-color tikiblue !important
+        }
+        & > input:checked ~ span{
+          border-color tikiblue !important
+          border-width 2px
+        }
+        span{
+          border-color lighten(tikiblue, 50%) !important
+          width 22px
+          top -2px
+          height 22px
+
+        }
+      }
+    }
+
     .form-control-feedback
     {
       font-size 12px
@@ -67,8 +94,13 @@
     }
   }
   .right-side{
-    width 500px
+    width 580px
     margin 20px
+    .m-portlet__body{
+      max-height 600px
+      padding 20px 60px
+
+    }
     height calc(100% - 40px)
     .nav-item{
 

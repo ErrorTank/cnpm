@@ -22,8 +22,10 @@ export class RadioGroup extends React.Component{
                             key={i}
                             checked={isChecked(value, each)}
                             label={displayAs(each)}
-                            value={each}
-                            onChange={(val) => onChange(val)}
+                            value={each.value}
+                            onChange={(val) => {
+                                onChange(val)
+                            }}
                         />
                     ))
 

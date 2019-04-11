@@ -8,12 +8,13 @@ export class Radio extends React.Component{
     };
     render(){
         let {checked, label, onChange, value} = this.props;
+
         return(
             <label className="m-radio m-radio--state-brand"
             >
                 <input type="radio"
                        checked={checked}
-                       onChange={(e) => onChange(e.target.value)}
+                       onChange={(e) => onChange(Number(e.target.value))}
                        value={value}
                 />
                 {label}

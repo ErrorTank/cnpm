@@ -44,6 +44,7 @@ export class Login extends KComponent{
                             onKeyDown={onEnter}
                             type={"text"}
                             label={"Email"}
+                            placeholder={"abc@xyz.com"}
                             onChange={e => {
 
                                 this.setState({error: ""});
@@ -58,6 +59,7 @@ export class Login extends KComponent{
                             error={error}
                             id={"password"}
                             type={"password"}
+                            placeholder={"Mật khẩu gồm ít nhất 6 kí tự"}
                             onKeyDown={onEnter}
                             onChange={e => {
                                 this.setState({error: ""});

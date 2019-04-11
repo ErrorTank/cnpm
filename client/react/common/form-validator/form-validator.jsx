@@ -60,7 +60,7 @@ export const createSimpleForm = (schema, _options) => {
   };
 
 
-  const onChange = (path, validateOnChange) => async (e) => {
+  const onChange = (path, validateOnChange, relativeFields) => async (e) => {
     const value = e.target && e.type == "change" ? e.target.value : e;
 
     updatePathData(path, value);
@@ -71,10 +71,16 @@ export const createSimpleForm = (schema, _options) => {
       if (!touched[path]) {
         touched[path] = true;
       }
+      if(relativeFields && relativeFields.length){
+        for(let p of relativeFields)
+          await validatePath(p)
+      }
       if (options && options.validateAll) {
         await validateData()
-      } else
+      } else{
         await validatePath(path);
+      }
+
 
       eventManagement.emit("change", state);
     }
@@ -136,10 +142,10 @@ export const createSimpleForm = (schema, _options) => {
         onBlur: onBlur(path),
       }
     },
-    enhanceComponent: (path, component, validateOnChange = false) => {
+    enhanceComponent: (path, component, validateOnChange = false, relativeFields = []) => {
       return component({
         value: getPathData(path),
-        onChange: onChange(path, validateOnChange),
+        onChange: onChange(path, validateOnChange, relativeFields),
         onBlur: onBlur(path),
         error: touched[path] ? errors[path] : null,
         onEnter: onEnter(path),

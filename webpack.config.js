@@ -21,7 +21,7 @@ module.exports = {
 
     },
     resolve: {
-        extensions: [".js", ".jsx", ".styl"]
+        extensions: [".js", ".jsx", ".styl", ".gql", ".graphql"]
     },
     plugins: [
         new webpack.DefinePlugin(envKeys)
@@ -39,9 +39,7 @@ module.exports = {
                     }
                 ],
                 exclude: /node_modules/
-            },
-
-            {
+            }, {
                 test: /\.styl$/,
                 use: [ //use if apply many loaders
                     "style-loader",

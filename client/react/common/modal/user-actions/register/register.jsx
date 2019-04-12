@@ -47,12 +47,13 @@ export class Register extends KComponent {
     this.form.validateData();
   };
 
-
+  handleRegister = () => {
+    let data = this.form.getData();
+    console.log(data);
+  };
 
   render() {
     let canRegister = this.form.getInvalidPaths().length === 0;
-    console.log(this.form.getInvalidPaths())
-    console.log(this.form.getData())
     return (
       <div className="register-panel">
         <div className="m-form m-form--state">
@@ -162,7 +163,7 @@ export class Register extends KComponent {
           ), true)}
           <button type="button" className="btn registration-btn mt-3"
                   disabled={!canRegister || this.state.loading}
-                  onClick={() => this.handleLogin()}
+                  onClick={() => this.handleRegister()}
           >
             {this.state.loading ? (
               <LoadingInline

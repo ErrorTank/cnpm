@@ -21,7 +21,9 @@ const userSchema = new Schema({
   password: {type: String, required: true},
   dob: { type: Date},
   gender: {type: Boolean, default: 0},
-  subscribe: {type: Boolean, default: 0}
+  subscribe: {type: Boolean, default: 0},
+  updatedAt: { type: Date},
+  createdAt: { type: Date}
 });
 
 const User = mongoose.model("User", userSchema);

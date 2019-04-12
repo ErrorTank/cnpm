@@ -9,7 +9,10 @@ const typeDefs = importSchema('./server/graphql/schema/index.graphql');
 const initializeApolloServer = (app) => {
   const schema = makeExecutableSchema({
     typeDefs,
-    resolvers
+    resolvers,
+    resolverValidationOptions :{
+      requireResolversForResolveType: false
+    },
   });
   console.log(process.env.NODE_ENV)
   const server = new ApolloServer({
@@ -19,7 +22,12 @@ const initializeApolloServer = (app) => {
       settings: {
         'editor.theme': 'dark'
       }
-    } : false
+    } : false,
+    context: ({req}) => {
+      return {
+        request: req
+      }
+    }
   });
   server.applyMiddleware({ app , path: "/server"})
 };

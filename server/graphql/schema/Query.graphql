@@ -1,12 +1,17 @@
-type Book {
-    title: String
-    author: Author
-}
+# import Node from "./interface.graphql"
 
-type Author {
-    books: [Book]
+type User implements Node{
+    id: ID!
+    fullname: String!
+    email: String!
+    phone: String!
+    password: String!
+    gender: Boolean!
+    dob: String!
+    updatedAt: String!
+    createdAt: String!
 }
 
 type Query {
-    author: Author
+    getAuthenUser: User
 }

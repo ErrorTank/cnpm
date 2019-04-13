@@ -5,7 +5,7 @@ let client = null;
 
 const initClient = () => {
   client = new ApolloClient({
-    uri: process.env.APP_URI,
+    uri: process.env.GRAPHQL_URI,
     onError: ({ networkError, graphQLErrors }) => {
       console.log('graphQLErrors', graphQLErrors);
       console.log('networkError', networkError)

@@ -1,0 +1,11 @@
+input CreateUserInput{
+    fullname: String!
+    email: String!
+    phone: String!
+    password: String!
+    gender: Boolean!
+    dob: String!
+    subscribe: Boolean!
+    role: Int!
+    isVerify: Boolean
+}

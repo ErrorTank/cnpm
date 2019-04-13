@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+
 const userSchema = new Schema({
   fullname:  {
     type: String,
@@ -16,15 +17,20 @@ const userSchema = new Schema({
   },
   email: {
     type: String,
-    required: true
+    required: true,
+    index: true,
+    unique: true
   },
   password: {type: String, required: true},
   dob: { type: Date},
-  gender: {type: Boolean, default: 0},
-  subscribe: {type: Boolean, default: 0},
+  gender: {type: Boolean, default: false},
+  subscribe: {type: Boolean, default: false},
   updatedAt: { type: Date},
-  createdAt: { type: Date}
+  createdAt: { type: Date},
+  role: {type: Number, required: true},
+  isVerify: {type: Boolean, default: false, required: true}
 });
+
 
 const User = mongoose.model("User", userSchema);
 

@@ -2,12 +2,14 @@ import {gql} from "apollo-boost"
 
 const UserInfoFragment = gql`
     fragment UserInfo on User{
-        fullName
+        _id
+        fullname
         phone
         email
         gender
         dob
         role
+        isVerify
     }
 `;
 

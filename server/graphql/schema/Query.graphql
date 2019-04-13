@@ -1,15 +1,21 @@
-# import Node from "./interface.graphql"
+
+type registerOuputType {
+    message: String
+}
 
 type User implements Node{
-    id: ID!
+    _id: ID!
     fullname: String!
     email: String!
     phone: String!
     password: String!
     gender: Boolean!
     dob: String!
+    subscribe: Boolean!
     updatedAt: String!
     createdAt: String!
+    role: Int!
+    isVerify: Boolean!
 }
 
 type Query {

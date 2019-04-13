@@ -7,12 +7,16 @@ import {RadioGroup} from "../../../radio-group/radio-group";
 import {BirthPicker} from "../../../birth-picker/birth-picker";
 import {Checkbox} from "../../../checkbox/checkbox";
 import {LoadingInline} from "../../../loading-inline/loading-inline";
+import {client} from "../../../../../graphql";
+import {register} from "../../../../../graphql/queries/user";
 
 export class Register extends KComponent {
   constructor(props) {
     super(props);
     this.state = {
-      creating: false,
+      loading: false,
+      serverResponse: null
+
     };
     const registerSchema = yup.object().shape({
       fullname: yup.string().min(6, "Họ và tên phải lớn hơn 6 kí tự").max(50, "Họ và tên phải nhỏ hơn 50 kí tự").onlyWord("Họ và tên không được có kí tự đặc biệt").notHaveNumber("Họ và tên không được có chữ số").required("Họ tên không được để trống"),
@@ -26,34 +30,62 @@ export class Register extends KComponent {
         year: yup.number().moreThan(0, "Năm không được để trống")
       }),
       subscribe: yup.boolean().required(),
+      role: yup.number().required()
     });
     this.form = createSimpleForm(registerSchema, {
       initData: {
-        fullname: "",
-        phone: "",
-        password: "",
-        email: "",
-        gender: 0,
+        fullname: "Tuan anh",
+        role: 0,
+        phone: "012313132",
+        password: "123123qwe",
+        email: "kappatank98@gmail.com",
+        gender: false,
         dob: {
-          day: 0,
-          month: 0,
-          year: 0
+          day: 12,
+          month: 1,
+          year: 1998
         },
-        subscribe: false
+        subscribe: true
       }
     });
     this.onUnmount(this.form.on("enter", () => this.handleLogin()));
-    this.onUnmount(this.form.on("change", () => this.forceUpdate()));
+    this.onUnmount(this.form.on("change", () => {
+      this.setState({serverResponse: null});
+      this.forceUpdate()
+    }));
     this.form.validateData();
+  };
+
+  generateServerResponse = err => {
+
   };
 
   handleRegister = () => {
     let data = this.form.getData();
-    console.log(data);
+    let {dob} = data;
+    this.setState({loading: true});
+    let strDob = new Date(dob.year, dob.month - 1, dob.day).toISOString();
+    client.mutate({
+      mutation:register,
+      variables: {
+        data: {...data, dob: strDob}
+      }
+    })
+      .then(() => {
+        this.setState({loading: false, serverResponse: {success: true, msg: `Email xác nhận đã được gửi đến địa chỉ ${data.email}. Vui lòng kích hoạt tài khoản trong vòng 1 phút tiếp theo`}});
+        this.handleServerResponse(err);
+      })
+
+      .catch(err => {
+        console.log(err);
+        this.setState({loading: false, serverResponse: {success: false}})
+        this.handleServerResponse(err);
+      });
   };
 
   render() {
     let canRegister = this.form.getInvalidPaths().length === 0;
+    console.log(this.form.getInvalidPaths())
     return (
       <div className="register-panel">
         <div className="m-form m-form--state">
@@ -131,10 +163,10 @@ export class Register extends KComponent {
               radios={[
                 {
                   label: "Nam",
-                  value: 0
+                  value: false
                 }, {
                   label: "Nữ",
-                  value: 1
+                  value: true
                 }
               ]}
               onChange={v => {

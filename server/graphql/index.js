@@ -18,7 +18,6 @@ const initializeApolloServer = (app) => {
   const server = new ApolloServer({
     schema,
     playground: process.env.NODE_ENV === "development" ? {
-      endpoint: "/server/kappa",
       settings: {
         'editor.theme': 'dark'
       }
@@ -27,9 +26,9 @@ const initializeApolloServer = (app) => {
       return {
         request: req
       }
-    }
+    },
   });
-  server.applyMiddleware({ app , path: "/server"})
+  server.applyMiddleware({ app , path: "/kappa"})
 };
 
 module.exports = initializeApolloServer;

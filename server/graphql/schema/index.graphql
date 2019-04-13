@@ -1,3 +1,6 @@
+#import * from "./enum.graphql"
+#import * from "./input.graphql"
+#import * from "./interface.graphql"
 #import Query.*, * from "./Query.graphql"
 #import Mutation.*, * from "./Mutation.graphql"
 #import Subscription.*, * from "./Subscription.graphql"

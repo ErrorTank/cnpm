@@ -5,20 +5,32 @@ import {UserInfoFragment} from "../fragments/user";
 const getBasicUserInfo = gql`
   query($id: ID!){
       getUser(userID: $id){
-          ...${UserInfoFragment}
+          ...UserInfo
       }
   }
+  ${UserInfoFragment}
 `;
 
 const getAuthenUser = gql`
     query{
         getAuthenUser(userID: $id){
-            ...${UserInfoFragment}
+            ...UserInfo
         }
     }
+    ${UserInfoFragment}
+`;
+
+const register = gql`
+    mutation ($data: CreateUserInput!){
+        register(data: $data){
+            message
+        }
+    }
+ 
 `;
 
 export {
   getBasicUserInfo,
-  getAuthenUser
+  getAuthenUser,
+  register
 }

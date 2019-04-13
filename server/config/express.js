@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 
 
 const configExpressServer = (app) => {
+  app.set('view engine', 'ejs');
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json({
     limit: '2mb'

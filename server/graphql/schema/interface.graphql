@@ -1,5 +1,5 @@
 interface Node {
-    id: ID!
+    _id: ID!
     createdAt: String!
     updatedAt: String!
 }

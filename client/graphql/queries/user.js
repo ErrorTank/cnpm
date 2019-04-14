@@ -28,9 +28,16 @@ const register = gql`
     }
  
 `;
+const resendConfirmEmail = gql`
+    mutation ($email: String!){
+        resendConfirmEmail(email: $email)
+    }
+
+`;
 
 export {
   getBasicUserInfo,
   getAuthenUser,
-  register
+  register,
+  resendConfirmEmail
 }

@@ -1,7 +1,7 @@
 
 
 const {authorizationUser} = require("../../../authorization/auth");
-const {register} = require("../../../db/model/user/controller");
+const {register, resendConfirmEmail} = require("../../../db/model/user/controller");
 
 const Mutation = {
   register: async (parent, {data}, {request}, info) => {
@@ -9,7 +9,12 @@ const Mutation = {
     return register(data).then(msg => msg).catch(err => throw err);
 
 
-  }
+  },
+  resendConfirmEmail: async (parent, {email}, {request}, info) => {
+    return resendConfirmEmail(email).then(msg => msg).catch(err => throw err);
+
+
+  },
 };
 
 module.exports = Mutation;

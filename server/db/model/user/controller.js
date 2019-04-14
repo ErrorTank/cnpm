@@ -22,6 +22,49 @@ const getClientUserCache = (user) => {
   });
 
 };
+
+const resendConfirmEmail = email => {
+  return new Promise((resolve, reject) => {
+    User.findOne({email}, (err, user) => {
+      if (err) {
+        reject(new Error())
+      } else {
+        if (!user) {
+          reject(new ApolloError("user_not_found"))
+        } else {
+          let newToken = new TokenConfirmation({
+            _userId: user._id,
+            token: crypto.randomBytes(16).toString('hex')
+          });
+          newToken.save((err) => {
+            if (err) {
+              reject(new Error())
+
+            } else {
+              sendEmail("gmail", {
+                from: "TAKA | Mua sắm trực tuyến",
+                to: email,
+                subject: "Xác nhận đăng ký",
+                template: "confirmation-email",
+                context: {
+                  appUrl: `${process.env.APP_URI}`,
+                  redirect: `${process.env.APP_URI}/email-confirmation?invitation_code=${newToken.token}`,
+                  name: user.fullname
+                }
+              }).then(() => resolve())
+            }
+
+          });
+        }
+
+      }
+
+
+    });
+
+  })
+};
+
 const register = (data) => {
   return new Promise((resolve, reject) => {
     let mockUser = new User(data);
@@ -48,7 +91,7 @@ const register = (data) => {
               if (err)
                 reject(new Error());
               sendEmail("gmail", {
-                from: "ncq998@gmail.com",
+                from: "TAKA | Mua sắm trực tuyến",
                 to: data.email,
                 subject: "Xác nhận đăng ký",
                 template: "confirmation-email",
@@ -70,5 +113,6 @@ const register = (data) => {
 
 module.exports = {
   register,
-  getClientUserCache
+  getClientUserCache,
+  resendConfirmEmail
 };

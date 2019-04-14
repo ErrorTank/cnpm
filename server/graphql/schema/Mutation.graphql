@@ -1,4 +1,5 @@
 
 type Mutation{
     register(data: CreateUserInput!): registerOuputType
+    resendConfirmEmail(email: String!): String
 }

@@ -50,7 +50,7 @@ export class Register extends KComponent {
     });
     this.onUnmount(this.form.on("enter", () => this.handleLogin()));
     this.onUnmount(this.form.on("change", () => {
-      this.setState({serverError: ""});
+      this.state.serverError && this.setState({serverError: ""});
       this.forceUpdate()
     }));
     this.form.validateData();
@@ -60,7 +60,7 @@ export class Register extends KComponent {
     let {serverError} = this.state;
     let {email} = this.form.getData();
     let errMatcher = {
-      "account_taken": `Tài khoản ${email} đã tồn tại, vui lòng tạo lại.`,
+      "account_taken": `Tài khoản ${email} đã tồn tại, vui lòng sử dụng địa chỉ email khác.`,
     };
     return errMatcher.hasOwnProperty(serverError) ? errMatcher[serverError] : "Đã có lỗi xảy ra."
   };
@@ -82,7 +82,8 @@ export class Register extends KComponent {
     })
       .then((response) => {
         this.setState({loading: false});
-        this.handleServerResponse({message: response.message, data: this.form.getData()});
+        console.log(response)
+        this.handleServerResponse({message: response.data.register.message, data: this.form.getData()});
       })
 
       .catch(err => {
@@ -93,7 +94,6 @@ export class Register extends KComponent {
 
   render() {
     let canRegister = this.form.getInvalidPaths().length === 0;
-    console.log(this.form.getInvalidPaths())
     return (
       <div className="register-panel">
         {this.state.serverError && (

@@ -56,12 +56,17 @@ export const userActionModal = {
     let matcher = (cred) =>  ({
       "email_sent": {
         title: `Thông báo`,
-        body: `Email đã được gửi thành công đến địa chỉ ${cred.email}`,
+        body: (
+          <span>Email đã được gửi thành công đến địa chỉ <span className="email-display">{cred.email}</span></span>
+        ),
 
       },
       "not_verify": {
         title: "Thông báo",
-        body: `Địa chỉ email ${cred.email}`
+        body: (
+          <span>Địa chỉ email <span className="email-display">{cred.email}</span> chưa được kích hoạt, vui lòng truy cập vào email này để kích hoạt tài khoản.</span>
+        ),
+        btnResendText: "Gửi lại mã kích hoạt"
       }
     });
     const modal = modals.openModal({
@@ -70,9 +75,10 @@ export const userActionModal = {
           onClose={() => modal.close()}
           onRegistered={cred => {
             modal.close();
-            let config = matcher[cred.message](cred.data);
-            resendModal.open(config)
+            let config = matcher(cred.data)[cred.message];
+            resendModal.open({...config, email: cred.data.email})
           }}
+
         />
       )
     });

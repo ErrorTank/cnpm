@@ -2,20 +2,21 @@ const User = require("./user");
 const TokenConfirmation = require("../confirm-token/confirm-token");
 const {sendEmail} = require("../../../email/index");
 const crypto = require("crypto");
+const {ApolloError, AuthenticationError} = require("apollo-server-express");
 
 const getClientUserCache = (user) => {
   return new Promise((resolve, reject) => {
-    let {accountID, role} = user;
-    User.findById(accountID, '-password', (err, user) => {
+    let {_id, role} = user;
+    User.findById(_id, '-password', (err, user) => {
       if (err) {
         console.log(err);
-        throw new Error();
+        reject(new AuthenticationError("login_required"));
       }
       if (user) {
         console.log(user);
         resolve(user);
       } else {
-        throw new ApolloError("User not found", "user_not_found")
+        reject(new AuthenticationError("login_required"))
       }
     })
   });
@@ -26,15 +27,14 @@ const register = (data) => {
     let mockUser = new User(data);
     let error = mockUser.validateSync();
     if (error) {
-      throw new ApolloError("Not match user schema", "not_match_user_schema")
+      reject(new Error())
     }
     User.findOne({email: data.email}, (err, user) => {
       if (err) {
-        throw new Error();
+        reject(new Error())
       }
-      console.log(user)
       if (user && user.isVerify) {
-        throw new Error("email_taken");
+        resolve(new ApolloError("account_taken"));
       } else {
         let msg = !user ? "email_sent" : "not_verify";
         if (msg === 'not_verify') {
@@ -42,11 +42,11 @@ const register = (data) => {
         } else {
           mockUser.save((err) => {
             if (err)
-              throw new Error();
+              reject(new Error());
             let token = new TokenConfirmation({_userId: mockUser._id, token: crypto.randomBytes(16).toString('hex')});
             token.save(err => {
               if (err)
-                throw new Error();
+                reject(new Error());
               sendEmail("gmail", {
                 from: "ncq998@gmail.com",
                 to: data.email,

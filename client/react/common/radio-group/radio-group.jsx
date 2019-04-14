@@ -18,15 +18,17 @@ export class RadioGroup extends React.Component{
 
                 <div className="m-radio-list">
                     {radios.map((each, i) => (
-                        <Radio
-                            key={i}
+                      <div className="radio-wrap" key={i}>
+                          <Radio
+
                             checked={isChecked(value, each)}
                             label={displayAs(each)}
-                            value={each.value}
-                            onChange={(val) => {
-                                onChange(val)
+                            onChange={() => {
+                                onChange(each.value)
                             }}
-                        />
+                          />
+                      </div>
+
                     ))
 
                     }

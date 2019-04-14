@@ -9,14 +9,14 @@ import {Checkbox} from "../../../checkbox/checkbox";
 import {LoadingInline} from "../../../loading-inline/loading-inline";
 import {client} from "../../../../../graphql";
 import {register} from "../../../../../graphql/queries/user";
+import {getErrorObject} from "../../../../../graphql/utils/errors";
 
 export class Register extends KComponent {
   constructor(props) {
     super(props);
     this.state = {
       loading: false,
-      serverResponse: null
-
+      serverError: "",
     };
     const registerSchema = yup.object().shape({
       fullname: yup.string().min(6, "Họ và tên phải lớn hơn 6 kí tự").max(50, "Họ và tên phải nhỏ hơn 50 kí tự").onlyWord("Họ và tên không được có kí tự đặc biệt").notHaveNumber("Họ và tên không được có chữ số").required("Họ tên không được để trống"),
@@ -50,14 +50,23 @@ export class Register extends KComponent {
     });
     this.onUnmount(this.form.on("enter", () => this.handleLogin()));
     this.onUnmount(this.form.on("change", () => {
-      this.setState({serverResponse: null});
+      this.setState({serverError: ""});
       this.forceUpdate()
     }));
     this.form.validateData();
   };
 
-  generateServerResponse = err => {
+  renderServerError = () => {
+    let {serverError} = this.state;
+    let {email} = this.form.getData();
+    let errMatcher = {
+      "account_taken": `Tài khoản ${email} đã tồn tại, vui lòng tạo lại.`,
+    };
+    return errMatcher.hasOwnProperty(serverError) ? errMatcher[serverError] : "Đã có lỗi xảy ra."
+  };
 
+  handleServerResponse = (res) => {
+    this.props.onRegistered(res)
   };
 
   handleRegister = () => {
@@ -71,15 +80,14 @@ export class Register extends KComponent {
         data: {...data, dob: strDob}
       }
     })
-      .then(() => {
-        this.setState({loading: false, serverResponse: {success: true, msg: `Email xác nhận đã được gửi đến địa chỉ ${data.email}. Vui lòng kích hoạt tài khoản trong vòng 1 phút tiếp theo`}});
-        this.handleServerResponse(err);
+      .then((response) => {
+        this.setState({loading: false});
+        this.handleServerResponse({message: response.message, data: this.form.getData()});
       })
 
       .catch(err => {
-        console.log(err);
-        this.setState({loading: false, serverResponse: {success: false}})
-        this.handleServerResponse(err);
+        let errMsg = getErrorObject(err).message;
+        this.setState({loading: false, serverError: errMsg})
       });
   };
 
@@ -88,6 +96,11 @@ export class Register extends KComponent {
     console.log(this.form.getInvalidPaths())
     return (
       <div className="register-panel">
+        {this.state.serverError && (
+          <div className="server-error">
+            {this.renderServerError()}
+          </div>
+        )}
         <div className="m-form m-form--state">
           {this.form.enhanceComponent("fullname", ({error, onChange, onEnter,...others}) => (
             <InputBase
@@ -194,7 +207,7 @@ export class Register extends KComponent {
             />
           ), true)}
           <button type="button" className="btn registration-btn mt-3"
-                  disabled={!canRegister || this.state.loading}
+                  disabled={!canRegister || this.state.loading || this.state.serverError}
                   onClick={() => this.handleRegister()}
           >
             {this.state.loading ? (

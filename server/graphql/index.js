@@ -14,7 +14,6 @@ const initializeApolloServer = (app) => {
       requireResolversForResolveType: false
     },
   });
-  console.log(process.env.NODE_ENV)
   const server = new ApolloServer({
     schema,
     playground: process.env.NODE_ENV === "development" ? {
@@ -26,7 +25,7 @@ const initializeApolloServer = (app) => {
       return {
         request: req
       }
-    },
+    }
   });
   server.applyMiddleware({ app , path: "/kappa"})
 };

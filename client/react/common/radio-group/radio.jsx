@@ -14,10 +14,10 @@ export class Radio extends React.Component{
             >
                 <input type="radio"
                        checked={checked}
-                       onChange={(e) => onChange(Number(e.target.value))}
+                       onChange={(e) => onChange(e.target.value)}
                        value={value}
                 />
-                {label}
+                    {label}
                 <span/>
             </label>
         );

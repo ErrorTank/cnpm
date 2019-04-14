@@ -25,7 +25,7 @@ yup.addMethod(yup.string, "isPhone", function (message = "no data") {
 });
 yup.addMethod(yup.string, "onlyWord", function (message) {
   return this.test("onlyWord", message, function (val) {
-    return /\W/gi.test(val.replace(" ", "")) === false
+    return /\W/gi.test(val.replace(/\s/gi, "")) === false
   })
 });
 

@@ -1,11 +1,19 @@
+
+input SocialInput{
+    id: String!
+    type: SocialType!
+}
+
 input CreateUserInput{
     fullname: String!
     email: String!
     phone: String!
-    password: String!
+    password: String
     gender: Boolean!
     dob: String!
     subscribe: Boolean!
     role: Int!
-    isVerify: Boolean
+    isVerify: Boolean!
+    picture: String
+    social: SocialInput
 }

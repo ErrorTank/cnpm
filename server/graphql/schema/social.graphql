@@ -1,0 +1,4 @@
+type Social{
+    id: String!
+    type: SocialType!
+}

@@ -10,6 +10,7 @@ import {LoadingInline} from "../../../loading-inline/loading-inline";
 import {client} from "../../../../../graphql";
 import {register} from "../../../../../graphql/queries/user";
 import {getErrorObject} from "../../../../../graphql/utils/errors";
+import {userRegisterSchema} from "./schema";
 
 export class Register extends KComponent {
   constructor(props) {
@@ -18,35 +19,9 @@ export class Register extends KComponent {
       loading: false,
       serverError: "",
     };
-    const registerSchema = yup.object().shape({
-      fullname: yup.string().min(6, "Họ và tên phải lớn hơn 6 kí tự").max(50, "Họ và tên phải nhỏ hơn 50 kí tự").onlyWord("Họ và tên không được có kí tự đặc biệt").notHaveNumber("Họ và tên không được có chữ số").required("Họ tên không được để trống"),
-      phone: yup.string().required("SĐT không được để trống").isPhone("SĐT không hợp lệ"),
-      password: yup.string().min(6, "Mật khẩu bắt buộc từ 6 ký tự trở lên").onlyWord("Mật khẩu không được có kí tự đặc biệt").required("Mật khẩu không được để trống"),
-      email: yup.string().email("Email không hợp lệ").required("Email không được để trống"),
-      gender: yup.boolean().required(),
-      dob: yup.object().shape({
-        day: yup.number().moreThan(0,"Ngày không được để trống"),
-        month: yup.number().moreThan(0,"Tháng không được để trống"),
-        year: yup.number().moreThan(0, "Năm không được để trống")
-      }),
-      subscribe: yup.boolean().required(),
-      role: yup.number().required()
-    });
-    this.form = createSimpleForm(registerSchema, {
-      initData: {
-        fullname: "Tuan anh",
-        role: 0,
-        phone: "012313132",
-        password: "123123qwe",
-        email: "kappatank98@gmail.com",
-        gender: false,
-        dob: {
-          day: 12,
-          month: 1,
-          year: 1998
-        },
-        subscribe: true
-      }
+    const {schema, defaultData} = userRegisterSchema[props.confirmRegisterData ? "social" : "regular"];
+    this.form = createSimpleForm(schema, {
+      initData: defaultData(props.confirmRegisterData)
     });
     this.onUnmount(this.form.on("enter", () => this.handleLogin()));
     this.onUnmount(this.form.on("change", () => {
@@ -75,7 +50,7 @@ export class Register extends KComponent {
     this.setState({loading: true});
     let strDob = new Date(dob.year, dob.month - 1, dob.day).toISOString();
     client.mutate({
-      mutation:register,
+      mutation: register,
       variables: {
         data: {...data, dob: strDob}
       }
@@ -94,6 +69,9 @@ export class Register extends KComponent {
 
   render() {
     let canRegister = this.form.getInvalidPaths().length === 0;
+    let {confirmRegisterData} = this.props;
+    console.log(this.form.getData());
+    console.log(this.form.getInvalidPaths())
     return (
       <div className="register-panel">
         {this.state.serverError && (
@@ -102,7 +80,7 @@ export class Register extends KComponent {
           </div>
         )}
         <div className="m-form m-form--state">
-          {this.form.enhanceComponent("fullname", ({error, onChange, onEnter,...others}) => (
+          {this.form.enhanceComponent("fullname", ({error, onChange, onEnter, ...others}) => (
             <InputBase
               className="registration-input pt-0"
               error={error}
@@ -117,7 +95,7 @@ export class Register extends KComponent {
               {...others}
             />
           ), true)}
-          {this.form.enhanceComponent("phone", ({error,  onChange, onEnter,  ...others}) => (
+          {this.form.enhanceComponent("phone", ({error, onChange, onEnter, ...others}) => (
             <InputBase
               className="registration-input pt-0 pb-0"
               error={error}
@@ -132,7 +110,7 @@ export class Register extends KComponent {
               {...others}
             />
           ), true)}
-          {this.form.enhanceComponent("email", ({error, onChange, onEnter,...others}) => (
+          {this.form.enhanceComponent("email", ({error, onChange, onEnter, ...others}) => (
             <InputBase
               className="registration-input pt-0"
               error={error}
@@ -149,7 +127,8 @@ export class Register extends KComponent {
               {...others}
             />
           ), true)}
-          {this.form.enhanceComponent("password", ({error,  onChange, onEnter,  ...others}) => (
+          {!confirmRegisterData &&
+          this.form.enhanceComponent("password", ({error, onChange, onEnter, ...others}) => (
             <InputBase
               className="registration-input pt-0 pb-0"
               error={error}
@@ -164,8 +143,10 @@ export class Register extends KComponent {
               label={"Mật khẩu"}
               {...others}
             />
-          ), true)}
-          {this.form.enhanceComponent("gender", ({error, onChange, onEnter,...others}) => (
+          ), true)
+          }
+
+          {this.form.enhanceComponent("gender", ({error, onChange, onEnter, ...others}) => (
             <RadioGroup
               className={"registration-input pt-0 pb-0"}
               title={"Giới tính"}
@@ -190,7 +171,7 @@ export class Register extends KComponent {
 
             />
           ), true)}
-          {this.form.enhanceComponent("dob", ({error, onChange, onEnter,...others}) => (
+          {this.form.enhanceComponent("dob", ({error, onChange, onEnter, ...others}) => (
             <BirthPicker
               className={"registration-input pt-0 pb-0"}
               label={"Ngày sinh"}
@@ -199,7 +180,7 @@ export class Register extends KComponent {
               value={others.value}
             />
           ), true, ["dob.day", "dob.month", "dob.year"])}
-          {this.form.enhanceComponent("subscribe", ({error, onEnter,...others}) => (
+          {this.form.enhanceComponent("subscribe", ({error, onEnter, ...others}) => (
             <Checkbox
               className={"subscribe-btn"}
               label={"Nhận các thông tin và chương trình khuyến mãi của Taka qua email."}
@@ -214,7 +195,7 @@ export class Register extends KComponent {
               <LoadingInline
                 className={"registration-loading"}
               />
-            ) : "Đăng ký"
+            ) : confirmRegisterData ? "Xác nhận thông tin" : "Đăng ký"
 
             }
 

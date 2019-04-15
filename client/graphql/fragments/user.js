@@ -10,6 +10,8 @@ const UserInfoFragment = gql`
         dob
         role
         isVerify
+        picture
+        subscribe
     }
 `;
 

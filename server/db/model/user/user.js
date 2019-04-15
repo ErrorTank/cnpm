@@ -28,7 +28,15 @@ const userSchema = new Schema({
   updatedAt: { type: Date},
   createdAt: { type: Date},
   role: {type: Number, required: true},
-  isVerify: {type: Boolean, default: false, required: true}
+  isVerify: {type: Boolean, default: false, required: true},
+  social: {
+    id: String,
+    type: {
+      type: String,
+      enum: ['GOOGLE', 'FACEBOOK']
+    },
+
+  }
 });
 
 

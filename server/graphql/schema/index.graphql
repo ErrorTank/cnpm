@@ -1,3 +1,4 @@
+#import Social from "./social.graphql"
 #import * from "./enum.graphql"
 #import * from "./input.graphql"
 #import * from "./interface.graphql"

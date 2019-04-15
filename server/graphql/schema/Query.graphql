@@ -22,11 +22,13 @@ type User implements Node{
     role: Int!
     isVerify: Boolean!
     picture: String
+    social: Social
 }
 
 
 type Query {
     getAuthenUser: User
     checkConfirm(token: String!): loginOutputType!
+    getSocialUserInfo(socialID: String!): loginOutputType
 }
 

@@ -48,10 +48,28 @@ const checkConfirm = gql`
   ${UserInfoFragment}
 `;
 
+const getSocialUserInfo = gql`
+    query ($socialID: String!){
+        getSocialUserInfo(socialID: $socialID){
+            user{
+                ...UserInfo
+                social{
+                    id
+                    type
+                }
+            }
+            token
+        }
+
+    }
+    ${UserInfoFragment}
+`;
+
 export {
   getBasicUserInfo,
   getAuthenUser,
   register,
   resendConfirmEmail,
-  checkConfirm
+  checkConfirm,
+  getSocialUserInfo
 }

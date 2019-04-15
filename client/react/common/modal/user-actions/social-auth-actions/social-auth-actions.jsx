@@ -12,11 +12,11 @@ export class SocialAuthActions extends React.Component{
     };
 
     facebookResponse = (res) => {
-        console.log(res)
+        this.props.onResponse(res, "facebook");
     };
 
     googleResponse = (res) => {
-        console.log(res);
+      this.props.onResponse(res, "google");
     };
 
     render(){
@@ -25,8 +25,8 @@ export class SocialAuthActions extends React.Component{
                 <FacebookLogin
                     appId={process.env.FACEBOOK_CLIENT_ID}
                     autoLoad={false}
-                    fields="name,email,picture,birthday,gender"
-                    onClick={() => console.log("fb login click")}
+                    fields="name,email,picture"
+                    onClick={() => this.props.handleClickSocialBtn()}
                     callback={this.facebookResponse}
                     render={props => {
                         return (
@@ -49,7 +49,7 @@ export class SocialAuthActions extends React.Component{
                         </Fragment>
 
                     )}
-                    onClick={() => console.log("google login")}
+                    onClick={() => this.props.handleClickSocialBtn()}
                     onSuccess={this.googleResponse}
                     cookiePolicy={'single_host_origin'}
                     onFailure={this.googleResponse}

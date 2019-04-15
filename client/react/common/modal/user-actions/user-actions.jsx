@@ -4,13 +4,21 @@ import {Login} from "./login/login";
 import {Register} from "./register/register";
 import {modals} from "../modals";
 import {resendModal} from "../resend-modal/resend-modal";
+import {LoadingInline} from "../../loading-inline/loading-inline";
 
 export class UserActionsModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentTab: this.tabs[0]
+      currentTab: this.tabs[0],
+      running: false,
+      confirmRegister: null
     };
+  };
+
+  createNewSocialUser = (rawData) => {
+    this.setState({running: false, confirmRegister: {...rawData}, currentTab: this.tabs[1]});
+
   };
 
   tabs = [
@@ -18,21 +26,32 @@ export class UserActionsModal extends React.Component {
       leftTitle: "Đăng nhập",
       des: "Đăng nhập để theo dõi đơn hàng, lưu danh sách sản phẩm yêu thích, nhận nhiều ưu đãi hấp dẫn.",
       label: "Đăng nhập",
-      render: () => <Login onLoginSuccess={() => this.props.onClose()}/>
+      render: () =>
+        <Login
+          onLoginSuccess={() => this.props.onClose()}
+          onLogin={() => this.setState({running: true})}
+          stopRunning={() => this.setState({running: false})}
+          createNewSocialUser={this.createNewSocialUser}
+        />
     }, {
       leftTitle: "Tạo tài khoản",
       des: "Tạo tài khoản để theo dõi đơn hàng, lưu danh sách sản phẩm yêu thích, nhận nhiều ưu đãi hấp dẫn.",
       label: "Tạo tài khoản",
-      render: () => <Register onRegistered={msg => this.props.onRegistered(msg)}/>
+      render: () => <Register onRegistered={msg => this.props.onRegistered(msg)} confirmRegisterData={this.state.confirmRegister}/>
     }
   ];
 
 
   render() {
-    let {currentTab} = this.state;
+    let {currentTab, running} = this.state;
 
     return (
       <div className="user-actions-modal">
+        {running && (
+          <LoadingInline/>
+        )
+
+        }
         <div className="left-side side">
           <Fragment>
             <p className="left-title">{currentTab.leftTitle}</p>
@@ -43,7 +62,7 @@ export class UserActionsModal extends React.Component {
           className={"right-side side"}
           tabs={this.tabs}
           activeTab={currentTab}
-          onChangeTab={(t) => this.setState({currentTab: t})}
+          onChangeTab={(t) => this.setState({currentTab: t, confirmRegister: null})}
         />
       </div>
     );

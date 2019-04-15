@@ -93,6 +93,13 @@ const checkConfirmToken = token => {
     .catch(err => Promise.reject(err))
 };
 
+const getSocialUserInfo = socialID => {
+  return User.findOne({"social.id": socialID})
+    .then(user => user ? user : Promise.reject(new ApolloError("not_existed")))
+    .catch(err => Promise.reject(err))
+
+};
+
 const register = (data) => {
   return new Promise((resolve, reject) => {
     let mockUser = new User(data);
@@ -139,9 +146,12 @@ const register = (data) => {
   });
 };
 
+
+
 module.exports = {
   register,
   getClientUserCache,
   resendConfirmEmail,
-  checkConfirmToken
+  checkConfirmToken,
+  getSocialUserInfo
 };

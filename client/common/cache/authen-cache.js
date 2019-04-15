@@ -24,12 +24,13 @@ export const authenCache = (() =>  {
           reject();
         }else{
           client.query({
-            query: getAuthenUser
+            query: getAuthenUser,
           }).then(({data}) => {
+            console.log(data);
             if(!data)
               reject();
             else
-              resolve(userInfo.setState(data));
+              resolve(userInfo.setState(data.getAuthenUser));
           }).catch(err => reject());
 
         }

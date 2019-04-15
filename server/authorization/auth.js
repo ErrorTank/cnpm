@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const {getPrivateKey, getPublicKey} = require("../authorization/keys/keys");
+const {AuthenticationError} = require("apollo-server-express");
 
 const decodeAuthRequest = (req, secret, config) => {
   return new Promise((resolve, reject) => {
@@ -22,11 +23,12 @@ const decodeAuthRequest = (req, secret, config) => {
 
 
 const createAuthToken = (userInfo, secret, config) =>{
+  console.log(userInfo)
   return new Promise((resolve, reject) => {
-    jwt.sign(userInfo, secret, config, (err, token) => {
+    jwt.sign(userInfo.toJSON(), secret, config, (err, token) => {
       if(err){
         console.log(err);
-        reject(new JWTError("Fail to generate token"));
+        reject(new Error("fail_generate_token"));
       }else{
         resolve(token);
       }
@@ -57,14 +59,14 @@ const authorization = (secret, config) => {
         .then((user) => {
 
           if (!user) {
-            throw new AuthenticationError('must authenticate');
+            reject(new AuthenticationError('must_authenticate'));
           } else {
             req.user = user;
             resolve()
           }
         }).catch(err => {
           console.log(err);
-          throw new AuthenticationError('must authenticate');
+          reject(new AuthenticationError('must authenticate'));
       })
     })
 

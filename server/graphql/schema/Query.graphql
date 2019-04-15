@@ -3,6 +3,11 @@ type registerOuputType {
     message: String
 }
 
+type loginOutputType {
+    user: User!
+    token: String!
+}
+
 type User implements Node{
     _id: ID!
     fullname: String!
@@ -20,4 +25,6 @@ type User implements Node{
 
 type Query {
     getAuthenUser: User
+    checkConfirm(token: String!): loginOutputType!
 }
+

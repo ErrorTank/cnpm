@@ -3,6 +3,8 @@ const TokenConfirmation = require("../confirm-token/confirm-token");
 const {sendEmail} = require("../../../email/index");
 const crypto = require("crypto");
 const {ApolloError, AuthenticationError} = require("apollo-server-express");
+const {createAuthToken} = require("../../../authorization/auth");
+const {getPrivateKey, getPublicKey} = require("../../../authorization/keys/keys");
 
 const getClientUserCache = (user) => {
   return new Promise((resolve, reject) => {
@@ -65,6 +67,32 @@ const resendConfirmEmail = email => {
   })
 };
 
+const checkConfirmToken = token => {
+  return TokenConfirmation.findOne({token}, "_userId")
+    .then(tokenObj => {
+      if(!tokenObj){
+        return Promise.reject(new ApolloError("token_expire"));
+      }
+      return tokenObj._userId;
+    })
+    .then(userID =>
+      TokenConfirmation.deleteMany({_userId: userID})
+        .then(() => userID)
+        .catch(err => Promise.reject(err))
+    )
+    .then(userID => User.findOneAndUpdate({_id: userID}, {$set: {isVerify: true}}, {new: true, fields: "-password"}))
+    .then(info =>
+      createAuthToken(info, getPrivateKey(), {expiresIn: "1 day", algorithm: "RS256"})
+        .then(token => ({
+          token,
+          user: info
+        }))
+        .catch(err => Promise.reject(err))
+    )
+    .then(data => data)
+    .catch(err => Promise.reject(err))
+};
+
 const register = (data) => {
   return new Promise((resolve, reject) => {
     let mockUser = new User(data);
@@ -114,5 +142,6 @@ const register = (data) => {
 module.exports = {
   register,
   getClientUserCache,
-  resendConfirmEmail
+  resendConfirmEmail,
+  checkConfirmToken
 };

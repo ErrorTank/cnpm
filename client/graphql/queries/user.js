@@ -13,7 +13,7 @@ const getBasicUserInfo = gql`
 
 const getAuthenUser = gql`
     query{
-        getAuthenUser(userID: $id){
+        getAuthenUser{
             ...UserInfo
         }
     }
@@ -35,9 +35,23 @@ const resendConfirmEmail = gql`
 
 `;
 
+const checkConfirm = gql`
+  query ($token: String!){
+      checkConfirm(token: $token){
+          user{
+              ...UserInfo
+          }
+          token
+      }
+      
+  }
+  ${UserInfoFragment}
+`;
+
 export {
   getBasicUserInfo,
   getAuthenUser,
   register,
-  resendConfirmEmail
+  resendConfirmEmail,
+  checkConfirm
 }

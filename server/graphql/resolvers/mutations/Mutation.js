@@ -1,7 +1,7 @@
 
 
 const {authorizationUser} = require("../../../authorization/auth");
-const {register, resendConfirmEmail} = require("../../../db/model/user/controller");
+const {register, resendConfirmEmail, registerSocial} = require("../../../db/model/user/controller");
 
 const Mutation = {
   register: async (parent, {data}, {request}, info) => {
@@ -14,6 +14,9 @@ const Mutation = {
     return resendConfirmEmail(email).then(msg => msg).catch(err => throw err);
 
 
+  },
+  registerSocial: async (parent, {data}, {request}, info) => {
+    return registerSocial(data).then(user => user).catch(err => throw err);
   },
 };
 

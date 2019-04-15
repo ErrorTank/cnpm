@@ -37,7 +37,11 @@ export class UserActionsModal extends React.Component {
       leftTitle: "Tạo tài khoản",
       des: "Tạo tài khoản để theo dõi đơn hàng, lưu danh sách sản phẩm yêu thích, nhận nhiều ưu đãi hấp dẫn.",
       label: "Tạo tài khoản",
-      render: () => <Register onRegistered={msg => this.props.onRegistered(msg)} confirmRegisterData={this.state.confirmRegister}/>
+      render: () =>
+        <Register
+          onRegistered={msg => this.props.onRegistered(msg)} confirmRegisterData={this.state.confirmRegister}
+          onConfirmSocial={() => this.props.onClose()}
+        />
     }
   ];
 

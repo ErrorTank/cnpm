@@ -21,7 +21,7 @@ const userSchema = new Schema({
     index: true,
     unique: true
   },
-  password: {type: String, required: true},
+  password: {type: String},
   dob: { type: Date},
   gender: {type: Boolean, default: false},
   subscribe: {type: Boolean, default: false},

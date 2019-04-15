@@ -13,7 +13,7 @@ input CreateUserInput{
     dob: String!
     subscribe: Boolean!
     role: Int!
-    isVerify: Boolean!
+    isVerify: Boolean
     picture: String
     social: SocialInput
 }

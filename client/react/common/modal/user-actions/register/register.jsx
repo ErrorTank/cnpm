@@ -8,9 +8,11 @@ import {BirthPicker} from "../../../birth-picker/birth-picker";
 import {Checkbox} from "../../../checkbox/checkbox";
 import {LoadingInline} from "../../../loading-inline/loading-inline";
 import {client} from "../../../../../graphql";
-import {register} from "../../../../../graphql/queries/user";
+import {register, registerSocial} from "../../../../../graphql/queries/user";
 import {getErrorObject} from "../../../../../graphql/utils/errors";
 import {userRegisterSchema} from "./schema";
+import {authenCache} from "../../../../../common/cache/authen-cache";
+import {userInfo} from "../../../../../common/states/user-info";
 
 export class Register extends KComponent {
   constructor(props) {
@@ -49,19 +51,29 @@ export class Register extends KComponent {
     let {dob} = data;
     this.setState({loading: true});
     let strDob = new Date(dob.year, dob.month - 1, dob.day).toISOString();
+    let sendMutation = this.props.confirmRegisterData ? registerSocial : register;
     client.mutate({
-      mutation: register,
+      mutation: sendMutation,
       variables: {
         data: {...data, dob: strDob}
       }
     })
       .then((response) => {
         this.setState({loading: false});
-        console.log(response)
-        this.handleServerResponse({message: response.data.register.message, data: this.form.getData()});
+        if(this.props.confirmRegisterData){
+          let {user, token} = response.data.registerSocial;
+          authenCache.setAuthen(token, {expire: 7});
+          userInfo.setState({...user});
+          this.props.onConfirmSocial();
+        } else{
+          this.handleServerResponse({message: response.data.register.message, data: this.form.getData()});
+        }
+
+
       })
 
       .catch(err => {
+        console.log(err);
         let errMsg = getErrorObject(err).message;
         this.setState({loading: false, serverError: errMsg})
       });

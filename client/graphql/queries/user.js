@@ -28,6 +28,23 @@ const register = gql`
     }
  
 `;
+
+const registerSocial = gql`
+    mutation ($data: CreateUserInput!){
+        registerSocial(data: $data){
+            user{
+                ...UserInfo
+                social{
+                    id
+                    type
+                }
+            }
+            token
+        }
+    }
+    ${UserInfoFragment}
+`;
+
 const resendConfirmEmail = gql`
     mutation ($email: String!){
         resendConfirmEmail(email: $email)
@@ -71,5 +88,6 @@ export {
   register,
   resendConfirmEmail,
   checkConfirm,
-  getSocialUserInfo
+  getSocialUserInfo,
+  registerSocial
 }

@@ -5,6 +5,7 @@ const crypto = require("crypto");
 const {ApolloError, AuthenticationError} = require("apollo-server-express");
 const {createAuthToken} = require("../../../authorization/auth");
 const {getPrivateKey, getPublicKey} = require("../../../authorization/keys/keys");
+const omit = require("lodash/omit");
 
 const getClientUserCache = (user) => {
   return new Promise((resolve, reject) => {
@@ -95,9 +96,33 @@ const checkConfirmToken = token => {
 
 const getSocialUserInfo = socialID => {
   return User.findOne({"social.id": socialID})
-    .then(user => user ? user : Promise.reject(new ApolloError("not_existed")))
+    .then(user => user ?  createAuthToken(omit(user, ["password", "social"]), getPrivateKey(), {expiresIn: "1 day", algorithm: "RS256"})
+      .then(token => ({
+        token,
+        user: omit(user, ["password"])
+      }))
+      .catch(err => Promise.reject(err)) : Promise.reject(new ApolloError("not_existed")))
     .catch(err => Promise.reject(err))
 
+};
+
+const registerSocial = user => {
+
+  return User.findOne({email: user.email})
+    .then(data => {
+      if(data)
+        return Promise.reject(new ApolloError("account_taken"));
+      return User.insertMany(user)
+    })
+    .then(([data]) =>
+      createAuthToken(omit(data, ["password", "social"]), getPrivateKey(), {expiresIn: "1 day", algorithm: "RS256"})
+        .then(token => ({
+          token,
+          user: omit(data, ["password"])
+        }))
+        .catch(err => Promise.reject(err))
+    )
+    .catch(err => Promise.reject(err))
 };
 
 const register = (data) => {
@@ -153,5 +178,6 @@ module.exports = {
   getClientUserCache,
   resendConfirmEmail,
   checkConfirmToken,
-  getSocialUserInfo
+  getSocialUserInfo,
+  registerSocial
 };

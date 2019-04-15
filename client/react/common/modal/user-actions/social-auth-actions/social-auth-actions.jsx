@@ -25,7 +25,7 @@ export class SocialAuthActions extends React.Component{
                 <FacebookLogin
                     appId={process.env.FACEBOOK_CLIENT_ID}
                     autoLoad={false}
-                    fields="name,email,picture"
+                    fields="name,email,picture,birthday,gender"
                     onClick={() => console.log("fb login click")}
                     callback={this.facebookResponse}
                     render={props => {

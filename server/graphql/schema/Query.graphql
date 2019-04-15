@@ -12,16 +12,18 @@ type User implements Node{
     _id: ID!
     fullname: String!
     email: String!
-    phone: String!
-    password: String!
-    gender: Boolean!
-    dob: String!
-    subscribe: Boolean!
+    phone: String
+    password: String
+    gender: Boolean
+    dob: String
+    subscribe: Boolean
     updatedAt: String!
     createdAt: String!
     role: Int!
     isVerify: Boolean!
+    picture: String
 }
+
 
 type Query {
     getAuthenUser: User

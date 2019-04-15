@@ -11,9 +11,9 @@ const initClient = () => {
       console.log('networkError', networkError)
     },
     request: async (operation) => {
-
+      let headers = await getHeaders();
       operation.setContext({
-        headers: getHeaders()
+        headers
       });
     },
   });

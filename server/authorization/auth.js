@@ -5,7 +5,6 @@ const {AuthenticationError} = require("apollo-server-express");
 const decodeAuthRequest = (req, secret, config) => {
   return new Promise((resolve, reject) => {
     let authHeader = req.headers.authorization;
-
     if (!authHeader || authHeader.replace(/^Bearer /, '') === 'null'){
 
       reject();
@@ -57,16 +56,16 @@ const authorization = (secret, config) => {
     return new Promise((resolve, reject) => {
       decodeAuthRequest(req, secret, config)
         .then((user) => {
-
           if (!user) {
             reject(new AuthenticationError('must_authenticate'));
           } else {
+
             req.user = user;
             resolve()
           }
         }).catch(err => {
           console.log(err);
-          reject(new AuthenticationError('must authenticate'));
+          reject(new AuthenticationError('must_authenticate'));
       })
     })
 

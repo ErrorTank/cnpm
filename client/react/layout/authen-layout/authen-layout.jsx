@@ -1,6 +1,7 @@
 import React from "react";
 import {KComponent} from "../../common/k-component";
 import {userInfo} from "../../../common/states/user-info";
+import {Navbar} from "./nav-bar/nav-bar";
 
 
 export class AuthenLayout extends KComponent {
@@ -17,8 +18,12 @@ export class AuthenLayout extends KComponent {
   };
 
   render() {
+
     return (
       <div className="authen-layout">
+        <Navbar
+          {...this.props}
+        />
         <div className="authen-body">
           {this.props.children}
         </div>

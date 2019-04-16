@@ -1,13 +1,14 @@
 import React from "react";
 import {PageTitle} from "../../../common/page-title/page-title";
 import {userActionModal} from "../../../common/modal/user-actions/user-actions";
+import {AuthenLayout} from "../../../layout/authen-layout/authen-layout";
 
 
 export class IndexRoute extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    userActionModal.open();
+    // userActionModal.open();
   };
 
   render() {
@@ -15,8 +16,11 @@ export class IndexRoute extends React.Component {
       <PageTitle
         title={"Trang chủ"}
       >
-        <div>
-        </div>
+        <AuthenLayout
+          showCategories={false}
+        >
+
+        </AuthenLayout>
       </PageTitle>
     );
   }

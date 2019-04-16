@@ -82,8 +82,6 @@ export class Register extends KComponent {
   render() {
     let canRegister = this.form.getInvalidPaths().length === 0;
     let {confirmRegisterData} = this.props;
-    console.log(this.form.getData());
-    console.log(this.form.getInvalidPaths())
     return (
       <div className="register-panel">
         {this.state.serverError && (

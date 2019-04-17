@@ -72,7 +72,7 @@ const authorization = (secret, config) => {
   }
 };
 
-const authorizationUser = authorization(getPublicKey(), {expiresIn: "1 day", algorithm: ["RS256"]});
+const authorizationUser = authorization(getPublicKey(), {expiresIn: "30d", algorithm: ["RS256"]});
 
 module.exports = {
   authorizationUser,

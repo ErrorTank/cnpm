@@ -6,7 +6,7 @@ import {KComponent} from "../../../k-component";
 import {LoadingInline} from "../../../loading-inline/loading-inline";
 import {SocialAuthActions} from "../social-auth-actions/social-auth-actions";
 import {client} from "../../../../../graphql";
-import {getSocialUserInfo} from "../../../../../graphql/queries/user";
+import {getSocialUserInfo, regularLogin, resendConfirmEmail} from "../../../../../graphql/queries/user";
 import {authenCache} from "../../../../../common/cache/authen-cache";
 import {userInfo} from "../../../../../common/states/user-info";
 import {getErrorObject} from "../../../../../graphql/utils/errors";
@@ -15,11 +15,12 @@ export class Login extends KComponent {
   constructor(props) {
     super(props);
     this.state = {
-      error: ""
+      error: "",
+      loading: false
     };
     const loginSchema = yup.object().shape({
       email: yup.string().email("Email không hợp lệ").required("Email không được để trống"),
-      password: yup.string().min(6, "Mật khẩu bắt buộc từ 6 ký tự trở lên").onlyWord("Mật khẩu không được có kí tự đặc biệt")
+      password: yup.string().min(6, "Mật khẩu bắt buộc từ 6 ký tự trở lên").noSpecialChar("Mật khẩu không được có kí tự đặc biệt")
     });
     this.form = createSimpleForm(loginSchema, {
       initData: {
@@ -37,15 +38,53 @@ export class Login extends KComponent {
 
   renderServerError = () => {
     let {error} = this.state;
+    let {email} = this.form.getData();
     let errMatcher = {
       "fb_login_failed": `Đăng nhập bằng Facebook thất bại. Vui lòng thử lại sau.`,
       "gg_login_failed": `Đăng nhập bằng Google thất bại. Vui lòng thử lại sau.`,
+      "not_existed": `Tài khoản ${email} không tồn tại.`,
+      "not_verified":
+        <span>
+          Tài khoản {email} chưa được xác thực. Bấm vào
+          <span className="email-display" onClick={() => this.handleResend(email)}> đây </span>
+          để gửi lại email xác thực.
+        </span>
+      ,
+      "password_wrong": `Sai mật khẩu.`,
+      "gg_taken": `Địa chỉ ${email} đã được liên kết với một tài khoản Google`,
+      "fb_taken": `Địa chỉ ${email} đã được liên kết với một tài khoản Facebook`
     };
     return errMatcher.hasOwnProperty(error) ? errMatcher[error] : "Đã có lỗi xảy ra."
   };
 
   handleLogin = () => {
+    let {email, password} = this.form.getData();
+    this.setState({loading: true});
+    client.query({
+      query: regularLogin,
+      variables: {
+        payload: {
+          email,
+          password
+        }
+      }
+    }).then(({data}) => {
+      let {user, token} = data.regularLogin;
+      authenCache.setAuthen(token, {expire: 30});
+      userInfo.setState({...user});
+      this.props.onLoginSuccess();
+    }).catch(err => this.setState({loading: false, error:  getErrorObject(err).message}));
+  };
 
+  handleResend = (email) => {
+    client.mutate({
+      mutation: resendConfirmEmail,
+      variables: {
+        email
+      }
+    }).then(() => {
+      this.setState({error: ""});
+    }).catch(err => this.setState({serverError: getErrorObject(err).message}))
   };
 
   socialStrategies = {
@@ -88,7 +127,7 @@ export class Login extends KComponent {
         }
       }).then(({data}) => {
         let {user, token} = data.getSocialUserInfo;
-        authenCache.setAuthen(token, {expire: 7});
+        authenCache.setAuthen(token, {expire: 30});
         userInfo.setState({...user});
         this.props.onLoginSuccess();
       }).catch(err => {
@@ -151,7 +190,7 @@ export class Login extends KComponent {
         </div>
         <div className="button-actions">
           <button type="button" className="btn registration-btn"
-                  disabled={!canLogin || this.state.loading || !this.state.error}
+                  disabled={!canLogin || this.state.loading || this.state.error}
                   onClick={() => this.handleLogin()}
           >
             {this.state.loading ? (

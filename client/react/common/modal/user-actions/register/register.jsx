@@ -62,7 +62,7 @@ export class Register extends KComponent {
         this.setState({loading: false});
         if(this.props.confirmRegisterData){
           let {user, token} = response.data.registerSocial;
-          authenCache.setAuthen(token, {expire: 7});
+          authenCache.setAuthen(token, {expire: 30});
           userInfo.setState({...user});
           this.props.onConfirmSocial();
         } else{

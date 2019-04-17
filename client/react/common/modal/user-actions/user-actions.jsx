@@ -28,7 +28,7 @@ export class UserActionsModal extends React.Component {
       label: "Đăng nhập",
       render: () =>
         <Login
-          onLoginSuccess={() => this.props.onClose()}
+          onLoginSuccess={() => this.props.onLogin()}
           onLogin={() => this.setState({running: true})}
           stopRunning={() => this.setState({running: false})}
           createNewSocialUser={this.createNewSocialUser}
@@ -40,7 +40,7 @@ export class UserActionsModal extends React.Component {
       render: () =>
         <Register
           onRegistered={msg => this.props.onRegistered(msg)} confirmRegisterData={this.state.confirmRegister}
-          onConfirmSocial={() => this.props.onClose()}
+          onConfirmSocial={() => this.props.onLogin()}
         />
     }
   ];
@@ -101,7 +101,7 @@ export const userActionModal = {
             let config = matcher(cred.data)[cred.message];
             resendModal.open({...config, email: cred.data.email})
           }}
-
+          onLogin={() => modal.close(true)}
         />
       )
     });

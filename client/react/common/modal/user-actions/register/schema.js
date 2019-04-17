@@ -5,7 +5,7 @@ export const userRegisterSchema = {
     schema: yup.object().shape({
       fullname: yup.string().min(6, "Họ và tên phải lớn hơn 6 kí tự").max(50, "Họ và tên phải nhỏ hơn 50 kí tự").onlyWord("Họ và tên không được có kí tự đặc biệt").notHaveNumber("Họ và tên không được có chữ số").required("Họ tên không được để trống"),
       phone: yup.string().required("SĐT không được để trống").isPhone("SĐT không hợp lệ"),
-      password: yup.string().min(6, "Mật khẩu bắt buộc từ 6 ký tự trở lên").onlyWord("Mật khẩu không được có kí tự đặc biệt").required("Mật khẩu không được để trống"),
+      password: yup.string().min(6, "Mật khẩu bắt buộc từ 6 ký tự trở lên").noSpecialChar("Mật khẩu không được có kí tự đặc biệt").required("Mật khẩu không được để trống"),
       email: yup.string().email("Email không hợp lệ").required("Email không được để trống"),
       gender: yup.boolean().required(),
       dob: yup.object().shape({

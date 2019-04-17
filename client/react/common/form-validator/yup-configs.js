@@ -28,6 +28,11 @@ yup.addMethod(yup.string, "onlyWord", function (message) {
     return /^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\\s]+$/gi.test(val.replace(/\s/gi, "")) === true
   })
 });
+yup.addMethod(yup.string, "noSpecialChar", function (message) {
+  return this.test("onlyWord", message, function (val) {
+    return /\W/gi.test(val.replace(/\s/gi, "")) === false
+  })
+});
 
 yup.addMethod(yup.string, "haveChar", function (message) {
   return this.test("haveChar", message, function (val) {

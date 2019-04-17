@@ -27,7 +27,7 @@ export class RedirectEmailConfirm extends React.Component {
         }
       }).then((res) => {
         this.setState({stage: 1});
-        authenCache.setAuthen(res.data.checkConfirm.token, {expire: 7});
+        authenCache.setAuthen(res.data.checkConfirm.token, {expire: 30});
         userInfo.setState({...res.data.checkConfirm.user});
       }).catch((err) => {
         let errMsg = getErrorObject(err).message;

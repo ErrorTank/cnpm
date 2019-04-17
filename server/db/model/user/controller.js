@@ -83,7 +83,7 @@ const checkConfirmToken = token => {
     )
     .then(userID => User.findOneAndUpdate({_id: userID}, {$set: {isVerify: true}}, {new: true, fields: "-password"}))
     .then(info =>
-      createAuthToken(info, getPrivateKey(), {expiresIn: "1 day", algorithm: "RS256"})
+      createAuthToken(info, getPrivateKey(), {expiresIn: "30d", algorithm: "RS256"})
         .then(token => ({
           token,
           user: info
@@ -96,7 +96,7 @@ const checkConfirmToken = token => {
 
 const getSocialUserInfo = socialID => {
   return User.findOne({"social.id": socialID})
-    .then(user => user ?  createAuthToken(omit(user, ["password", "social"]), getPrivateKey(), {expiresIn: "1 day", algorithm: "RS256"})
+    .then(user => user ?  createAuthToken(omit(user, ["password", "social"]), getPrivateKey(), {expiresIn: "30d", algorithm: "RS256"})
       .then(token => ({
         token,
         user: omit(user, ["password"])
@@ -115,7 +115,7 @@ const registerSocial = user => {
       return User.insertMany(user)
     })
     .then(([data]) =>
-      createAuthToken(omit(data, ["password", "social"]), getPrivateKey(), {expiresIn: "1 day", algorithm: "RS256"})
+      createAuthToken(omit(data, ["password", "social"]), getPrivateKey(), {expiresIn: "30d", algorithm: "RS256"})
         .then(token => ({
           token,
           user: omit(data, ["password"])
@@ -171,6 +171,33 @@ const register = (data) => {
   });
 };
 
+const regularLogin = payload => {
+  return User.findOne({email: payload.email})
+    .then(data => {
+      if(!data){
+        return Promise.reject(new ApolloError("not_existed"))
+      }
+      if(data.hasOwnProperty("social")){
+        return Promise.reject(new ApolloError(data.social.type === "GOOGLE" ? "gg_taken" : "fb_taken"))
+      }
+      if(!data.isVerify){
+        return Promise.reject(new ApolloError("not_verified"))
+      }
+      if(data.password !== payload.password)
+        return Promise.reject(new ApolloError("password_wrong"));
+      return data;
+
+    })
+    .then((data) =>
+      createAuthToken(omit(data, ["password"]), getPrivateKey(), {expiresIn: "30d", algorithm: "RS256"})
+        .then(token => ({
+          token,
+          user: omit(data, ["password"])
+        }))
+        .catch(err => Promise.reject(err))
+    )
+    .catch(err => Promise.reject(err))
+};
 
 
 module.exports = {
@@ -179,5 +206,6 @@ module.exports = {
   resendConfirmEmail,
   checkConfirmToken,
   getSocialUserInfo,
-  registerSocial
+  registerSocial,
+  regularLogin
 };

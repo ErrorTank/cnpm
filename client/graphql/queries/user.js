@@ -29,6 +29,19 @@ const register = gql`
  
 `;
 
+const regularLogin = gql`
+   query($payload: RegularLoginInput!){
+        regularLogin(payload: $payload){
+            user{
+                ...UserInfo
+            }
+            token
+        }
+    }
+    ${UserInfoFragment}
+`;
+
+
 const registerSocial = gql`
     mutation ($data: CreateUserInput!){
         registerSocial(data: $data){
@@ -89,5 +102,6 @@ export {
   resendConfirmEmail,
   checkConfirm,
   getSocialUserInfo,
-  registerSocial
+  registerSocial,
+  regularLogin
 }

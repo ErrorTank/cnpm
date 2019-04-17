@@ -8,7 +8,7 @@ export class IndexRoute extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    // userActionModal.open();
+
   };
 
   render() {

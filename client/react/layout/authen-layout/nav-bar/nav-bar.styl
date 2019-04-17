@@ -1,13 +1,17 @@
-.app-navbar{
+.app-navbar {
   background-color tikiblue
-  .main-actions{
+
+  .main-actions {
     padding 16px 0
-    .nav-section{
+
+    .nav-section {
       display inline-block
       vertical-align middle
-      &.app-brand{
-        margin-right 25px
-        .app-name{
+
+      &.app-brand {
+        margin-right 30px
+
+        .app-name {
           font-size lg
           font-family: 'Fredoka One', cursive;
           font-weight 550
@@ -15,9 +19,85 @@
         }
       }
     }
-    .actions{
-      .nav-box{
+
+    .actions {
+      float right
+      .user-actions-toggle{
+        max-width 170px
+        overflow hidden
+        white-space nowrap
+        text-overflow ellipsis
+      }
+      &::after {
+        content ''
+        clear both
+      }
+
+      .nav-box
+      .cart-btn {
         display inline-block
+      }
+
+      .cart-btn {
+        height 40px
+        vertical-align middle
+        line-height 40px
+        position relative
+        text-align center
+        font-size sm - 0.3rem
+        border-radius 4px
+        color white
+        padding-left 45px
+        border 2px solid white
+        cursor pointer
+        padding-right 50px
+        .cart-count{
+          background-color tikiyellow
+          color tikiblack
+          border-radius 3px !important
+          font-size sm - 0.4rem
+          font-weight 550
+          position absolute
+          top 50%
+          padding 0
+          transform translateY(-50%)
+          right 15px
+        }
+        i{
+          position absolute
+          left 15px
+          top 50%
+          transform translateY(-50%)
+          font-size sm + 0.3rem
+        }
+      }
+
+      .nav-box {
+        height 38px
+        position relative
+        font-size sm - 0.3rem
+        color white
+        background-color tikiblue
+        border-radius 4px
+        padding-left 45px
+        vertical-align middle
+        line-height 38px
+        margin-right 15px
+        padding-right 15px
+        cursor pointer
+        transition background-color 0.1s ease
+
+        &:hover {
+          background-color darken(tikiblue, 20%)
+        }
+
+        i {
+          position absolute
+          left 15px
+          top 50%
+          transform translateY(-50%)
+          font-size sm + 0.4rem
+        }
       }
     }
   }

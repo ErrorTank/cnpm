@@ -1,6 +1,8 @@
 import React from "react";
 import {GlobalSearchBar} from "./global-search-bar/global-search-bar";
 import {CartBtn} from "./cart/cart-btn/cart-btn";
+import {customHistory} from "../../../routes/routes";
+import {Actions} from "./actions/actions";
 
 export class Navbar extends React.Component {
   constructor(props) {
@@ -12,9 +14,6 @@ export class Navbar extends React.Component {
 
   };
 
-  handleClickCart = () => {
-
-  };
 
   render() {
     let {showCategories} = this.props;
@@ -24,7 +23,9 @@ export class Navbar extends React.Component {
           <div className="container content-container">
             <div className="main-actions">
               <div className="app-brand nav-section">
-                    <span className="app-name">
+                    <span className="app-name"
+                          onClick={() => customHistory.push("/")}
+                    >
                       TAKA
                     </span>
               </div>
@@ -33,26 +34,7 @@ export class Navbar extends React.Component {
                   onSearch={this.handleSearchGlobal}
                 />
               </div>
-              <div className="actions nav-section">
-                <div className="nav-box">
-                  <i className="fas fa-receipt"></i>
-                  Xem đơn hàng
-                </div>
-                <div className="nav-box">
-                  <i className="fas fa-receipt"></i>
-                  Đăng nhập <span className="smaller">Tài khoản</span>
-                </div>
-                <div className="nav-box">
-                  <i className="fas fa-receipt"></i>
-                  Xem đơn hàng
-                </div>
-                <div className="nav-box">
-                  <CartBtn
-                    onClick={this.handleClickCart}
-                  />
-                </div>
-
-              </div>
+              <Actions/>
             </div>
             {showCategories && (
               <div className="bonus-actions col-12 px-0 m-0">

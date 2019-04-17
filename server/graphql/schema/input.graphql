@@ -17,3 +17,8 @@ input CreateUserInput{
     picture: String
     social: SocialInput
 }
+
+input RegularLoginInput{
+    email: String!
+    password: String!
+}

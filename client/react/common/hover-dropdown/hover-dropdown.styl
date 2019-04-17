@@ -1,0 +1,17 @@
+.hover-dropdown{
+  position relative
+  overflow visible !important
+  .dropdown-content{
+    display none
+    position absolute
+    top 100%
+    z-index 10
+    left 50%
+    transform translateX(-50%)
+  }
+  &:hover{
+    .dropdown-content{
+      display block
+    }
+  }
+}

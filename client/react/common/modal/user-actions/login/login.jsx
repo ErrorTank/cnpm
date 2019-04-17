@@ -112,7 +112,6 @@ export class Login extends KComponent {
   };
 
   handleSocialResponse = (res, type) => {
-    console.log(res);
     let strategy = this.socialStrategies[type];
     let {isValid, getData, errorMsg} = strategy;
     if (!isValid(res)) {

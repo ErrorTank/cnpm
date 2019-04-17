@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Fragment} from "react";
 import {CartBtn} from "../cart/cart-btn/cart-btn";
 import {customHistory} from "../../../../routes/routes";
 import {userActionModal} from "../../../../common/modal/user-actions/user-actions";
@@ -6,6 +6,8 @@ import {authenCache} from "../../../../../common/cache/authen-cache";
 import {KComponent} from "../../../../common/k-component";
 import {userInfo} from "../../../../../common/states/user-info";
 import {isLogin} from "../../../../../common/system/system";
+import {HoverDropdown} from "../../../../common/hover-dropdown/hover-dropdown";
+import {CommonDropdown} from "../../../../common/hover-dropdown/common-dropdown/common-dropdown";
 
 export class Actions extends KComponent {
   constructor(props) {
@@ -29,10 +31,28 @@ export class Actions extends KComponent {
     }
   };
 
+  actions = {
+    0: [
+      {
+        label: "Đơn hàng của tôi",
+        onClick: () => customHistory.push("/bills")
+      }, {
+        label: "Tài khoản của tôi",
+        onClick: () => customHistory.push("/customer/account")
+      }, {
+        label: "Sản phẩm đã xem",
+        onClick: () => customHistory.push("/danh-rieng-cho-ban")
+      }, {
+        label: "Sản phẩm yêu thích",
+        onClick: () => customHistory.push("/customer/wishlist")
+      }
+    ]
+  };
+
   render() {
 
     let info = userInfo.getState();
-    console.log(info)
+    let userActions = this.actions[info.role];
     return (
       <div className="actions nav-section">
         <div className="nav-box"
@@ -42,10 +62,30 @@ export class Actions extends KComponent {
           <span>Xem đơn hàng</span>
         </div>
         {isLogin() ? (
-          <div className="nav-box user-actions-toggle">
-            <i className="fas fa-user"></i>
-            <span>Chào {info.fullname}</span>
-          </div>
+          <HoverDropdown
+            className={"nav-box user-actions-toggle"}
+            toggleContent={(
+              <Fragment>
+                <i className="fas fa-user"></i>
+                <span>Chào {info.fullname}</span>
+              </Fragment>
+            )}
+            dropdown={(
+              <CommonDropdown
+                content={(
+                  <div className="user-actions">
+                    {userActions.map((each, i) => (
+                      <div className="action" key={i}
+                           onClick={each.onClick}
+                      >
+                        {each.label}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              />
+            )}
+          />
         ) : (
           <div className="nav-box"
                onClick={this.handleClickLogin}

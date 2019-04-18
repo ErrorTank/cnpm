@@ -1,3 +1,5 @@
+import React from "react";
+
 export const categories = [
   {
     icon: <i className="fas fa-mobile-alt"></i>,
@@ -84,7 +86,7 @@ export const categories = [
       }
     ]
   },{
-    icon: <i className="fas fa-headphones"></i>,
+    icon: <i className="fas fa-headphones-alt"></i>,
     label: "Phụ kiện - Thiết bị số",
     subCategories: [
       {
@@ -169,7 +171,7 @@ export const categories = [
     ]
   },{
     icon: <i className="fas fa-laptop"></i>,
-    label: "PC - Thiết bị IT",
+    label: "Laptop - Thiết bị IT",
     subCategories: [
       {
         label: "Laptop",

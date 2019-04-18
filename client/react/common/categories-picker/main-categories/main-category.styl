@@ -1,0 +1,42 @@
+.main-category{
+  color #444
+  position relative
+  font-size 13px
+  padding 2px 15px
+  height 36px
+  line-height 36px
+  padding-left 42px
+  border-radius 3px
+  cursor pointer
+  .pointer{
+    position absolute
+    width 25.5px
+    height 25.5px
+    top 5px
+    transform rotateZ(-45deg)
+    right -11.75px
+    z-index 5
+    display none
+  }
+  &.active{
+    background-color tikiblue
+    color white
+    .pointer{
+      display inline-block
+      background-color  tikiblue
+
+
+    }
+    i{
+      color white
+    }
+  }
+  i{
+    font-size tn + 0.5rem !important
+    position absolute
+    top 50%
+    color lighten(tikitext, 40%)
+    transform translateY(-55%)
+    left 12px
+  }
+}

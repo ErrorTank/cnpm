@@ -5,6 +5,9 @@ export const CommonDropdown = props => {
   return (
     <div className={classnames("common-dropdown", props.className)}>
       {props.content}
+      <div className="pointer">
+
+      </div>
     </div>
   )
 };

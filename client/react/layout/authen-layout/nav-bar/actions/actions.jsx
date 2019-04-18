@@ -8,6 +8,7 @@ import {userInfo} from "../../../../../common/states/user-info";
 import {isLogin} from "../../../../../common/system/system";
 import {HoverDropdown} from "../../../../common/hover-dropdown/hover-dropdown";
 import {CommonDropdown} from "../../../../common/hover-dropdown/common-dropdown/common-dropdown";
+import classnames from "classnames"
 
 export class Actions extends KComponent {
   constructor(props) {
@@ -45,6 +46,18 @@ export class Actions extends KComponent {
       }, {
         label: "Sản phẩm yêu thích",
         onClick: () => customHistory.push("/customer/wishlist")
+      }, {
+        label: (
+          <span>
+            Đăng xuất
+          </span>
+        ),
+        onClick: () => {
+          authenCache.clearAuthen();
+          userInfo.setState(null);
+
+        },
+        className: "sign-out-action"
       }
     ]
   };
@@ -52,7 +65,6 @@ export class Actions extends KComponent {
   render() {
 
     let info = userInfo.getState();
-    let userActions = this.actions[info.role];
     return (
       <div className="actions nav-section">
         <div className="nav-box"
@@ -72,10 +84,11 @@ export class Actions extends KComponent {
             )}
             dropdown={(
               <CommonDropdown
+                className={"user-actions"}
                 content={(
-                  <div className="user-actions">
-                    {userActions.map((each, i) => (
-                      <div className="action" key={i}
+                  <div className="actions-list">
+                    {this.actions[info.role].map((each, i) => (
+                      <div className={classnames("action", each.className)} key={i}
                            onClick={each.onClick}
                       >
                         {each.label}

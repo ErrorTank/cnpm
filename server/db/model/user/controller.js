@@ -1,5 +1,6 @@
 const User = require("./user");
 const TokenConfirmation = require("../confirm-token/confirm-token");
+const ResetPasswordToken = require("../reset-password-token/reset-password-token");
 const {sendEmail} = require("../../../email/index");
 const crypto = require("crypto");
 const {ApolloError, AuthenticationError} = require("apollo-server-express");
@@ -35,29 +36,34 @@ const resendConfirmEmail = email => {
         if (!user) {
           reject(new ApolloError("user_not_found"))
         } else {
-          let newToken = new TokenConfirmation({
-            _userId: user._id,
-            token: crypto.randomBytes(16).toString('hex')
-          });
-          newToken.save((err) => {
-            if (err) {
-              reject(new Error())
+          TokenConfirmation.deleteMany({_userId: user._id}).then(() => {
+            let newToken = new TokenConfirmation({
+              _userId: user._id,
+              token: crypto.randomBytes(16).toString('hex')
+            });
+            newToken.save((err) => {
+              if (err) {
+                reject(new Error())
 
-            } else {
-              sendEmail("gmail", {
-                from: "TAKA | Mua sắm trực tuyến",
-                to: email,
-                subject: "Xác nhận đăng ký",
-                template: "confirmation-email",
-                context: {
-                  appUrl: `${process.env.APP_URI}`,
-                  redirect: `${process.env.APP_URI}/email-confirmation?invitation_code=${newToken.token}`,
-                  name: user.fullname
-                }
-              }).then(() => resolve())
-            }
+              } else {
+                sendEmail("gmail", {
+                  from: "TAKA | Mua sắm trực tuyến",
+                  to: email,
+                  subject: "Xác nhận đăng ký",
+                  template: "confirmation-email",
+                  context: {
+                    appUrl: `${process.env.APP_URI}`,
+                    redirect: `${process.env.APP_URI}/email-confirmation?invitation_code=${newToken.token}`,
+                    name: user.fullname
+                  }
+                }).then(() => resolve())
+              }
 
+            }).catch(err => {
+              reject(err)
+            });
           });
+
         }
 
       }
@@ -211,6 +217,27 @@ const checkEmailExisted = email => {
     .catch(err => Promise.reject(err))
 };
 
+const confirmForgotPassword = email => {
+  return User.findOne({email})
+    .then(user => ResetPasswordToken.deleteMany({_userId: user._id}).then(() => user).catch(err => Promise.reject(err)))
+    .then(user => {
+      let token = new ResetPasswordToken({_userId: user._id, token: crypto.randomBytes(16).toString('hex')});
+      token.save().then(() => {
+        return sendEmail("gmail", {
+          from: "TAKA | Mua sắm trực tuyến",
+          to: user.email,
+          subject: "Xác nhận đổi mật khẩu",
+          template: "reset-password",
+          context: {
+            appUrl: `${process.env.APP_URI}`,
+            redirect: `${process.env.APP_URI}/confirm-reset-password?reset_code=${token.token}`,
+            name: user.fullname
+          }
+        }).then(() => Promise.resolve())
+
+      }).catch(err => Promise.reject(err));
+    }).catch(err => Promise.reject(err))
+};
 
 module.exports = {
   register,
@@ -220,5 +247,6 @@ module.exports = {
   getSocialUserInfo,
   registerSocial,
   regularLogin,
-  checkEmailExisted
+  checkEmailExisted,
+  confirmForgotPassword
 };

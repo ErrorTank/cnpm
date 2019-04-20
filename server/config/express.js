@@ -1,7 +1,11 @@
 const fs = require('fs');
 const express = require("express");
 const bodyParser = require('body-parser');
+const ExceptionRoutes = ["/confirm-reset-password"];
 
+const checkExceptionRoutes = (org = '') => {
+  return !!ExceptionRoutes.find((each) => org.startsWith(each));
+};
 
 const configExpressServer = (app) => {
   app.use(bodyParser.urlencoded({extended: true}));
@@ -27,6 +31,8 @@ const configExpressServer = (app) => {
   app.use("*", (req, res, next) => {
 
     if (/^\/api\//.test(req.originalUrl)) {
+      next();
+    }else if(checkExceptionRoutes(req.originalUrl)){
       next();
     } else {
       res.sendFile(process.cwd() + "/" + process.env.HTML_DIR);

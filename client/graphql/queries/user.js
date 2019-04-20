@@ -59,7 +59,7 @@ const registerSocial = gql`
 `;
 
 const checkEmailExisted = gql`
-    mutation ($email: String!){
+    query ($email: String!){
         checkEmailExisted(email: $email)
     }
   
@@ -102,6 +102,13 @@ const getSocialUserInfo = gql`
     ${UserInfoFragment}
 `;
 
+const confirmForgotPassword = gql`
+    mutation ($email: String!){
+        confirmForgotPassword(email: $email)
+
+    }
+`;
+
 export {
   getBasicUserInfo,
   getAuthenUser,
@@ -111,5 +118,6 @@ export {
   getSocialUserInfo,
   registerSocial,
   regularLogin,
-  checkEmailExisted
+  checkEmailExisted,
+  confirmForgotPassword
 }

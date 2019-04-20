@@ -1,10 +1,11 @@
-import React from "react";
+import React, {Fragment} from "react";
 import {InputBase} from "../../../../base-input/base-input";
 import {LoadingInline} from "../../../../loading-inline/loading-inline";
 import * as yup from "yup";
 import {client} from "../../../../../../graphql";
-import {checkEmailExisted} from "../../../../../../graphql/queries/user";
+import {checkEmailExisted, confirmForgotPassword} from "../../../../../../graphql/queries/user";
 import debounce from "lodash/debounce"
+import Alert from "../../../../alert/alert";
 
 export class ForgotPasswordPanel extends React.Component {
   constructor(props) {
@@ -13,8 +14,9 @@ export class ForgotPasswordPanel extends React.Component {
       email: "",
       loading: false,
       error: "",
-      checking: true,
-      startValidate: false
+      checking: false,
+      startValidate: false,
+      success: false
     };
   };
 
@@ -23,7 +25,14 @@ export class ForgotPasswordPanel extends React.Component {
   });
 
   handleChangePassword = () => {
-
+    let {email} = this.state;
+    client.mutate({
+      mutation: confirmForgotPassword,
+      variables: {
+        email
+      }
+    }).then(() => this.setState({success: true}))
+      .catch(() => this.setState({error: "Đã có lỗi xảy ra"}));
   };
 
   checkEmailExisted = (email) => {
@@ -35,7 +44,10 @@ export class ForgotPasswordPanel extends React.Component {
     }).then(({data}) => {
       let {checkEmailExisted} = data;
       if(!checkEmailExisted)
-        this.setState({error: "Tài khoản không tồn tại"})
+        this.setState({error: "Tài khoản không tồn tại", checking: false})
+      else{
+        this.setState({checking: false})
+      }
     })
   };
 
@@ -55,7 +67,7 @@ export class ForgotPasswordPanel extends React.Component {
   };
 
   render() {
-    let {email, loading, error, checking, startValidate} = this.state;
+    let {email, loading, error, checking, startValidate, success} = this.state;
     let isValid = this.emailValidator.isValidSync({email});
     console.log(this.state);
     console.log(isValid)
@@ -65,37 +77,54 @@ export class ForgotPasswordPanel extends React.Component {
         <div className="actions">
           <span onClick={this.props.onBack}><i className="fas fa-arrow-left"></i> Về đăng nhập</span>
         </div>
-        <p className="fp-title">Quên mật khẩu?</p>
-        <p className="instruction">Vui lòng cung cấp email đăng nhập để lấy lại mật khẩu.</p>
-        <div className="input-wrapper">
-          <InputBase
-            className="registration-input pt-0"
-            id={"email"}
-            error={startValidate ? isValid ? error ? {message: error} : null : {message: "Email không hợp lệ"} : null}
-            type={"text"}
-            placeholder={"abc@xyz.com"}
-            onChange={this.handleChange}
-            value={email}
+        {success ? (
+          <Alert
+            className={"success-notify m-alert--outline"}
+            content={`Email xác nhận đã được gửi đến địa chỉ ${email}`}
+            type={"success"}
+            title={"Thông báo"}
           />
-          <span className="check-loading">
-            <i className="fas fa-spinner spin"></i>
-          </span>
+        ) : (
+          <Fragment>
+            <p className="fp-title">Quên mật khẩu?</p>
+            <p className="instruction">Vui lòng cung cấp email đăng nhập để lấy lại mật khẩu.</p>
+            <div className="input-wrapper">
+              <InputBase
+                className="registration-input pt-0"
+                id={"email"}
+                error={startValidate ? isValid ? error ? {message: error} : null : {message: "Email không hợp lệ"} : null}
+                type={"text"}
+                placeholder={"abc@xyz.com"}
+                onChange={this.handleChange}
+                value={email}
+              />
+              {checking && (
+                <span className="check-loading">
+              <i className="fas fa-spinner spin"></i>
+            </span>
+              )
 
-        </div>
+              }
 
-        <button type="button" className="btn registration-btn"
-                disabled={!canLogin}
-                onClick={this.handleChangePassword}
-        >
-          {this.state.loading ? (
-            <LoadingInline
-              className={"registration-loading"}
-            />
-          ) : "Gửi email"
 
-          }
+            </div>
 
-        </button>
+            <button type="button" className="btn registration-btn"
+                    disabled={!canLogin}
+                    onClick={this.handleChangePassword}
+            >
+              {this.state.loading ? (
+                <LoadingInline
+                  className={"registration-loading"}
+                />
+              ) : "Gửi email"
+
+              }
+
+            </button>
+          </Fragment>
+        )}
+
       </div>
     );
   }

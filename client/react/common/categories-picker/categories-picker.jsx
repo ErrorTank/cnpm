@@ -8,15 +8,16 @@ export class CategoriesPicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentCategories: null
+      currentCategories: "Điện tử - Điện lạnh"
     };
   };
 
 
   render() {
     let {currentCategories} = this.state;
-    let subCategories = categories.find(each => each.label === currentCategories);
-    console.log(currentCategories)
+    let currentCategoriesObj = categories.find(each => each.label === currentCategories);
+    let subCategories = currentCategoriesObj ? currentCategoriesObj.subCategories : null ;
+    console.log(currentCategoriesObj)
     return (
       <div className="categories-picker"
            onMouseLeave={() => this.setState({currentCategories: null})}
@@ -26,11 +27,9 @@ export class CategoriesPicker extends React.Component {
           onOpenSubCategories={(c) => this.setState({currentCategories: c})}
           current={currentCategories}
         />
-        {/*{subCategories && (*/}
-          {/*<SubCategories*/}
-            {/*categories={subCategories}*/}
-          {/*/>*/}
-        {/*)}*/}
+        <SubCategories
+          categories={subCategories}
+        />
 
       </div>
     );

@@ -1,0 +1,24 @@
+.sub-categories{
+  height 400px
+  position absolute
+  left 245px
+  top 0
+  box-shadow -2px 0 8px 0 rgba(0,0,0,.06)
+  width 925px
+  background-color white
+  border-radius 0 3px 3px 0
+  border 1px solid #e1e1e1
+  border-left none
+  display none
+  padding 18px
+  &.active{
+    display block
+  }
+  .list{
+    display flex
+    flex-direction column
+    flex-wrap wrap
+    max-height 100%
+    align-content flex-start
+  }
+}

@@ -10,13 +10,15 @@ import {getSocialUserInfo, regularLogin, resendConfirmEmail} from "../../../../.
 import {authenCache} from "../../../../../common/cache/authen-cache";
 import {userInfo} from "../../../../../common/states/user-info";
 import {getErrorObject} from "../../../../../graphql/utils/errors";
+import {ForgotPasswordPanel} from "./forgot-password-panel/forgot-password-panel";
 
 export class Login extends KComponent {
   constructor(props) {
     super(props);
     this.state = {
       error: "",
-      loading: false
+      loading: false,
+      forgotPasswordMode: false
     };
     const loginSchema = yup.object().shape({
       email: yup.string().email("Email không hợp lệ").required("Email không được để trống"),
@@ -73,7 +75,7 @@ export class Login extends KComponent {
       authenCache.setAuthen(token, {expire: 30});
       userInfo.setState({...user});
       this.props.onLoginSuccess();
-    }).catch(err => this.setState({loading: false, error:  getErrorObject(err).message}));
+    }).catch(err => this.setState({loading: false, error: getErrorObject(err).message}));
   };
 
   handleResend = (email) => {
@@ -131,7 +133,7 @@ export class Login extends KComponent {
         this.props.onLoginSuccess();
       }).catch(err => {
         let errMsg = getErrorObject(err).message;
-        if(errMsg === 'not_existed'){
+        if (errMsg === 'not_existed') {
           this.props.createNewSocialUser(rawData);
         }
       });
@@ -144,68 +146,77 @@ export class Login extends KComponent {
     let canLogin = this.form.getInvalidPaths().length === 0;
     return (
       <div className={"login-panel"}>
-        {this.state.error && (
-          <div className="server-error">
-            {this.renderServerError()}
-          </div>
-        )}
-        <div className="m-form m-form--state">
-          {this.form.enhanceComponent("email", ({error, onChange, onEnter, ...others}) => (
-            <InputBase
-              className="registration-input pt-0"
-              error={error}
-              id={"email"}
-              onKeyDown={onEnter}
-              type={"text"}
-              label={"Email"}
-              placeholder={"abc@xyz.com"}
-              onChange={e => {
-
-                this.setState({error: ""});
-                onChange(e);
-              }}
-              {...others}
-            />
-          ), true)}
-          {this.form.enhanceComponent("password", ({error, onChange, onEnter, ...others}) => (
-            <InputBase
-              className="registration-input pt-0 pb-0"
-              error={error}
-              id={"password"}
-              type={"password"}
-              placeholder={"Mật khẩu gồm ít nhất 6 kí tự"}
-              onKeyDown={onEnter}
-              onChange={e => {
-                this.setState({error: ""});
-                onChange(e);
-              }}
-              label={"Mật khẩu"}
-              {...others}
-            />
-          ), true)}
-        </div>
-        <div className="forgot-password">
-          Quên mật khẩu? Nhấn vào <span>đây</span>
-        </div>
-        <div className="button-actions">
-          <button type="button" className="btn registration-btn"
-                  disabled={!canLogin || this.state.loading || this.state.error}
-                  onClick={() => this.handleLogin()}
-          >
-            {this.state.loading ? (
-              <LoadingInline
-                className={"registration-loading"}
-              />
-            ) : "Đăng nhập"
-
-            }
-
-          </button>
-          <SocialAuthActions
-            handleClickSocialBtn={this.props.onLogin}
-            onResponse={this.handleSocialResponse}
+        {this.state.forgotPasswordMode ? (
+          <ForgotPasswordPanel
+            onBack={() => this.setState({forgotPasswordMode: false})}
           />
-        </div>
+        ) : (
+          <Fragment>
+            {this.state.error && (
+              <div className="server-error">
+                {this.renderServerError()}
+              </div>
+            )}
+            <div className="m-form m-form--state">
+              {this.form.enhanceComponent("email", ({error, onChange, onEnter, ...others}) => (
+                <InputBase
+                  className="registration-input pt-0"
+                  error={error}
+                  id={"email"}
+                  onKeyDown={onEnter}
+                  type={"text"}
+                  label={"Email"}
+                  placeholder={"abc@xyz.com"}
+                  onChange={e => {
+
+                    this.setState({error: ""});
+                    onChange(e);
+                  }}
+                  {...others}
+                />
+              ), true)}
+              {this.form.enhanceComponent("password", ({error, onChange, onEnter, ...others}) => (
+                <InputBase
+                  className="registration-input pt-0 pb-0"
+                  error={error}
+                  id={"password"}
+                  type={"password"}
+                  placeholder={"Mật khẩu gồm ít nhất 6 kí tự"}
+                  onKeyDown={onEnter}
+                  onChange={e => {
+                    this.setState({error: ""});
+                    onChange(e);
+                  }}
+                  label={"Mật khẩu"}
+                  {...others}
+                />
+              ), true)}
+            </div>
+            <div className="forgot-password">
+              Quên mật khẩu? Nhấn vào <span onClick={() => this.setState({forgotPasswordMode: true})}>đây</span>
+            </div>
+            <div className="button-actions">
+              <button type="button" className="btn registration-btn"
+                      disabled={!canLogin || this.state.loading || this.state.error}
+                      onClick={() => this.handleLogin()}
+              >
+                {this.state.loading ? (
+                  <LoadingInline
+                    className={"registration-loading"}
+                  />
+                ) : "Đăng nhập"
+
+                }
+
+              </button>
+              <SocialAuthActions
+                handleClickSocialBtn={this.props.onLogin}
+                onResponse={this.handleSocialResponse}
+              />
+            </div>
+          </Fragment>
+        )}
+
       </div>
     );
   }

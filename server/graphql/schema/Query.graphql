@@ -31,5 +31,6 @@ type Query {
     checkConfirm(token: String!): loginOutputType
     getSocialUserInfo(socialID: String!): loginOutputType
     regularLogin(payload: RegularLoginInput!): loginOutputType
+    checkEmailExisted(email: String!): Boolean
 }
 

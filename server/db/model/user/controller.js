@@ -71,7 +71,7 @@ const resendConfirmEmail = email => {
 const checkConfirmToken = token => {
   return TokenConfirmation.findOne({token}, "_userId")
     .then(tokenObj => {
-      if(!tokenObj){
+      if (!tokenObj) {
         return Promise.reject(new ApolloError("token_expire"));
       }
       return tokenObj._userId;
@@ -96,7 +96,10 @@ const checkConfirmToken = token => {
 
 const getSocialUserInfo = socialID => {
   return User.findOne({"social.id": socialID})
-    .then(user => user ?  createAuthToken(omit(user, ["password", "social"]), getPrivateKey(), {expiresIn: "30d", algorithm: "RS256"})
+    .then(user => user ? createAuthToken(omit(user, ["password", "social"]), getPrivateKey(), {
+      expiresIn: "30d",
+      algorithm: "RS256"
+    })
       .then(token => ({
         token,
         user: omit(user, ["password"])
@@ -110,7 +113,7 @@ const registerSocial = user => {
 
   return User.findOne({email: user.email})
     .then(data => {
-      if(data)
+      if (data)
         return Promise.reject(new ApolloError("account_taken"));
       return User.insertMany(user)
     })
@@ -174,16 +177,16 @@ const register = (data) => {
 const regularLogin = payload => {
   return User.findOne({email: payload.email})
     .then(data => {
-      if(!data){
+      if (!data) {
         return Promise.reject(new ApolloError("not_existed"))
       }
-      if(data.hasOwnProperty("social")){
+      if (data.hasOwnProperty("social")) {
         return Promise.reject(new ApolloError(data.social.type === "GOOGLE" ? "gg_taken" : "fb_taken"))
       }
-      if(!data.isVerify){
+      if (!data.isVerify) {
         return Promise.reject(new ApolloError("not_verified"))
       }
-      if(data.password !== payload.password)
+      if (data.password !== payload.password)
         return Promise.reject(new ApolloError("password_wrong"));
       return data;
 
@@ -199,6 +202,15 @@ const regularLogin = payload => {
     .catch(err => Promise.reject(err))
 };
 
+const checkEmailExisted = email => {
+  return User.findOne({email})
+    .then(data => {
+        return !!data
+      }
+    )
+    .catch(err => Promise.reject(err))
+};
+
 
 module.exports = {
   register,
@@ -207,5 +219,6 @@ module.exports = {
   checkConfirmToken,
   getSocialUserInfo,
   registerSocial,
-  regularLogin
+  regularLogin,
+  checkEmailExisted
 };

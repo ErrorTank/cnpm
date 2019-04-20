@@ -1,5 +1,5 @@
 const {authorizationUser, } = require("../../../authorization/auth");
-const {checkConfirmToken, getClientUserCache, getSocialUserInfo, regularLogin} = require("../../../db/model/user/controller");
+const {checkConfirmToken, getClientUserCache, getSocialUserInfo, regularLogin, checkEmailExisted} = require("../../../db/model/user/controller");
 
 const Query = {
   getAuthenUser: (parent, args, {request}, info) => {
@@ -19,6 +19,9 @@ const Query = {
   },
   regularLogin: async (parent, args, {request}, info) => {
     return regularLogin(args.payload).then(data => data).catch(err => throw err);
+  },
+  checkEmailExisted: async (parent, args, {request}, info) => {
+    return checkEmailExisted(args.email).then(data => data).catch(err => throw err);
   },
 };
 

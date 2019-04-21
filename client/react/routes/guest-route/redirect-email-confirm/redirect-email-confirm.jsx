@@ -17,9 +17,7 @@ export class RedirectEmailConfirm extends React.Component {
       msg: ""
     };
     const queryObj = parseQueryString(props.location.search);
-    if(Object.hasOwnProperty("invitation_code")){
-      // customHistory.push("/");
-    }else{
+    if(queryObj.hasOwnProperty("invitation_code")){
       client.query({
         query: checkConfirm,
         variables: {
@@ -36,6 +34,9 @@ export class RedirectEmailConfirm extends React.Component {
         await wait(() => this.setState({stage: 2}));
         await wait(() => customHistory.push("/"));
       });
+
+    }else{
+      customHistory.push("/");
     }
   };
 

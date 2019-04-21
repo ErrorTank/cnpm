@@ -21,8 +21,8 @@ const Mutation = {
   confirmForgotPassword: async (parent, {email}, {request}, info) => {
     return confirmForgotPassword(email).then(res => res).catch(err => throw err);
   },
-  changePassword: async (parent, {password}, {request}, info) => {
-    return changePassword(password).then(res => res).catch(err => throw err);
+  changePassword: async (parent, {payload}, {request}, info) => {
+    return changePassword(payload).then(res => res).catch(err => throw err);
   },
 };
 

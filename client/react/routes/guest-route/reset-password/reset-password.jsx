@@ -10,6 +10,8 @@ import {client} from "../../../../graphql";
 import {changePassword} from "../../../../graphql/queries/user";
 import Alert from "../../../common/alert/alert";
 import {getErrorObject} from "../../../../graphql/utils/errors";
+import {parseQueryString} from "../../../../string-utils";
+import {customHistory} from "../../routes";
 
 export class ResetPassword extends KComponent {
   constructor(props) {
@@ -29,26 +31,35 @@ export class ResetPassword extends KComponent {
         rePassword: ""
       }
     });
-    this.onUnmount(this.form.on("enter", () => this.handleLogin()));
+    this.onUnmount(this.form.on("enter", () => this.handleChangePassword()));
     this.onUnmount(this.form.on("change", () => {
       this.forceUpdate();
       this.state.error && this.setState({error: ""});
     }));
     this.form.validateData();
   };
-
+  //Todo: add event listen to user info change and redirect to home
   handleChangePassword = () => {
     let data = this.form.getData();
-    client.mutate({
-      mutation: changePassword,
-      variables: {
-        password: data.password
-      }
-    }).then(() => {
-      this.setState({success: true});
-    }).catch(err => {
-      this.setState({serverError: getErrorObject(err).message})
-    });
+    const queryObj = parseQueryString(this.props.location.search);
+
+    if(queryObj.hasOwnProperty("reset_code")){
+      client.mutate({
+        mutation: changePassword,
+        variables: {
+          payload: {
+            password: data.password,
+            token: queryObj.reset_code
+          }
+
+        }
+      }).then(() => {
+        this.setState({success: true});
+      }).catch(err => {
+        this.setState({serverError: getErrorObject(err).message})
+      });
+    }
+
   };
 
   renderServerError = () => {
@@ -76,7 +87,7 @@ export class ResetPassword extends KComponent {
                     className={"notify m-alert--outline"}
                     content={(
                       <span>
-                        Mật khẩu được đổi thành công! Về <span className="email-display">trang chủ</span>
+                        Mật khẩu được đổi thành công! Về <span className="email-display" onClick={() => customHistory.push("/")}>trang chủ</span>
                       </span>
                     )}
                     type={"success"}

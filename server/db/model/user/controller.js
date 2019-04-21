@@ -239,8 +239,16 @@ const confirmForgotPassword = email => {
     }).catch(err => Promise.reject(err))
 };
 
-const changePassword = password => {
-  return ResetPasswordToken.findOne({})
+const changePassword = payload => {
+  return ResetPasswordToken.findOne({token: payload.token})
+    .then((p) => {
+      if(!p)
+        return Promise.reject(new ApolloError("token_expired"));
+      return p._userId;
+    })
+    .then((userID) => User.updateOne({_id: userID}, {$set: {password: payload.password}}).then(() => userID).catch(err => Promise.reject(err)))
+    .then((userID) => ResetPasswordToken.deleteMany({_userId: userID}).then(() => true).catch(err => Promise.reject(err)))
+    .catch(err => Promise.reject(err))
 };
 
 module.exports = {

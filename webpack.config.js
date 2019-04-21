@@ -41,7 +41,7 @@ module.exports = {
                 exclude: /node_modules/
             }, {
                 test: /\.styl$/,
-                use: [ //use if apply many loaders
+                use: [
                     "style-loader",
                     "css-loader",
                     "stylus-loader"

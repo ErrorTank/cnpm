@@ -69,8 +69,7 @@ export class ForgotPasswordPanel extends React.Component {
   render() {
     let {email, loading, error, checking, startValidate, success} = this.state;
     let isValid = this.emailValidator.isValidSync({email});
-    console.log(this.state);
-    console.log(isValid)
+
     let canLogin = isValid && !loading && !checking && !error;
     return (
       <div className="forgot-password-panel">

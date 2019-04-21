@@ -109,6 +109,13 @@ const confirmForgotPassword = gql`
     }
 `;
 
+const changePassword = gql`
+    mutation ($payload: ResetPasswordInput!){
+        changePassword(payload: $payload)
+
+    }
+`;
+
 export {
   getBasicUserInfo,
   getAuthenUser,
@@ -119,5 +126,6 @@ export {
   registerSocial,
   regularLogin,
   checkEmailExisted,
-  confirmForgotPassword
+  confirmForgotPassword,
+  changePassword
 }

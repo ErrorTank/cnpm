@@ -22,3 +22,8 @@ input RegularLoginInput{
     email: String!
     password: String!
 }
+
+input ResetPasswordInput{
+    password: String!
+    token: String!
+}

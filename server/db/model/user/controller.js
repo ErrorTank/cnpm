@@ -239,6 +239,10 @@ const confirmForgotPassword = email => {
     }).catch(err => Promise.reject(err))
 };
 
+const changePassword = password => {
+  return ResetPasswordToken.findOne({})
+};
+
 module.exports = {
   register,
   getClientUserCache,
@@ -248,5 +252,6 @@ module.exports = {
   registerSocial,
   regularLogin,
   checkEmailExisted,
-  confirmForgotPassword
+  confirmForgotPassword,
+  changePassword
 };

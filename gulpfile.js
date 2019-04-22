@@ -29,7 +29,7 @@ const startServer = () => {
         ],
         env: {'NODE_ENV': 'development'},
         stdout: true,
-        exec:'babel-node'
+        exec: "babel-node"
     })
 };
 

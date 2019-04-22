@@ -1,6 +1,35 @@
+
+.app-navbar-wrapper{
+  z-index 1
+  &.show{
+    position fixed
+    left 0
+    top 0
+    width 100vw
+    height 100vh
+    background-color rgba(tikiblack, 60%)
+  }
+}
 .app-navbar {
   background-color tikiblue
-
+  .cate-toggle{
+    height 40px
+    cursor pointer
+    font-size 14px
+    color white
+    padding 10px 0
+    margin-bottom 10px
+    position relative
+    padding-left 40px
+    display inline-block
+    i{
+      font-size 22px
+      position absolute
+      left 8px
+      top 50%
+      transform translateY(-50%)
+    }
+  }
   .main-actions {
     padding 16px 0
 
@@ -102,4 +131,7 @@
     }
   }
 
+}
+.temp-block{
+  margin-top 124px
 }

@@ -26,13 +26,14 @@ export class ForgotPasswordPanel extends React.Component {
 
   handleChangePassword = () => {
     let {email} = this.state;
+    this.setState({loading: true});
     client.mutate({
       mutation: confirmForgotPassword,
       variables: {
         email
       }
     }).then(() => this.setState({success: true}))
-      .catch(() => this.setState({error: "Đã có lỗi xảy ra"}));
+      .catch(() => this.setState({error: "Đã có lỗi xảy ra", loading: false}));
   };
 
   checkEmailExisted = (email) => {

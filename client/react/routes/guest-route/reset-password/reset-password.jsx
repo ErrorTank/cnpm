@@ -41,6 +41,7 @@ export class ResetPassword extends KComponent {
   //Todo: add event listen to user info change and redirect to home
   handleChangePassword = () => {
     let data = this.form.getData();
+    this.setState({loading: true});
     const queryObj = parseQueryString(this.props.location.search);
 
     if(queryObj.hasOwnProperty("reset_code")){
@@ -56,7 +57,7 @@ export class ResetPassword extends KComponent {
       }).then(() => {
         this.setState({success: true});
       }).catch(err => {
-        this.setState({serverError: getErrorObject(err).message})
+        this.setState({serverError: getErrorObject(err).message, loading: false})
       });
     }
 

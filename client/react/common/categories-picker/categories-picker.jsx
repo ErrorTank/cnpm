@@ -17,7 +17,6 @@ export class CategoriesPicker extends React.Component {
     let {currentCategories} = this.state;
     let currentCategoriesObj = categories.find(each => each.label === currentCategories);
     let subCategories = currentCategoriesObj ? currentCategoriesObj.subCategories : null ;
-    console.log(currentCategoriesObj)
     return (
       <div className="categories-picker"
            onMouseLeave={() => this.setState({currentCategories: null})}

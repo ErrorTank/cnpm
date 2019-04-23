@@ -23,7 +23,7 @@ export class AuthenLayout extends KComponent {
       <div className="authen-layout">
         <Navbar
           {...this.props}
-        />
+        />b
         <div className="authen-body">
           {this.props.children}
         </div>

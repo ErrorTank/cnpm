@@ -36,6 +36,14 @@ const productSchema = new Schema({
         type: ObjectId,
         ref: "User"
     },
+    discountWithCode: {
+        type: ObjectId,
+        ref: "DiscountWithCode"
+    },
+    regularDiscount: {
+        type: ObjectId,
+        ref: "RegularDiscount"
+    },
     options: {
         type: [{
             price: Number,

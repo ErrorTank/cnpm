@@ -22,7 +22,7 @@ const decodeAuthRequest = (req, secret, config) => {
 
 
 const createAuthToken = (userInfo, secret, config) =>{
-  console.log(typeof userInfo);
+  console.log(Object.keys(userInfo));
   console.log(userInfo.toJSON())
   return new Promise((resolve, reject) => {
     jwt.sign(userInfo.toJSON(), secret, config, (err, token) => {
@@ -60,7 +60,6 @@ const authorization = (secret, config) => {
           if (!user) {
             reject(new AuthenticationError('must_authenticate'));
           } else {
-
             req.user = user;
             resolve()
           }

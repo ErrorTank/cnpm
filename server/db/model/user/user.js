@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-
+//0: Regular user, 1: Seller(include Regular)
 const userSchema = new Schema({
   fullname:  {
     type: String,
@@ -27,7 +27,7 @@ const userSchema = new Schema({
   subscribe: {type: Boolean, default: false},
   updatedAt: { type: Date},
   createdAt: { type: Date},
-  role: {type: Number, required: true},
+  role: {type: Number, required: true, default: 0},
   isVerify: {type: Boolean, default: false, required: true},
   social: {
     id: String,

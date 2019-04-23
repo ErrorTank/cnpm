@@ -13,19 +13,19 @@ export class BannerSlider extends React.Component {
   bannerImages = [
     {
       content: (
-        <div>Mot</div>
+        <div className="banner-slider-content first"></div>
       )
     }, {
       content: (
-        <div>Hai</div>
+        <div className="banner-slider-content sec"></div>
       )
     }, {
       content: (
-        <div>Ba</div>
+        <div className="banner-slider-content third"></div>
       )
     }, {
       content: (
-        <div>Bon</div>
+        <div className="banner-slider-content four"></div>
       )
     }
   ];

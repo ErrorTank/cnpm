@@ -10,13 +10,13 @@
       position: absolute
       top: 0;
       width 100%;
-      background-color black
       height 100%;
     }
     &.right {
       .slide-cover-enter {
         left: 100%;
         transition: left 300ms;
+        z-index 1
       }
 
       .slide-cover-enter.slide-cover-enter-active {
@@ -25,17 +25,17 @@
 
       .slide-cover-exit {
         left: 0;
+        z-index 0
         transition: left 300ms;
       }
 
-      .slide-cover-exit.slide-cover-exit-active {
-        left: 0;
-      }
+
     }
     &.left {
       .slide-cover-enter {
         left: -100%;
         transition: left 300ms;
+        z-index 1
       }
 
       .slide-cover-enter.slide-cover-enter-active {
@@ -45,11 +45,10 @@
       .slide-cover-exit {
         left: 0;
         transition: left 300ms;
+        z-index 0
       }
 
-      .slide-cover-exit.slide-cover-exit-active {
-        left: 0
-      }
+
     }
   }
 

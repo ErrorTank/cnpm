@@ -22,8 +22,7 @@ const decodeAuthRequest = (req, secret, config) => {
 
 
 const createAuthToken = (userInfo, secret, config) =>{
-  console.log(Object.keys(userInfo));
-  console.log(userInfo.toJSON())
+
   return new Promise((resolve, reject) => {
     jwt.sign(userInfo.toJSON(), secret, config, (err, token) => {
       if(err){

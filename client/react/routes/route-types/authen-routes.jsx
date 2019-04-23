@@ -11,9 +11,9 @@ export class GuestRoute extends KComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    this.onUnmount(userInfo.onChange(() => {
-      this.forceUpdate();
-    }));
+    // this.onUnmount(userInfo.onChange(() => {
+    //   this.forceUpdate();
+    // }));
   };
 
   render() {

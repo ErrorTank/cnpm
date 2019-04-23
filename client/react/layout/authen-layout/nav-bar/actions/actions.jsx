@@ -79,7 +79,7 @@ export class Actions extends KComponent {
             toggleContent={(
               <Fragment>
                 <i className="fas fa-user"></i>
-                <span>Chào {info.fullname}</span>
+                <div className="text-wrapper"><span>Chào {info.fullname}</span></div>
               </Fragment>
             )}
             dropdown={(

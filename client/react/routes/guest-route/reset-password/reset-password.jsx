@@ -12,6 +12,7 @@ import Alert from "../../../common/alert/alert";
 import {getErrorObject} from "../../../../graphql/utils/errors";
 import {parseQueryString} from "../../../../string-utils";
 import {customHistory} from "../../routes";
+import {userInfo} from "../../../../common/states/user-info";
 
 export class ResetPassword extends KComponent {
   constructor(props) {
@@ -21,6 +22,9 @@ export class ResetPassword extends KComponent {
       error: "",
       success: false
     };
+    this.onUnmount(userInfo.onChange(() => {
+      this.forceUpdate();
+    }));
     const resetPasswordSchema = yup.object().shape({
       password: yup.string().min(6, "Mật khẩu bắt buộc từ 6 ký tự trở lên").noSpecialChar("Mật khẩu không được có kí tự đặc biệt"),
       rePassword: yup.string().equalTo(yup.ref("password"), "Mật khẩu nhập lại không trùng với mật khẩu mới")

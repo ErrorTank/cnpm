@@ -91,7 +91,7 @@ const checkConfirmToken = token => {
         .then(userID => User.findOneAndUpdate({_id: userID}, {$set: {isVerify: true}}, {
             new: true,
             fields: "-password"
-        })).lean()
+        }).lean())
         .then(info =>
             createAuthToken(info, getPrivateKey(), {expiresIn: "30d", algorithm: "RS256"})
                 .then(token => ({

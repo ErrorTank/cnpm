@@ -138,10 +138,6 @@ const registerSocial = user => {
 const register = (data) => {
   return new Promise((resolve, reject) => {
     let mockUser = new User(data);
-    let error = mockUser.validateSync();
-    if (error) {
-      reject(new Error())
-    }
     User.findOne({email: data.email}, (err, user) => {
       if (err) {
         reject(new Error())
@@ -154,25 +150,31 @@ const register = (data) => {
           resolve({message: msg});
         } else {
           mockUser.save((err) => {
-            if (err)
-              reject(new Error());
-            let token = new TokenConfirmation({_userId: mockUser._id, token: crypto.randomBytes(16).toString('hex')});
-            token.save(err => {
-              if (err)
-                reject(new Error());
-              sendEmail("gmail", {
-                from: "TAKA | Mua sắm trực tuyến",
-                to: data.email,
-                subject: "Xác nhận đăng ký",
-                template: "confirmation-email",
-                context: {
-                  appUrl: `${process.env.APP_URI}`,
-                  redirect: `${process.env.APP_URI}/email-confirmation?invitation_code=${token.token}`,
-                  name: data.fullname
-                }
-              }).then(() => resolve({message: msg}))
+            if (err){
+              console.log(err)
+              reject(err);
+            }
 
-            });
+            else{
+              let token = new TokenConfirmation({_userId: mockUser._id, token: crypto.randomBytes(16).toString('hex')});
+              token.save(err => {
+                if (err)
+                  reject(new Error());
+                sendEmail("gmail", {
+                  from: "TAKA | Mua sắm trực tuyến",
+                  to: data.email,
+                  subject: "Xác nhận đăng ký",
+                  template: "confirmation-email",
+                  context: {
+                    appUrl: `${process.env.APP_URI}`,
+                    redirect: `${process.env.APP_URI}/email-confirmation?invitation_code=${token.token}`,
+                    name: data.fullname
+                  }
+                }).then(() => resolve({message: msg}))
+
+              });
+            }
+
           });
 
         }

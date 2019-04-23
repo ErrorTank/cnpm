@@ -32,11 +32,11 @@ export class RedirectEmailConfirm extends React.Component {
         this.setState({stage: 1, msg: errMsg});
       }).finally(async () => {
         await wait(() => this.setState({stage: 2}));
-        // await wait(() => customHistory.push("/"));
+        await wait(() => customHistory.push("/"));
       });
 
     }else{
-      // customHistory.push("/");
+      customHistory.push("/");
     }
   };
 

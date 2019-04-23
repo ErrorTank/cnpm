@@ -105,7 +105,7 @@ const checkConfirmToken = token => {
 };
 
 const getSocialUserInfo = socialID => {
-    return User.findOne({"social.id": socialID})
+    return User.findOne({"social.id": socialID}).lean()
         .then(user => user ? createAuthToken(omit(user, ["password", "social"]), getPrivateKey(), {
             expiresIn: "30d",
             algorithm: "RS256"
@@ -121,7 +121,7 @@ const getSocialUserInfo = socialID => {
 
 const registerSocial = user => {
 
-    return User.findOne({email: user.email})
+    return User.findOne({email: user.email}).lean()
         .then(data => {
             if (data)
                 return Promise.reject(new ApolloError("account_taken"));
@@ -188,7 +188,7 @@ const register = (data) => {
 };
 
 const regularLogin = payload => {
-    return User.findOne({email: payload.email})
+    return User.findOne({email: payload.email}).lean()
         .then(data => {
             if (!data) {
                 return Promise.reject(new ApolloError("not_existed"))
@@ -225,7 +225,7 @@ const checkEmailExisted = email => {
 };
 
 const confirmForgotPassword = email => {
-    return User.findOne({email})
+    return User.findOne({email}).lean()
         .then(user => ResetPasswordToken.deleteMany({_userId: user._id}).then(() => user).catch(err => Promise.reject(err)))
         .then(user => {
             let token = new ResetPasswordToken({_userId: user._id, token: crypto.randomBytes(16).toString('hex')});

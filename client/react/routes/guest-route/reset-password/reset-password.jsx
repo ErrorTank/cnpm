@@ -22,8 +22,10 @@ export class ResetPassword extends KComponent {
       error: "",
       success: false
     };
-    this.onUnmount(userInfo.onChange(() => {
-      this.forceUpdate();
+    this.onUnmount(userInfo.onChange((nextState) => {
+      if(nextState){
+        customHistory.push("/");
+      }
     }));
     const resetPasswordSchema = yup.object().shape({
       password: yup.string().min(6, "Mật khẩu bắt buộc từ 6 ký tự trở lên").noSpecialChar("Mật khẩu không được có kí tự đặc biệt"),

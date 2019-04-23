@@ -5,14 +5,14 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   fullname:  {
     type: String,
-    minLength: 6,
-    maxLength: 50,
+    minlength: 6,
+    maxlength: 50,
     required: true
   },
   phone: {
     type: String,
-    minLength: 5,
-    maxLength: 20,
+    minlength: 5,
+    maxlength: 20,
     required: true
   },
   email: {

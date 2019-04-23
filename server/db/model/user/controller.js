@@ -17,8 +17,6 @@ const getClientUserCache = (user) => {
                 reject(new AuthenticationError("login_required"));
             }
             if (user) {
-                console.log("con cac")
-                console.log(user);
                 resolve(user);
             } else {
                 reject(new AuthenticationError("login_required"))

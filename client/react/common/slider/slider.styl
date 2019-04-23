@@ -6,5 +6,51 @@
     height 100%
     position relative
     overflow hidden;
+    .slider-item{
+      position: absolute
+      top: 0;
+      width 100%;
+      background-color black
+      height 100%;
+    }
+    &.right {
+      .slide-cover-enter {
+        left: 100%;
+        transition: left 300ms;
+      }
+
+      .slide-cover-enter.slide-cover-enter-active {
+        left: 0;
+      }
+
+      .slide-cover-exit {
+        left: 0;
+        transition: left 300ms;
+      }
+
+      .slide-cover-exit.slide-cover-exit-active {
+        left: 0;
+      }
+    }
+    &.left {
+      .slide-cover-enter {
+        left: -100%;
+        transition: left 300ms;
+      }
+
+      .slide-cover-enter.slide-cover-enter-active {
+        left: 0;
+      }
+
+      .slide-cover-exit {
+        left: 0;
+        transition: left 300ms;
+      }
+
+      .slide-cover-exit.slide-cover-exit-active {
+        left: 0
+      }
+    }
   }
+
 }

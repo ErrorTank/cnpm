@@ -3,8 +3,41 @@
   height 100%
   position relative
   .slider-control{
+    cursor pointer
     position absolute
     top 50%
     transform translateY(-50%)
+    &.left{
+      left 20px
+    }
+    &.right{
+      right 20px
+    }
+    width 45px
+    height 45px
+    background-color transparent
+    border-radius 50%
+    overflow hidden
+    transition background-color 0.2s ease
+    &:hover{
+      background-color white
+      i{
+        color tikiblack
+      }
+    }
+    .wrapper{
+      position relative
+      width 100%
+      height 100%
+      border-radius 50%
+      i{
+        position: absolute;
+        top 50%
+        left 50%
+        transform translate(-50%, -50%)
+        font-size 20px
+        color tikitext
+      }
+    }
   }
 }

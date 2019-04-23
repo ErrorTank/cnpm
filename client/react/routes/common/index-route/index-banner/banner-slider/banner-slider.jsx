@@ -5,49 +5,64 @@ export class BannerSlider extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: this.bannerImages[0]
+      current: 0
     };
+
   };
 
   bannerImages = [
     {
-      key: 0,
       content: (
         <div>Mot</div>
       )
     }, {
-      key: 1,
       content: (
         <div>Hai</div>
       )
     }, {
-      key: 2,
       content: (
         <div>Ba</div>
       )
     }, {
-      key: 3,
       content: (
         <div>Bon</div>
       )
     }
   ];
 
+
+
   render() {
+    let {current} = this.state;
     return (
       <div className="banner-slider">
         <Slider
-          current={this.state.current}
-          getContent={slide => slide.content}
-          getKey={slide => slide.key}
+          current={current}
+          getContent={index => this.bannerImages[index].content}
         />
-        <div className="slider-control left">
+        <div className="slider-control left"
+             onClick={() => {
+                if(current === 0){
+                  this.setState({current: this.bannerImages.length - 1})
+                }else{
+                  this.setState({current: current - 1})
+                }
+             }}
+        >
           <div className="wrapper">
             <i className="fas fa-chevron-left"></i>
           </div>
 
         </div>
-        <div className="slider-control right">
+        <div className="slider-control right"
+             onClick={() => {
+               if(current === this.bannerImages.length - 1){
+                 this.setState({current: 0})
+               }else{
+                 this.setState({current: current + 1})
+               }
+             }}
+        >
           <div className="wrapper">
             <i className="fas fa-chevron-right"></i>
           </div>

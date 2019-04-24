@@ -3,6 +3,9 @@
   white-space nowrap
   background-color transparent
   margin-top 20px
+  .categories-picker{
+    z-index 3
+  }
   .categories-wrapper{
     width 245px
     display inline-block
@@ -16,14 +19,105 @@
     .banner-slider-content{
       width 100%
       height 100%
+      position relative
+      cursor pointer
+      .description{
+        position absolute
+        top 50%
+        display inline-block
+        left 80px
+        transform translateY(-50%)
+        .slider-title{
+          background-color darken(tikiyellow, 30%)
+          padding 4px 8px
+          color white
+          font-family: 'Roboto', sans-serif;
+          font-size 20px
+          display inline-block
+
+        }
+        .slider-quote{
+          color white
+          font-size 40px
+          font-family: 'Roboto Mono', monospace;
+          margin 10px 0
+          font-weight bold
+          display inline-block
+        }
+        .navigate{
+          font-size 20px
+          padding 6px 15px
+          border 2px solid white
+          border-radius 5px
+          display inline-block
+        }
+      }
       &.first{
-        background-color red
+        background-color black
+
+        img{
+
+          position absolute
+          &#banner-s8{
+            top 87px
+            right 306px
+            height 200px
+          }
+          &#banner-s10{
+            top 111px
+            right 153px
+            height  200px
+          }
+          &#banner-ipx{
+            top 30px
+            right 269px
+            height  200px
+          }
+        }
       }
       &.sec{
-        background-color green
+        background-color darken(tikiblue, 10%)
+        img{
+
+          position absolute
+          &#banner-case{
+            top 52px
+            right 345px
+            height 237px
+          }
+          &#banner-scar2{
+            top 78px
+            right 48px
+            height  226px
+          }
+          &#banner-2080{
+            top 146px
+            right 185px
+            height  220px
+          }
+        }
       }
       &.third{
-        background-color black
+        background-color darken(tikiblue, 10%)
+        img{
+
+          position absolute
+          &#banner-case{
+            top 52px
+            right 345px
+            height 237px
+          }
+          &#banner-scar2{
+            top 78px
+            right 48px
+            height  226px
+          }
+          &#banner-2080{
+            top 146px
+            right 185px
+            height  220px
+          }
+        }
       }
       &.four{
         background-color blue

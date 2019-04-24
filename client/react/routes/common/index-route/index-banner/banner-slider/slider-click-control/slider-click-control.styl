@@ -1,0 +1,23 @@
+.slider-click-control{
+  position absolute
+  cursor pointer
+  z-index 2
+  display: inline-block
+  left 50%
+  transform translateX(-50%)
+  bottom 20px
+  .slider-nav{
+    display inline-block
+    margin 5px
+    width 13px
+    height 13px
+    border-radius 50%
+    background-color white
+    &.active{
+      background-color darken(tikiyellow, 30%)
+    }
+    &:not(.active)hover{
+      background-color darken(white, 8%)
+    }
+  }
+}

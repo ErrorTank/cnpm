@@ -21,7 +21,9 @@ export class Slider extends React.Component {
   render() {
     let {className, current, getContent} = this.props;
     return (
-      <div className={classnames("slider", className)}>
+      <div className={classnames("slider", className)}
+
+      >
         <TransitionGroup
           className={classnames("slides-container", this.state.direction)}
         >

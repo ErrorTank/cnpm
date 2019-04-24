@@ -8,7 +8,7 @@ export class CategoriesPicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentCategories: "Điện thoại - Máy tính bảng"
+      currentCategories: null
     };
   };
 

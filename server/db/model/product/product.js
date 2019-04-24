@@ -40,10 +40,7 @@ const productSchema = new Schema({
         type: ObjectId,
         ref: "DiscountWithCode"
     },
-    regularDiscount: {
-        type: ObjectId,
-        ref: "RegularDiscount"
-    },
+    regularDiscount: Number,
     options: {
         type: [{
             price: Number,
@@ -57,7 +54,8 @@ const productSchema = new Schema({
             return array.length >= 1;
         }, "Options cate length must > 0"],
 
-    }
+    },
+
 });
 
 

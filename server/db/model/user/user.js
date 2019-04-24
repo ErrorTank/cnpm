@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
 //0: Regular user, 1: Seller(include Regular)
 const userSchema = new Schema({
@@ -14,6 +15,13 @@ const userSchema = new Schema({
     minlength: 5,
     maxlength: 20,
     required: true
+  },
+  recentVisit: {
+    type: [{
+      type: ObjectId,
+      ref: "Product"
+    }],
+    default: []
   },
   email: {
     type: String,

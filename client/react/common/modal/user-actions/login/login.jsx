@@ -98,7 +98,7 @@ export class Login extends KComponent {
           email, fullname: name, picture, social: {id: googleId, type: "GOOGLE"}
         }
       },
-      errorMsg: "fb_login_failed"
+      errorMsg: "gg_login_failed"
     },
     "facebook": {
       isValid: (res) => res.hasOwnProperty("userID") && res.userID,
@@ -109,12 +109,14 @@ export class Login extends KComponent {
           email, fullname: name, picture, social: {id: userID, type: "FACEBOOK"}
         }
       },
-      errorMsg: "gg_login_failed"
+      errorMsg: "fb_login_failed"
     },
   };
 
   handleSocialResponse = (res, type) => {
+    console.log(type)
     let strategy = this.socialStrategies[type];
+    console.log(strategy)
     let {isValid, getData, errorMsg} = strategy;
     if (!isValid(res)) {
       this.setState({error: errorMsg});

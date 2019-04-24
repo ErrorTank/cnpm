@@ -14,9 +14,10 @@ const initializeApolloServer = (app) => {
       requireResolversForResolveType: false
     },
   });
-  const server = new ApolloServer({
+  let environment = process.env.NODE_ENV;
+  const apollo = new ApolloServer({
     schema,
-    playground: process.env.NODE_ENV === "development" ? {
+    playground: environment === "development" ? {
       settings: {
         'editor.theme': 'dark'
       }
@@ -27,7 +28,9 @@ const initializeApolloServer = (app) => {
       }
     }
   });
-  server.applyMiddleware({ app , path: "/kappa"})
+
+  apollo.applyMiddleware({ app , path: "/kappa"});
+
 };
 
 module.exports = initializeApolloServer;

@@ -5,17 +5,30 @@ const initializeDb = require("./config/db");
 const initializeApolloServer = require("./graphql/index");
 const configExpressServer = require("./config/express");
 const routerConfig = require('./config/routes');
+const https = require('https');
+const fs = require("fs");
+const path = require("path");
 
 initializeDb().then(() => {
-    initializeApolloServer(app);
-    configExpressServer(app);
-    app.use('/', routerConfig());
-    app.listen(process.env.PORT, () => {
-        console.log(`Server running on port: ${process.env.PORT}` );
-    });
+  let environment = process.env.NODE_ENV;
+  let server = https.createServer(
+    {
+      key: fs.readFileSync(path.join(__dirname, `./ssl/${environment}/${process.env.SSL_KEY_PATH}`)),
+      cert: fs.readFileSync(path.join(__dirname, `./ssl/${environment}/${process.env.SSL_CRT_PATH}`))
+    },
+    app
+  );
+  initializeApolloServer(app);
+  configExpressServer(app);
+  app.use('/', routerConfig());
+
+
+  server.listen(process.env.PORT, () => {
+    console.log(`Server running on port: ${process.env.PORT}`);
+  });
 }).catch(err => {
-    console.log(err)
-    process.exit();
+  console.log(err)
+  process.exit();
 });
 
 

@@ -18,14 +18,14 @@ export class BannerSlider extends React.Component {
     }
 
     runSliderInterval = () => {
-        // this.interval = setInterval(() => {
-        //     let {current} = this.state;
-        //     if(current === this.bannerImages.length - 1){
-        //         this.setState({current: 0});
-        //     }else{
-        //         this.setState({current: current + 1});
-        //     }
-        // }, 3000);
+        this.interval = setInterval(() => {
+            let {current} = this.state;
+            if(current === this.bannerImages.length - 1){
+                this.setState({current: 0});
+            }else{
+                this.setState({current: current + 1});
+            }
+        }, 3000);
     };
 
     bannerImages = [
@@ -73,11 +73,24 @@ export class BannerSlider extends React.Component {
             )
         }, {
             content: (
-                <div className="banner-slider-content third"></div>
-            )
-        }, {
-            content: (
-                <div className="banner-slider-content four"></div>
+                <div className="banner-slider-content third">
+                    <img src="/assets/img/lg-fridge.png" id="fridge-banner"/>
+                    <img src="/assets/img/sony-4k.png" id="sony-banner"/>
+                    <img src="/assets/img/lg-mg.png" id="mg-banner"/>
+                    <div className="description">
+                        <div className="slider-title">
+                            MUA SẮM ĐIỆN MÁY
+                        </div>
+                        <br/>
+                        <p className="slider-quote">ĐIỆN MÁY <br/> CHÍNH HÃNG</p>
+                        <br/>
+                        <p className="slider-sub">Hàng ngàn quà tặng</p>
+                        <br/>
+                        <div className='navigate'>
+                            Sắm ngay
+                        </div>
+                    </div>
+                </div>
             )
         }
     ];
@@ -101,7 +114,7 @@ export class BannerSlider extends React.Component {
                 />
                 <SliderClickControl
                     onClick={index => this.setState({current: index})}
-                    length={4}
+                    length={3}
                     current={current}
                 />
                 <div className="slider-control left"

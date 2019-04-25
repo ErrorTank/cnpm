@@ -10,6 +10,22 @@ const userSchema = new Schema({
     maxlength: 50,
     required: true
   },
+  provider: {
+    name: {
+      type: String,
+      required: true,
+
+    },
+    products: {
+      type: [
+        {
+          type: ObjectId,
+          ref: "Product"
+        }
+      ],
+      default: []
+    }
+  },
   phone: {
     type: String,
     minlength: 5,
@@ -34,7 +50,7 @@ const userSchema = new Schema({
   gender: {type: Boolean, default: false},
   subscribe: {type: Boolean, default: false},
   updatedAt: { type: Date},
-  createdAt: { type: Date},
+  createdAt: { type: Date, default: Date.now},
   role: {type: Number, required: true, default: 0},
   isVerify: {type: Boolean, default: false, required: true},
   social: {

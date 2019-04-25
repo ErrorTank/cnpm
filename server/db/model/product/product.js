@@ -11,8 +11,13 @@ const productSchema = new Schema({
         required: true
     },
     provider: {
-        type: ObjectId,
-        ref: "Provider"
+        type: [
+            {
+                type: ObjectId,
+                ref: "User"
+            }
+        ],
+        required: true
     },
     categories: {
         main: ObjectId,
@@ -27,27 +32,45 @@ const productSchema = new Schema({
         },
         ref: "Category"
     },
-    rating: {
-        type: Number,
-        enum: [0, 1, 2, 3, 4, 5]
-    },
+    comments: [{
+        rating: {
+            type: Number,
+            enum: [0, 1, 2, 3, 4, 5]
+        },
+        author: {
+            type: ObjectId,
+            ref: "User",
+
+        },
+        updatedAt: {
+            type: Date,
+            default: Date.now
+        },
+        title: String,
+        content: String,
+        picture: [String],
+        default: []
+    }],
     description: String,
-    seller: {
-        type: ObjectId,
-        ref: "User"
-    },
+
     discountWithCode: {
         type: ObjectId,
         ref: "DiscountWithCode"
     },
     regularDiscount: Number,
+
     options: {
         type: [{
             price: Number,
             description: String,
             qty: Number,
             uploadDate: Date,
-            picture: [String]
+            picture: [String],
+            deal: {
+                total: Number,
+                sold: Number,
+                last: Date
+            }
         }],
         required: true,
         validate: [(array)=>{
@@ -57,6 +80,7 @@ const productSchema = new Schema({
     },
 
 });
+
 
 
 const Product = mongoose.model("Product", productSchema);

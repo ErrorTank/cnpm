@@ -8,7 +8,7 @@ const routerConfig = require('./config/routes');
 const https = require('https');
 const fs = require("fs");
 const path = require("path");
-const Product = require("./db/model/product/product");
+const DiscountWithCode = require("./db/model/discount-with-code/discount-with-code");
 
 initializeDb().then(() => {
     let environment = process.env.NODE_ENV;
@@ -28,7 +28,7 @@ initializeDb().then(() => {
     server.listen(process.env.PORT, () => {
         console.log(`Server running on port: ${process.env.PORT}`);
     });
-    // Product.create({name: "Samsung Galaxy S10 256GB", provider: "5cc18eea1d4db822d4b0be13", categories: ["5cc185031db2bb2860dde2cd", "5cc185a31d4db822d4b0bdf0", "5cc196d3a0826d25a01882cd"], description: "Galaxy s10 description", options: [{price: 18000000, description: "", qty: 10, picture: ["https://www.google.com/search?q=s10&source=lnms&tbm=isch&sa=X&ved=0ahUKEwjB-rzAkOvhAhWXdHAKHR_oDyYQ_AUIDigB&biw=1920&bih=969#imgrc=pRtRslD0ShvvRM:"], total: 100, sold: 0 ,deal: {last: "04/30/2019"}}]}).then((x) => console.log(x));
+    DiscountWithCode.create({code: "LSPDFR123", value: 30});
 }).catch(err => {
     console.log(err)
     process.exit();

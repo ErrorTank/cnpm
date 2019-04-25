@@ -20,17 +20,13 @@ const productSchema = new Schema({
         required: true
     },
     categories: {
-        main: ObjectId,
-        subs:  {
-            type: [
-                {
-                    type: ObjectId,
-                    ref: "Category"
-                }
-            ],
-            required: false,
-        },
-        ref: "Category"
+        type: [
+            {
+                type: ObjectId,
+                ref: "Category"
+            }
+        ],
+        default: []
     },
     comments: [{
         rating: {
@@ -63,12 +59,10 @@ const productSchema = new Schema({
         type: [{
             price: Number,
             description: String,
-            qty: Number,
-            uploadDate: Date,
+            total: Number,
+            sold: {type: Number, default: 0},
             picture: [String],
             deal: {
-                total: Number,
-                sold: Number,
                 last: Date
             }
         }],

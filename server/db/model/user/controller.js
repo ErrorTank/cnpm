@@ -7,6 +7,7 @@ const {ApolloError, AuthenticationError} = require("apollo-server-express");
 const {createAuthToken} = require("../../../authorization/auth");
 const {getPrivateKey, getPublicKey} = require("../../../authorization/keys/keys");
 const omit = require("lodash/omit");
+const pick = require("lodash/pick");
 
 const getClientUserCache = (user) => {
     return new Promise((resolve, reject) => {
@@ -91,7 +92,7 @@ const checkConfirmToken = token => {
             fields: "-password"
         }).lean())
         .then(info =>
-            createAuthToken(info, getPrivateKey(), {expiresIn: "30d", algorithm: "RS256"})
+            createAuthToken(pick(info, ["_id", "role", "email", "phone", "fullname", "isVerify"]), getPrivateKey(), {expiresIn: "30d", algorithm: "RS256"})
                 .then(token => ({
                     token,
                     user: info
@@ -104,7 +105,7 @@ const checkConfirmToken = token => {
 
 const getSocialUserInfo = socialID => {
     return User.findOne({"social.id": socialID}).lean()
-        .then(user => user ? createAuthToken(omit(user, ["password", "social"]), getPrivateKey(), {
+        .then(user => user ? createAuthToken(pick(user, ["_id", "role", "email", "phone", "fullname", "isVerify"]), getPrivateKey(), {
             expiresIn: "30d",
             algorithm: "RS256"
         })
@@ -126,7 +127,7 @@ const registerSocial = user => {
             return User.insertMany(user)
         })
         .then(([data]) =>
-            createAuthToken(omit(data, ["password", "social"]), getPrivateKey(), {expiresIn: "30d", algorithm: "RS256"})
+            createAuthToken(pick(data, ["_id", "role", "email", "phone", "fullname", "isVerify"]), getPrivateKey(), {expiresIn: "30d", algorithm: "RS256"})
                 .then(token => ({
                     token,
                     user: omit(data, ["password"])
@@ -203,7 +204,7 @@ const regularLogin = payload => {
 
         })
         .then((data) =>
-            createAuthToken(omit(data, ["password"]), getPrivateKey(), {expiresIn: "30d", algorithm: "RS256"})
+            createAuthToken(pick(data, ["_id", "role", "email", "phone", "fullname", "isVerify"]), getPrivateKey(), {expiresIn: "30d", algorithm: "RS256"})
                 .then(token => ({
                     token,
                     user: omit(data, ["password"])

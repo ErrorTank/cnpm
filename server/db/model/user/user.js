@@ -13,7 +13,6 @@ const userSchema = new Schema({
   provider: {
     name: {
       type: String,
-      required: true,
 
     },
     products: {

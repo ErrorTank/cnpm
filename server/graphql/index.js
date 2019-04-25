@@ -29,7 +29,7 @@ const initializeApolloServer = (app) => {
     }
   });
 
-  apollo.applyMiddleware({ app , path: "/kappa"});
+  apollo.applyMiddleware({ app , path: "/kappa", cors: true});
 
 };
 

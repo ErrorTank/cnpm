@@ -29,8 +29,9 @@ const configExpressServer = (app) => {
   app.use("/", express.static(process.cwd() + "/" + process.env.STATIC_DIR));
   app.use("/uploads", express.static(uploadDir));
   app.use("*", (req, res, next) => {
-
     if (/^\/api\//.test(req.originalUrl)) {
+      next();
+    }else if (/^\/kappa/.test(req.originalUrl)) {
       next();
     }else if(checkExceptionRoutes(req.originalUrl)){
       next();

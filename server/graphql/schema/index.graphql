@@ -1,3 +1,7 @@
+#import * from "./comment.graphql"
+#import * from "./category.graphql"
+#import * from "./product.graphql"
+#import * from "./provider.graphql"
 #import Social from "./social.graphql"
 #import * from "./enum.graphql"
 #import * from "./input.graphql"

@@ -1,0 +1,15 @@
+type Option{
+
+}
+
+type Product{
+    name: String!
+    provider: [User]!
+    categories: [Category]!
+    comments: [Comment]!
+    description: String
+    discountWithCode: DiscountWithCode
+    regularDiscount: Int
+    options: [Option!]!
+
+}

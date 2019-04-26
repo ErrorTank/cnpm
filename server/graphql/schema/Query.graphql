@@ -1,4 +1,6 @@
 
+
+
 type registerOuputType {
     message: String
 }
@@ -23,6 +25,9 @@ type User implements Node{
     isVerify: Boolean!
     picture: String
     social: Social
+    provider: Provider
+    recentVisit: [Product]!
+
 }
 
 

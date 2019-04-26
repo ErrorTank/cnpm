@@ -1,0 +1,4 @@
+type DiscountWithCode{
+    code: String
+    value: Float
+}

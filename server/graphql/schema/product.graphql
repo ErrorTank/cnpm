@@ -1,4 +1,14 @@
+type Deal{
+    last: String!
+}
+
 type Option{
+    price: Float
+    description: String
+    total: Int
+    sold: Int
+    picture: [String]
+    deal: Deal
 
 }
 

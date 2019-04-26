@@ -1,4 +1,4 @@
 type Provider{
     name: String
-    products:[Products]!
+    products:[Product]!
 }

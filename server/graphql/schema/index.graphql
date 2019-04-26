@@ -1,3 +1,4 @@
+#import * from "./discount-with-code.graphql"
 #import * from "./comment.graphql"
 #import * from "./category.graphql"
 #import * from "./product.graphql"

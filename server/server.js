@@ -28,7 +28,7 @@ initializeDb().then(() => {
     server.listen(process.env.PORT, () => {
         console.log(`Server running on port: ${process.env.PORT}`);
     });
-    DiscountWithCode.create({code: "LSPDFR123", value: 30});
+    // DiscountWithCode.create({code: "LSPDFR123", value: 30});
 }).catch(err => {
     console.log(err)
     process.exit();

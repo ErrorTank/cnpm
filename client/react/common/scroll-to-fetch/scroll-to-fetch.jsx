@@ -28,7 +28,6 @@ export class ScrollToFetch extends KComponent {
       let elemPos = elem.getBoundingClientRect().top + document.documentElement.scrollTop;
       let windowClientHeight = window.pageYOffset + window.innerHeight;
       if(this.cancelFetching && windowClientHeight > elemPos){
-        console.log("cascas");
         this.cancelFetching();
         this.cancelFetching = null;
         this.props.api();

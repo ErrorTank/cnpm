@@ -4,6 +4,7 @@ import {userActionModal} from "../../../common/modal/user-actions/user-actions";
 import {AuthenLayout} from "../../../layout/authen-layout/authen-layout";
 import {IndexBanner} from "./index-banner/index-banner";
 import {ScrollToFetch} from "../../../common/scroll-to-fetch/scroll-to-fetch";
+import {DealSection} from "./deal-section/deal-section";
 
 export class IndexRoute extends React.Component {
   constructor(props) {
@@ -22,6 +23,9 @@ export class IndexRoute extends React.Component {
         >
           <div className="container content-container">
             <IndexBanner/>
+          </div>
+          <div className="container content-container ">
+            <DealSection/>
           </div>
           {/*<div style={{height: "2000px"}}>*/}
             {/*<ScrollToFetch>*/}

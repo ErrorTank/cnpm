@@ -17,21 +17,26 @@ export class ScrollToFetch extends KComponent {
 
   componentDidMount() {
     this.cancelFetching = this.initialFetching();
-
+    this.fetching();
   }
+
+  fetching = () => {
+
+    let elem = ReactDOM.findDOMNode(this);
+    let elemPos = elem.getBoundingClientRect().top + document.documentElement.scrollTop;
+    let windowClientHeight = window.pageYOffset + window.innerHeight;
+    if(this.cancelFetching && windowClientHeight > elemPos){
+      this.cancelFetching();
+      this.cancelFetching = null;
+      this.props.api();
+    }
+  };
 
 
 
   initialFetching = () => {
     let fetchFunc = (e) => {
-      let elem = ReactDOM.findDOMNode(this);
-      let elemPos = elem.getBoundingClientRect().top + document.documentElement.scrollTop;
-      let windowClientHeight = window.pageYOffset + window.innerHeight;
-      if(this.cancelFetching && windowClientHeight > elemPos){
-        this.cancelFetching();
-        this.cancelFetching = null;
-        this.props.api();
-      }
+      this.fetching();
     };
     window.addEventListener("scroll", fetchFunc);
     return () => window.removeEventListener("scroll", fetchFunc);

@@ -1,6 +1,31 @@
 import React from "react";
 import {ScrollToFetch} from "../../../../common/scroll-to-fetch/scroll-to-fetch";
 import {LoadingInline} from "../../../../common/loading-inline/loading-inline";
+import classnames from "classnames"
+
+export const ProductPanel = props => {
+  return (
+    <div className="product"
+
+    >
+      {props.data}
+    </div>
+  );
+};
+
+export const ProductsRow = (props) => {
+  let {rowList, cols} = props;
+  return (
+    <div className={classnames("products-row m-0 p-0", {"c5": cols === 5})}>
+      {rowList.map((each, i) => (
+        <ProductPanel
+          key={i}
+          data={each}
+        />
+      ))}
+    </div>
+  )
+};
 
 export class IndexProductList extends React.Component {
   constructor(props) {
@@ -16,7 +41,7 @@ export class IndexProductList extends React.Component {
     let {cols} = this.props;
     if(!list.length) return [];
     let rowsCount = Math.ceil(list.length / cols);
-    return new Array
+    return Array.from(new Array(rowsCount)).map((each, i) => list.slice(i * 5, i * 5 + 5));
   };
 
   render() {
@@ -30,7 +55,7 @@ export class IndexProductList extends React.Component {
           return Promise.resolve();
         })}
       >
-        <div className="index-product-list">
+        <div className="index-product-list" style={{marginTop: "600px"}}>
 
           <div className="products-wrapper">
             {loading ? (
@@ -41,7 +66,13 @@ export class IndexProductList extends React.Component {
               </div>
 
             ) : (
-
+              renderList.map((each, i) => (
+                <ProductsRow
+                  rowList={each}
+                  key={i}
+                  cols={this.props.cols}
+                />
+              ))
             )}
           </div>
           {onClickBtn && (

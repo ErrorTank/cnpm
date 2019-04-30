@@ -31,11 +31,14 @@ type User implements Node{
 }
 
 
+
+
 type Query {
     getAuthenUser: User
     checkConfirm(token: String!): loginOutputType
     getSocialUserInfo(socialID: String!): loginOutputType
     regularLogin(payload: RegularLoginInput!): loginOutputType
     checkEmailExisted(email: String!): Boolean
+    getProducts: [Product]
 }
 

@@ -54,7 +54,9 @@ const productSchema = new Schema({
         ref: "DiscountWithCode"
     },
     regularDiscount: Number,
-
+    deal: {
+        last: Date
+    },
     options: {
         type: [{
             price: Number,
@@ -62,9 +64,7 @@ const productSchema = new Schema({
             total: Number,
             sold: {type: Number, default: 0},
             picture: [String],
-            deal: {
-                last: Date
-            }
+
         }],
         required: true,
         validate: [(array)=>{

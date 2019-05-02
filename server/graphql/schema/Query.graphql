@@ -39,6 +39,6 @@ type Query {
     getSocialUserInfo(socialID: String!): loginOutputType
     regularLogin(payload: RegularLoginInput!): loginOutputType
     checkEmailExisted(email: String!): Boolean
-    getProducts: [Product]
+    getIndexDealProducts(skip: Int, take: Int): [Product]
 }
 

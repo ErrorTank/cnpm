@@ -1,6 +1,7 @@
 import React from "react";
 import {IndexProductList} from "../index-product-list/index-product-list";
-
+import {client} from "../../../../../graphql";
+import {fetchIndexDealProducts} from "../../../../../graphql/queries/product";
 
 export class DealSection extends React.Component {
   constructor(props) {
@@ -9,7 +10,12 @@ export class DealSection extends React.Component {
   };
 
   fetchDealProducts = () => {
-
+      return client.query({
+          query: fetchIndexDealProducts
+      }).then(({data}) => {
+          console.log(data);
+          return data;
+      });
   };
 
   render() {

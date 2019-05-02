@@ -1,5 +1,6 @@
 const {authorizationUser, } = require("../../../authorization/auth");
 const {checkConfirmToken, getClientUserCache, getSocialUserInfo, regularLogin, checkEmailExisted} = require("../../../db/model/user/controller");
+const {getIndexDealProducts} = require("../../../db/model/product/controller");
 
 const Query = {
   getAuthenUser: (parent, args, {request}, info) => {
@@ -22,6 +23,9 @@ const Query = {
   },
   checkEmailExisted: async (parent, args, {request}, info) => {
     return checkEmailExisted(args.email).then(data => data).catch(err => throw err);
+  },
+  getIndexDealProducts:async (parent, args, {request}, info) => {
+    return getIndexDealProducts(args).then(data => {console.log(data); return data}).catch(err => throw err);
   },
 };
 

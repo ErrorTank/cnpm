@@ -55,7 +55,7 @@ export class IndexProductList extends React.Component {
           return Promise.resolve();
         })}
       >
-        <div className="index-product-list" style={{marginTop: "600px"}}>
+        <div className="index-product-list">
 
           <div className="products-wrapper">
             {loading ? (

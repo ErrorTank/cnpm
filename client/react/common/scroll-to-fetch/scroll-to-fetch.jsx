@@ -25,6 +25,9 @@ export class ScrollToFetch extends KComponent {
     let elem = ReactDOM.findDOMNode(this);
     let elemPos = elem.getBoundingClientRect().top + document.documentElement.scrollTop;
     let windowClientHeight = window.pageYOffset + window.innerHeight;
+    console.log(elem.getBoundingClientRect().top);
+    console.log(windowClientHeight)
+    console.log(elemPos);
     if(this.cancelFetching && windowClientHeight > elemPos){
       this.cancelFetching();
       this.cancelFetching = null;

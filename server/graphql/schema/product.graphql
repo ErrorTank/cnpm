@@ -8,13 +8,15 @@ type Option{
     total: Int
     sold: Int
     picture: [String]
-    deal: Deal
+
 
 }
 
 type Product{
+    _id: ID
     name: String!
     provider: [User]!
+    deal: Deal
     categories: [Category]!
     comments: [Comment]!
     description: String

@@ -5,22 +5,14 @@ import classnames from "classnames"
 import {customHistory} from "../../../routes";
 import {calcSalePrice, formatMoney} from "../../../../../common/products-utils";
 import {CSSTransition, TransitionGroup} from "react-transition-group";
-import {convertMilToDifferent} from "../../../../../common/moment-utils";
+
+import {CountDown} from "../../../../common/countdown/countdown";
 
 
 export const ProductPanel = ({data, isDeal}) => {
   let {regularDiscount, name, _id, deal, options, timeLeft} = data;
   let {picture, price, sold, total} = options[0];
-  let tf = Number(timeLeft);
-  setInterval(() => {
-    console.log(name)
 
-    tf = tf - 1000 ;
-
-    let left = convertMilToDifferent(tf);
-    console.log(left)
-    // console.log(left.hour + " " + left.minute + " " +left.second)
-  }, 1000);
   return (
     <div className={`product`}
          onClick={() => customHistory.push(`/product/${_id}`)}
@@ -45,14 +37,22 @@ export const ProductPanel = ({data, isDeal}) => {
           <span className="main-price">{formatMoney(Number(price))} ₫</span><span className="sale-price">{formatMoney(calcSalePrice(Number(price), Number(regularDiscount)))} ₫</span>
         </p>
       </div>
-      <div className="deal-content">
-        <div className="path">
+      {isDeal && (
+        <div className="deal-content">
+          <div className="path">
 
+          </div>
+          <div className="path">
+            <CountDown
+              value={timeLeft}
+              render={({year, month, day, hour, minute, second}) => (
+                <span className="deal-countdown">{year && (year + " năm ")}{month && (month + " tháng ")}{day && (day + " ngày ")}{hour && (hour + ":")}{minute && (minute + ":")}{second && (second)}</span>
+              )}
+            />
+          </div>
         </div>
-        <div className="path">
-          {}
-        </div>
-      </div>
+      )}
+
     </div>
   );
 };

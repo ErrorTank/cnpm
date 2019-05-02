@@ -9,15 +9,15 @@ const convertMilToDifferent = (mil) => {
   let result = {
 
   };
-  if(left / 31556926000 >= 1){
-    result.year = Math.floor(left / 31556926000);
-    left = left - (31556926000 * result.year);
-  }
-
-  if(left / 2629743830 >= 1){
-    result.month = Math.floor(left / 2629743830);
-    left = left - (2629743830 * result.month);
-  }
+  // if(left / 31556926000 >= 1){
+  //   result.year = Math.floor(left / 31556926000);
+  //   left = left - (31556926000 * result.year);
+  // }
+  //
+  // if(left / 2629743830 >= 1){
+  //   result.month = Math.floor(left / 2629743830);
+  //   left = left - (2629743830 * result.month);
+  // }
 
   if(left / 86400000 >= 1){
     result.day = Math.floor(left / 86400000);

@@ -1,6 +1,10 @@
 .index-product-list {
   background-color white
 
+  .load-products{
+    font-size 50px !important
+    color tikiblue !important
+  }
   .products-wrapper {
     .loading-holder {
       min-height 300px
@@ -14,13 +18,138 @@
     display inline-block
     vertical-align top
     cursor pointer
-    &:hover{
-      box-shadow 0 0 20px rgba(0,0,0,.1)
+    height 350px
+    position relative
+    .deal-content{
+      overflow hidden
+      .path{
+        display inline-block
+        width 50%
+        vertical-align middle
+      }
+    }
+    &:hover {
+      box-shadow 0 0 20px rgba(0, 0, 0, .1)
       z-index 1
     }
+
+    .p-details {
+      margin-top 12px
+
+      .p-name {
+        font-size 14px
+        color #242424
+        white-space pre-wrap
+        height 45px
+        text-overflow ellipsis
+      }
+
+      .p-price {
+        line-height 25px
+
+        span {
+          display inline-block
+          vertical-align bottom
+
+          &.main-price {
+            font-weight bold
+            font-size 16px
+          }
+
+          &.sale-price {
+            font-size 12px
+            color #a2a2a2
+            text-decoration line-through
+            margin-left 6px
+          }
+        }
+      }
+
+    }
+
+    .p-picture {
+      position relative
+      height 200px
+      overflow hidden
+
+      .discount-display {
+        z-index 2
+        position absolute
+        top 0
+        left 0
+
+        .wrapper {
+          position relative
+          height 28px
+          width 40px
+          line-height 28px
+          color white
+          font-size 13px
+          text-align center
+          border-radius 3px
+          background-color danger
+
+          .deal-arrow {
+            background-color danger
+            position absolute
+            width 28.3px
+            height 28.3px
+            z-index -1
+            left 50%
+            top 13px
+            transform translateX(-50%) rotateZ(45deg)
+
+          }
+        }
+      }
+
+      img {
+        top 50%
+        position absolute
+        left 50%
+        transform translate(-50%, -50%)
+        width 200px
+        z-index 1
+      }
+
+    }
   }
+
   .products-row {
     white-space nowrap
+
+
+
+    .faded-appear {
+      opacity 0
+      &.delay-0{
+        transition: opacity 400ms;
+      }
+      &.delay-1{
+        transition: opacity 650ms;
+      }
+      &.delay-2{
+        transition: opacity 900ms;
+      }
+      &.delay-3{
+        transition: opacity 1150ms;
+      }
+      &.delay-4{
+        transition: opacity 1400ms;
+      }
+
+    }
+
+    .faded-appear.faded-appear-active {
+      opacity 1
+    }
+
+
+    &.index-deal {
+      .product {
+        height 350px
+      }
+    }
 
     &.c5 {
       .product {

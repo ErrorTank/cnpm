@@ -13,8 +13,8 @@ export class DealSection extends React.Component {
       return client.query({
           query: fetchIndexDealProducts
       }).then(({data}) => {
-          console.log(data);
-          return data;
+          console.log(data.getIndexDealProducts);
+          return data.getIndexDealProducts.map(each => ({...each.product, timeLeft: each.timeLeft}));
       });
   };
 
@@ -34,6 +34,9 @@ export class DealSection extends React.Component {
           cols={5}
           api={this.fetchDealProducts}
         />
+        <div className="ds-footer">
+          <button className="btn more-btn">Xem thêm</button>
+        </div>
       </div>
     );
   }

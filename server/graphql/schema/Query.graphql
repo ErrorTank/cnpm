@@ -5,6 +5,11 @@ type registerOuputType {
     message: String
 }
 
+type IndexDealProduct{
+    product: Product
+    timeLeft: String
+}
+
 type loginOutputType {
     user: User!
     token: String!
@@ -39,6 +44,6 @@ type Query {
     getSocialUserInfo(socialID: String!): loginOutputType
     regularLogin(payload: RegularLoginInput!): loginOutputType
     checkEmailExisted(email: String!): Boolean
-    getIndexDealProducts(skip: Int, take: Int): [Product]
+    getIndexDealProducts(skip: Int, take: Int): [IndexDealProduct]
 }
 

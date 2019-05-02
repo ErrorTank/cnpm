@@ -25,7 +25,15 @@ const Query = {
     return checkEmailExisted(args.email).then(data => data).catch(err => throw err);
   },
   getIndexDealProducts:async (parent, args, {request}, info) => {
-    return getIndexDealProducts(args).then(data => {console.log(data); return data}).catch(err => throw err);
+    return getIndexDealProducts(args).then(data => {
+
+      return data.map(each => {
+        console.log(each)
+        let {deal} = each;
+        let different = new Date(deal.last).getTime() - new Date().getTime();
+        return {product: each, timeLeft: different}
+      })
+    }).catch(err => throw err);
   },
 };
 

@@ -4,18 +4,24 @@ import {UserInfoFragment} from "../fragments/user";
 const fetchIndexDealProducts = gql`
     query{
         getIndexDealProducts(skip: 0, take: 5){
-            _id
-            name
-            deal{
-                last
+            
+            timeLeft
+            product{
+                _id
+                name
+                regularDiscount
+                deal{
+                    last
+                }
+                options{
+                    price
+                    total
+                    sold
+                    picture
+
+                }
             }
-            options{
-                price
-                total
-                sold
-                picture
-                
-            }
+           
             
         }
     }

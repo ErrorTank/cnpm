@@ -45,5 +45,6 @@ type Query {
     regularLogin(payload: RegularLoginInput!): loginOutputType
     checkEmailExisted(email: String!): Boolean
     getIndexDealProducts(skip: Int, take: Int): [IndexDealProduct]
+    getProduct(productID: String!): Product
 }
 

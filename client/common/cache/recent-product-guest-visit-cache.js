@@ -3,35 +3,48 @@ import {client} from "../../graphql";
 import {getAuthenUser} from "../../graphql/queries/user";
 import {userInfo} from "../states/user-info";
 import {authenCache} from "./authen-cache";
-import {client} from "../../graphql";
 
-export const recentVisitedProductCache  = (() =>  {
+export const createLocalStorageCache  = ({maxCache = 20, key, compare}) =>  {
     const cache = new Cache(localStorage);
     return {
-        async clearProducts(){
-            return cache.set(null, "recent-visited-products");
+        async clear(){
+            return cache.set(null, key);
         },
-        async getProducts(){
-            return cache.get("recent-visited-products")
+        async get(){
+            return cache.get(key)
         },
-        async addProduct(product){
-            let previousProds = cache.get("recent-visited-products") || [];
-            return cache.set([...previousProds, product], "recent-visited-products");
+        async add(item){
+            let previousItems = cache.get(key) || [];
+            let index = previousItems.findIndex(each => compare(each, item));
+            if(index !== -1){
+               previousItems.splice(index, 1);
+            }else if(previousItems.length === maxCache){
+                previousItems.pop();
+            }
+            return cache.set([item, ...previousItems], key);
         }
     }
-})();
+};
 
-export const RVPCManager = (actionName) => {
+const recentVisitedCache = createLocalStorageCache({
+    key: "recent-visited-products",
+    compare: (item1, item2) => item1._id === item2._id,
+    maxCache: 10
+});
+
+const authenActions = {
+    get(){
+        return client.query()
+    },
+    add(product){
+        return client.mutate({
+
+        })
+    }
+};
+
+export const createVisitedCacheFunction = (actionName) => {
   let authen = authenCache.getAuthen();
-  let authenActions = {
-      getProducts(){
-          return client.query()
-      },
-      addProduct(product){
-          return client.mutate({
 
-          })
-      }
-  };
-  return !authen ? recentVisitedProductCache[actionName] : authenActions[actionName]
+  return !authen ? recentVisitedCache[actionName] : authenActions[actionName]
 };

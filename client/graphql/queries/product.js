@@ -1,5 +1,6 @@
 import {gql} from "apollo-boost"
 import {UserInfoFragment} from "../fragments/user";
+import {ProductInfoFragment} from "../fragments/product";
 
 const fetchIndexDealProducts = gql`
     query{
@@ -27,6 +28,16 @@ const fetchIndexDealProducts = gql`
     }
 `;
 
+const getFullProductDetails = gql`
+    query($pID: String!){
+        getProduct(productID: $pID){
+            ...ProductInfo
+        }
+    }
+    ${ProductInfoFragment}
+`;
+
 export {
-    fetchIndexDealProducts
+    fetchIndexDealProducts,
+    getFullProductDetails
 }

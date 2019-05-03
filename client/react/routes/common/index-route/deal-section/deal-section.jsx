@@ -2,6 +2,7 @@ import React from "react";
 import {IndexProductList} from "../index-product-list/index-product-list";
 import {client} from "../../../../../graphql";
 import {fetchIndexDealProducts} from "../../../../../graphql/queries/product";
+import {customHistory} from "../../../routes";
 
 export class DealSection extends React.Component {
   constructor(props) {
@@ -33,9 +34,11 @@ export class DealSection extends React.Component {
         <IndexProductList
           cols={5}
           api={this.fetchDealProducts}
+          deal={true}
+
         />
         <div className="ds-footer">
-          <button className="btn more-btn">Xem thêm</button>
+          <button className="btn more-btn" onClick={() => customHistory.push("/hot-deals")}>Xem thêm</button>
         </div>
       </div>
     );

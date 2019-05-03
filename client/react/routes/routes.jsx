@@ -9,6 +9,7 @@ import {IndexRoute} from "./common/index-route/index-route";
 import {GuestRoute} from "./route-types/authen-routes";
 import {RedirectEmailConfirm} from "./guest-route/redirect-email-confirm/redirect-email-confirm";
 import {ResetPassword} from "./guest-route/reset-password/reset-password";
+import {ProductRoute} from "./common/product-route/product-route";
 
 
 // const NotFoundRoute = () => {
@@ -53,6 +54,7 @@ export class MainRoute extends KComponent {
             <WithLocationRoute exact path="/" render={props => (<IndexRoute {...props}/>)}/>
             <GuestRoute exact path="/email-confirmation" component={RedirectEmailConfirm}/>
             <GuestRoute exact path="/confirm-reset-password" component={ResetPassword}/>
+            <WithLocationRoute exact path="/product/:productID" render={props => (<ProductRoute {...props} />)}/>
           </Switch>
 
         </Router>

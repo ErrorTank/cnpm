@@ -13,6 +13,11 @@ export class BannerSlider extends React.Component {
 
     };
 
+    componentWillUnmount() {
+        if(this.interval) clearInterval(this.interval);
+    }
+
+
     componentDidMount() {
         this.runSliderInterval();
     }

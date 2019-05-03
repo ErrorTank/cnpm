@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Fragment} from "react";
 import {ScrollToFetch} from "../../../../common/scroll-to-fetch/scroll-to-fetch";
 import {LoadingInline} from "../../../../common/loading-inline/loading-inline";
 import classnames from "classnames"
@@ -35,9 +35,30 @@ export const ProductPanel = ({data, isDeal}) => {
       </div>
       <div className="p-details">
         <p className="p-name">{name}</p>
-        <p className="p-price">
-          <span className="main-price">{formatMoney(Number(price))} ₫</span><span className="sale-price">{formatMoney(calcSalePrice(Number(price), Number(regularDiscount)))} ₫</span>
-        </p>
+        <div className="p-price">
+          {isDeal ? (
+              <Fragment>
+                <span className="main-price">{formatMoney(Number(price))} ₫</span><span className="sale-price">{formatMoney(calcSalePrice(Number(price), Number(regularDiscount)))} ₫</span>
+              </Fragment>
+          ) : (
+              <Fragment>
+                <div>
+                  <span className="main-price">{formatMoney(Number(price))} ₫</span>{regularDiscount && <span className="discount-display">-{regularDiscount}%</span>}
+                </div>
+                {regularDiscount && (
+                    <div>
+                      <span className="sale-price m-0">{formatMoney(calcSalePrice(Number(price), Number(regularDiscount)))} ₫</span>
+                    </div>
+                )
+
+                }
+
+              </Fragment>
+          )
+
+          }
+
+        </div>
       </div>
       {isDeal && (
         <div className="deal-content">
@@ -125,7 +146,7 @@ export class IndexProductList extends React.Component {
   };
 
   render() {
-    let {api, onClickBtn = null} = this.props;
+    let {api, deal} = this.props;
     let {loading} = this.state;
     let renderList = this.getRenderList();
     return (
@@ -152,16 +173,13 @@ export class IndexProductList extends React.Component {
                   rowList={each}
                   key={i}
                   cols={this.props.cols}
-                  deal={true}
+                  deal={deal}
+                  showDetails={false}
                 />
               ))
             )}
           </div>
-          {onClickBtn && (
-            <div className="idl-footer">
-              <button className="btn btn-outline-secondary watch-more-btn" onClick={onClickBtn}>Xem thêm</button>
-            </div>
-          )}
+
 
         </div>
 

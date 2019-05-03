@@ -15,5 +15,14 @@ const UserInfoFragment = gql`
     }
 `;
 
+const UserProviderInfoFragment = gql`
+    fragment UserProviderInfo on User{
+        _id
+        fullname
+        phone
+        email
+        picture
+    }
+`;
 
-export {UserInfoFragment}
+export {UserInfoFragment, UserProviderInfoFragment}

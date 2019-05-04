@@ -11,9 +11,9 @@ export const createLocalStorageCache  = ({maxCache = 20, key, compare}) =>  {
             return cache.set(null, key);
         },
         async get(){
-            return cache.get(key)
+            return cache.get(key) || []
         },
-        async add(item){
+        async add(temp, item){
             let previousItems = cache.get(key) || [];
             let index = previousItems.findIndex(each => compare(each, item));
             if(index !== -1){

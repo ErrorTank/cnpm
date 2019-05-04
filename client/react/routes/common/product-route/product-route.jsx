@@ -24,6 +24,7 @@ export class ProductRoute extends React.Component {
         }).then(({data}) => {
             let result = data.getProduct;
             let info = userInfo.getState();
+            console.log(info)
             createVisitedCacheFunction("add")(info ? info._id : null, pick(result, ["name", "_id", "options", "deal", "description", "regularDiscount"]));
             this.setState({product: {...result}, loading: false});
         })

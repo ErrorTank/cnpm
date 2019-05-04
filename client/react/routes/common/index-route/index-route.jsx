@@ -30,13 +30,14 @@ export class IndexRoute extends KComponent {
           <div className="container content-container">
             <IndexBanner/>
           </div>
+
           <div className="container content-container">
             <VisitedSection/>
           </div>
-
           <div className="container content-container">
             <DealSection/>
           </div>
+
           {/*<div style={{height: "2000px"}}>*/}
             {/*<ScrollToFetch>*/}
               {/*<div style={{marginTop: "500px", height: "100px", backgroundColor: "red"}}></div>*/}

@@ -137,8 +137,7 @@ export class IndexProductList extends React.Component {
     };
   };
 
-  getRenderList = () => {
-    let {list} = this.state;
+  getRenderList = (list) => {
     let {cols} = this.props;
     if(!list.length) return [];
     let rowsCount = Math.ceil(list.length / cols);
@@ -147,8 +146,8 @@ export class IndexProductList extends React.Component {
 
   render() {
     let {api, deal} = this.props;
-    let {loading} = this.state;
-    let renderList = this.getRenderList();
+    let {loading, list} = this.state;
+    let renderList = this.getRenderList(list);
     return (
       <ScrollToFetch
         api={() => api().then((products) => {

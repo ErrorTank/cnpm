@@ -2,6 +2,7 @@ import React from "react";
 import {IndexProductList} from "../index-product-list/index-product-list";
 import {createVisitedCacheFunction} from "../../../../../common/cache/recent-product-guest-visit-cache";
 import {customHistory} from "../../../routes";
+import {userInfo} from "../../../../../common/states/user-info";
 
 
 export class VisitedSection extends React.Component {
@@ -11,7 +12,8 @@ export class VisitedSection extends React.Component {
     };
 
     getRecentVisited = () => {
-        return createVisitedCacheFunction("get")().then(arr => arr.length > 5 ? arr.slice(0, 5) : arr);
+        let info = userInfo.getState();
+        return createVisitedCacheFunction("get")(info ? info._id : null).then(arr => arr.length > 5 ? arr.slice(0, 5) : arr);
     };
 
 

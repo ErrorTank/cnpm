@@ -33,8 +33,12 @@ const userSchema = new Schema({
   },
   recentVisit: {
     type: [{
-      type: ObjectId,
-      ref: "Product"
+      createdAt: Date,
+      product: {
+        type: ObjectId,
+        ref: "Product"
+      }
+
     }],
     default: []
   },

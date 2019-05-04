@@ -1,14 +1,12 @@
 
 
 const {authorizationUser} = require("../../../authorization/auth");
-const {register, resendConfirmEmail, registerSocial, confirmForgotPassword, changePassword} = require("../../../db/model/user/controller");
+const {register, resendConfirmEmail, registerSocial, confirmForgotPassword, changePassword, addRecentVisit} = require("../../../db/model/user/controller");
 
 const Mutation = {
   register: async (parent, {data}, {request}, info) => {
     console.log(data);
     return register(data).then(msg => msg).catch(err => throw err);
-
-
   },
   resendConfirmEmail: async (parent, {email}, {request}, info) => {
     return resendConfirmEmail(email).then(msg => msg).catch(err => throw err);
@@ -23,6 +21,9 @@ const Mutation = {
   },
   changePassword: async (parent, {payload}, {request}, info) => {
     return changePassword(payload).then(res => res).catch(err => throw err);
+  },
+  addRecentVisit: async (parent, args, {request}, info) => {
+    return addRecentVisit(args).then(res => res).catch(err => throw err);
   },
 };
 

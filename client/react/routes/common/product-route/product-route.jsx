@@ -5,6 +5,7 @@ import {client} from "../../../../graphql";
 import {createVisitedCacheFunction} from "../../../../common/cache/recent-product-guest-visit-cache";
 import {getFullProductDetails} from "../../../../graphql/queries/product";
 import pick from "lodash/pick"
+import {userInfo} from "../../../../common/states/user-info";
 
 export class ProductRoute extends React.Component {
     constructor(props) {
@@ -22,7 +23,8 @@ export class ProductRoute extends React.Component {
             }
         }).then(({data}) => {
             let result = data.getProduct;
-            createVisitedCacheFunction("add")(pick(result, ["name", "_id", "options", "deal", "description", "regularDiscount"]));
+            let info = userInfo.getState();
+            createVisitedCacheFunction("add")(info ? info._id : null, pick(result, ["name", "_id", "options", "deal", "description", "regularDiscount"]));
             this.setState({product: {...result}, loading: false});
         })
     };

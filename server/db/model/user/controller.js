@@ -1,4 +1,5 @@
 const User = require("./user");
+const Product = require("../product/product");
 const TokenConfirmation = require("../confirm-token/confirm-token");
 const ResetPasswordToken = require("../reset-password-token/reset-password-token");
 const {sendEmail} = require("../../../email/index");
@@ -257,6 +258,46 @@ const changePassword = payload => {
         .catch(err => Promise.reject(err))
 };
 
+const getUser = ({userID}) => {
+  return User.findById(userID)
+
+    .populate("recentVisit.product", "_id name description deal regularDiscount options")
+    .populate("provider.products", "_id name description deal regularDiscount options")
+    .then(data => data)
+    .catch(err => Promise.reject(err))
+};
+
+const addRecentVisit = ({uID, pID}) => {
+    return Product.findById(pID, "_id")
+      .then(data => data ? data : Promise.reject(new ApolloError("product_not_found")))
+      .then(data => User.findOne({_id: uID}).lean())
+      .then(data => {
+
+
+        if(data.recentVisit.find(each => {
+          console.log(each.product.toString().length)
+          console.log(pID.length)
+          return each.product.toString() === pID
+        })){
+          console.log("cac")
+          return User.findOneAndUpdate({_id: uID, "recentVisit.product": pID}, {$set: {"recentVisit.$.createdAt": Date.now()}})
+
+        }else{
+          if(data.recentVisit.length === 10){
+            let newArray = [...data.recentVisit];
+            newArray.sort((a,b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            newArray.pop();
+            newArray.push({createdAt: Date.now(), product: pID});
+            return User.findOneAndUpdate({_id: uID}, {$set: {recentVisit: newArray}})
+          }
+          return User.findOneAndUpdate({_id: uID}, {$push: {recentVisit: {createdAt: Date.now(), product: pID}}})
+        }
+
+      })
+      .then(() => true)
+      .catch(() => false)
+};
+
 module.exports = {
     register,
     getClientUserCache,
@@ -267,5 +308,7 @@ module.exports = {
     regularLogin,
     checkEmailExisted,
     confirmForgotPassword,
-    changePassword
+    changePassword,
+    getUser,
+    addRecentVisit
 };

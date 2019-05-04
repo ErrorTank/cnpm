@@ -1,6 +1,6 @@
 import {Cache} from "./cache";
 import {client} from "../../graphql";
-import {getAuthenUser} from "../../graphql/queries/user";
+import {addRecentVisit, getAuthenUser, getUserRecentVisited} from "../../graphql/queries/user";
 import {userInfo} from "../states/user-info";
 import {authenCache} from "./authen-cache";
 
@@ -33,18 +33,33 @@ const recentVisitedCache = createLocalStorageCache({
 });
 
 const authenActions = {
-    get(){
-        return client.query()
-    },
-    add(product){
-        return client.mutate({
+    get(userID){
+        return client.query({
+            query: getUserRecentVisited,
+            variables: {
+                id: userID
+            },
+            fetchPolicy: "no-cache"
+        }).then(({data}) => {
+            let result = [...data.getUser.recentVisit];
+            result.sort((a,b) => Number(b.createdAt) - Number(a.createdAt));
+            return result.map(each => each.product)
+        })
 
+
+    },
+    add(userID, product){
+        return client.mutate({
+            mutation: addRecentVisit,
+            variables: {
+                pID: product._id,
+                uID: userID
+            }
         })
     }
 };
 
 export const createVisitedCacheFunction = (actionName) => {
   let authen = authenCache.getAuthen();
-
   return !authen ? recentVisitedCache[actionName] : authenActions[actionName]
 };

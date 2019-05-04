@@ -27,7 +27,10 @@ export class AuthenLayout extends KComponent {
         <div className="authen-body">
           {this.props.children}
         </div>
-
+        <div className="authen-footer">
+          <p>© 2016 - Bản quyền của Công Ty Cổ Phần Ta Ka - Taka.vn</p>
+          <p>Giấy chứng nhận Đăng ký Kinh doanh số 0309532909 do Sở Kế hoạch và Đầu tư Thành phố Hồ Chí Minh cấp ngày 06/01/2010</p>
+        </div>
       </div>
     );
   }

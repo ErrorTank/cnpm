@@ -5,4 +5,5 @@ type Mutation{
     registerSocial(data: CreateUserInput!): loginOutputType
     confirmForgotPassword(email: String!): Boolean
     changePassword(payload: ResetPasswordInput!): Boolean
+    addRecentVisit(uID: ID!, pID: ID!): Boolean
 }

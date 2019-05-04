@@ -7,17 +7,28 @@ import {ScrollToFetch} from "../../../common/scroll-to-fetch/scroll-to-fetch";
 import {DealSection} from "./deal-section/deal-section";
 import {VisitedSection} from "./visited-section/visited-section";
 import {createVisitedCacheFunction} from "../../../../common/cache/recent-product-guest-visit-cache";
+import {userInfo} from "../../../../common/states/user-info";
+import {KComponent} from "../../../common/k-component";
+import {customHistory} from "../../routes";
 
-export class IndexRoute extends React.Component {
+export class IndexRoute extends KComponent {
   constructor(props) {
     super(props);
     this.state = {
       show: false
     };
-    createVisitedCacheFunction("get")().then(arr => {
+    let info = userInfo.getState();
+    createVisitedCacheFunction("get")(info ? info._id : null).then(arr => {
       if(arr && arr.length) this.setState({show: true})
-    })
+    });
+    this.onUnmount(userInfo.onChange((nextState) => {
+     createVisitedCacheFunction("get")(nextState ? nextState._id : null).then(arr => {
+       this.setState({show: arr && arr.length})
+     });
+    }));
   };
+
+
 
   render() {
     return (

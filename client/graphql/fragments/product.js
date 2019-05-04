@@ -34,5 +34,24 @@ const ProductInfoFragment = gql`
     ${CommentInfoFragment}
 `;
 
+const ProductCacheFragment = gql`    
+    fragment ProductCacheInfo on Product{
+        _id
+        name
+        description
+        regularDiscount
+        deal{
+            last
+        }
+        options{
+            price
+            description
+            total
+            sold
+            picture
+        }
+    }
+`;
 
-export {ProductInfoFragment}
+
+export {ProductInfoFragment, ProductCacheFragment}

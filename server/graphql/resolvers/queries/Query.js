@@ -1,5 +1,5 @@
 const {authorizationUser, } = require("../../../authorization/auth");
-const {checkConfirmToken, getClientUserCache, getSocialUserInfo, regularLogin, checkEmailExisted} = require("../../../db/model/user/controller");
+const {checkConfirmToken, getClientUserCache, getSocialUserInfo, regularLogin, checkEmailExisted, getUser} = require("../../../db/model/user/controller");
 const {getIndexDealProducts, getProduct} = require("../../../db/model/product/controller");
 
 const Query = {
@@ -28,7 +28,7 @@ const Query = {
     return getIndexDealProducts(args).then(data => {
 
       return data.map(each => {
-        console.log(each)
+
         let {deal} = each;
         let different = new Date(deal.last).getTime() - new Date().getTime();
         return {product: each, timeLeft: different}
@@ -37,6 +37,11 @@ const Query = {
   },
   getProduct: async (parent, args, {request}, info) => {
     return getProduct(args).then(data => data).catch(err => throw err);
+  },
+  getUser: async (parent, args, {request}, info) => {
+    return getUser(args).then(data => {
+      return data;
+    }).catch(err => throw err);
   },
 };
 

@@ -14,18 +14,7 @@ import {customHistory} from "../../routes";
 export class IndexRoute extends KComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      show: false
-    };
-    let info = userInfo.getState();
-    createVisitedCacheFunction("get")(info ? info._id : null).then(arr => {
-      if(arr && arr.length) this.setState({show: true})
-    });
-    this.onUnmount(userInfo.onChange((nextState) => {
-     createVisitedCacheFunction("get")(nextState ? nextState._id : null).then(arr => {
-       this.setState({show: arr && arr.length})
-     });
-    }));
+
   };
 
 
@@ -41,13 +30,9 @@ export class IndexRoute extends KComponent {
           <div className="container content-container">
             <IndexBanner/>
           </div>
-          {this.state.show && (
-              <div className="container content-container">
-                <VisitedSection/>
-              </div>
-          )
-
-          }
+          <div className="container content-container">
+            <VisitedSection/>
+          </div>
 
           <div className="container content-container">
             <DealSection/>

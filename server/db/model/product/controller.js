@@ -19,7 +19,63 @@ const getProduct = ({productID}) => {
         .catch(err => Promise.reject(err))
 };
 
+const addComment = ({pID, comment}) => {
+  return Product.findOneAndUpdate({_id: pID},
+      {$push: {comments: comment}},
+      {new: true},
+      (err, doc) => {
+        if(err){
+          // handle err
+        }
+        if(doc){
+          //new documet here.
+        }
+  })
+};
+
+const editComment = ({pID, cId, comment}) => {
+  let updateBlock = {};
+  if (comment.rating)
+    updateBlock['comments.$.rating'] = comment.rating;
+  if (comment.title)
+    updateBlock['comments.$.title'] = comment.title;
+  if (comment.content)
+    updateBlock['comments.$.content'] = comment.content;
+  if (comment.picture)
+    updateBlock['comments.$.picture'] = comment.picture;
+  updateBlock['comments.$.updatedAt'] = Date.now();
+
+  return Product.findOneAndUpdate({_id: pID, 'comments._id': cID},
+    {'$set': updateBlock},
+    {new:true}, 
+    (err, doc) => {
+      if(err){
+        //handle err
+      }
+      if(doc){
+        //new documet here.
+      }
+    });
+};
+
+const deleteComment = ({pID, cID}) => {
+  return Product.findOneAndUpdate({_id: pID},
+    {$pull: {comments: {_id: cID}}},
+    {new: true},
+    (err, doc) => {
+      if(err){
+        // handle err
+      }
+      if(doc){
+        //new documet here.
+      }
+  })
+};
+
 module.exports = {
     getIndexDealProducts,
-    getProduct
+    getProduct,
+    addComment,
+    editComment,
+    deleteComment
 };

@@ -6,6 +6,9 @@ import {createVisitedCacheFunction} from "../../../../common/cache/recent-produc
 import {getFullProductDetails} from "../../../../graphql/queries/product";
 import pick from "lodash/pick"
 import {userInfo} from "../../../../common/states/user-info";
+import {getBreadcrumbItems} from "../../../common/breadcrumb/breadcrumb-items";
+import {Breadcrumb} from "../../../common/breadcrumb/breadcrumb";
+
 
 export class ProductRoute extends React.Component {
     constructor(props) {
@@ -38,9 +41,14 @@ export class ProductRoute extends React.Component {
                 <AuthenLayout
                     showCategories={true}
                 >
-                    <div className="container content-container">
+                    <Breadcrumb
+                        items={getBreadcrumbItems([...product.categories])}
+                    >
+                        <div className="container content-container">
 
-                    </div>
+                        </div>
+                    </Breadcrumb>
+
 
 
                 </AuthenLayout>

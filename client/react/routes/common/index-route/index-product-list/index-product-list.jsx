@@ -38,16 +38,16 @@ export const ProductPanel = ({data, isDeal}) => {
         <div className="p-price">
           {isDeal ? (
               <Fragment>
-                <span className="main-price">{formatMoney(Number(price))} ₫</span><span className="sale-price">{formatMoney(calcSalePrice(Number(price), Number(regularDiscount)))} ₫</span>
+                <span className="main-price">{formatMoney(calcSalePrice(Number(price), Number(regularDiscount)))} ₫</span><span className="sale-price">{formatMoney(Number(price))} ₫</span>
               </Fragment>
           ) : (
               <Fragment>
                 <div>
-                  <span className="main-price">{formatMoney(Number(price))} ₫</span>{regularDiscount && <span className="discount-display">-{regularDiscount}%</span>}
+                  <span className="main-price">{formatMoney(calcSalePrice(Number(price), Number(regularDiscount)))} ₫</span>{regularDiscount && <span className="discount-display">-{regularDiscount}%</span>}
                 </div>
                 {regularDiscount && (
                     <div>
-                      <span className="sale-price m-0">{formatMoney(calcSalePrice(Number(price), Number(regularDiscount)))} ₫</span>
+                      <span className="sale-price m-0">{formatMoney(Number(price))} ₫</span>
                     </div>
                 )
 

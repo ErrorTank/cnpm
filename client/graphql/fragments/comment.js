@@ -7,11 +7,19 @@ const CommentInfoFragment = gql`
         author{
             fullname 
             role
+            picture
         }
         updatedAt
         title
         content
         picture
+        subComment{
+            author{
+                fullname
+                picture
+            }
+            content
+        }
     }
 
 `;

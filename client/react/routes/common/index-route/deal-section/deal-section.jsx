@@ -28,7 +28,7 @@ export class DealSection extends React.Component {
 
                 </span>
           <p className="main-title">Taka Deal</p>
-          <p className="sub">Cập nhật hàng giờ tất cả những deal giảm giá đặc biệt trên Tiki. Hãy bookmark trang này và
+          <p className="sub">Cập nhật hàng giờ tất cả những deal giảm giá đặc biệt trên Taka. Hãy bookmark trang này và
             quay lại thường xuyên để không bỏ lỡ bạn nhé!</p>
         </div>
         <IndexProductList

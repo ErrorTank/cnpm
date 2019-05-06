@@ -21,9 +21,11 @@ const ProductInfoFragment = gql`
         deal{
             last
         }
+        describeFields
         options{
             price
             description
+            describeFields
             total
             sold
             picture

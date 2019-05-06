@@ -19,6 +19,10 @@ const productSchema = new Schema({
         ],
         required: true
     },
+    describeFields: {
+        type: [String],
+        default: []
+    },
     categories: {
         type: [
             {
@@ -45,7 +49,18 @@ const productSchema = new Schema({
         title: String,
         content: String,
         picture: [String],
-        default: []
+        default: [],
+        subComment: {
+            type: [{
+                author: {
+                    type: ObjectId,
+                    ref: "User",
+                },
+                content: String,
+
+            }],
+            default: []
+        }
     }],
     description: String,
 
@@ -64,6 +79,10 @@ const productSchema = new Schema({
             total: Number,
             sold: {type: Number, default: 0},
             picture: [String],
+            describeFields: {
+                type: [String],
+                default: []
+            },
 
         }],
         required: true,

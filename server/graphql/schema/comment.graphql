@@ -1,3 +1,8 @@
+type SubComment{
+    author: User
+    content: String
+}
+
 type Comment{
     rating: Int
     author: User
@@ -5,4 +10,5 @@ type Comment{
     title: String
     content: String
     picture: [String]
+    subComment: [SubComment]!
 }

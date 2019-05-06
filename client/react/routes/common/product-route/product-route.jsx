@@ -14,7 +14,6 @@ export class ProductRoute extends React.Component {
             product: null,
             loading: true
         };
-        console.log(props);
 
         client.query({
             query: getFullProductDetails,
@@ -24,7 +23,6 @@ export class ProductRoute extends React.Component {
         }).then(({data}) => {
             let result = data.getProduct;
             let info = userInfo.getState();
-            console.log(info)
             createVisitedCacheFunction("add")(info ? info._id : null, pick(result, ["name", "_id", "options", "deal", "description", "regularDiscount"]));
             this.setState({product: {...result}, loading: false});
         })
@@ -32,6 +30,7 @@ export class ProductRoute extends React.Component {
 
     render() {
         let {loading, product} = this.state;
+        console.log(product)
         return (
             <PageTitle
                 title={product ? product.name : "Đang tải thông tin sản phẩm"}

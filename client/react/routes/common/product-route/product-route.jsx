@@ -3,11 +3,11 @@ import {PageTitle} from "../../../common/page-title/page-title";
 import {AuthenLayout} from "../../../layout/authen-layout/authen-layout";
 import {client} from "../../../../graphql";
 import {createVisitedCacheFunction} from "../../../../common/cache/recent-product-guest-visit-cache";
-import {getFullProductDetails} from "../../../../graphql/queries/product";
+import {getBasicProductInfo, getFullProductDetails} from "../../../../graphql/queries/product";
 import pick from "lodash/pick"
 import {userInfo} from "../../../../common/states/user-info";
-import {getBreadcrumbItems} from "../../../common/breadcrumb/breadcrumb-items";
 import {Breadcrumb} from "../../../common/breadcrumb/breadcrumb";
+import {LoadingInline} from "../../../common/loading-inline/loading-inline";
 
 
 export class ProductRoute extends React.Component {
@@ -19,7 +19,8 @@ export class ProductRoute extends React.Component {
         };
 
         client.query({
-            query: getFullProductDetails,
+            query: getBasicProductInfo
+            ,
             variables: {
                 pID: props.match.params.productID
             }
@@ -27,7 +28,7 @@ export class ProductRoute extends React.Component {
             let result = data.getProduct;
             let info = userInfo.getState();
             createVisitedCacheFunction("add")(info ? info._id : null, pick(result, ["name", "_id", "options", "deal", "description", "regularDiscount"]));
-            this.setState({product: {...result}, loading: false});
+            this.setState({ loading: false, product: {...result}});
         })
     };
 
@@ -41,13 +42,21 @@ export class ProductRoute extends React.Component {
                 <AuthenLayout
                     showCategories={true}
                 >
-                    <Breadcrumb
-                        items={getBreadcrumbItems([...product.categories])}
-                    >
-                        <div className="container content-container">
+                    <div className="product-route">
+                        {(loading) ? (
+                            <LoadingInline/>
+                        ) : (
+                          <Breadcrumb
+                            items={[...product.categories]}
+                          >
+                              <div className="container content-container">
 
-                        </div>
-                    </Breadcrumb>
+                              </div>
+                          </Breadcrumb>
+                        )}
+                    </div>
+
+
 
 
 

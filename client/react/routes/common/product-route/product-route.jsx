@@ -10,7 +10,9 @@ import {Breadcrumb} from "../../../common/breadcrumb/breadcrumb";
 import {LoadingInline} from "../../../common/loading-inline/loading-inline";
 import {ProductMainPanel} from "./product-main-panel/product-main-panel";
 import {ProductDetailFields} from "./product-detail-fields/product-detail-fields";
-
+import {ProductDescription,} from "./product-description/product-description";
+import {VisitedSection} from "../index-route/visited-section/visited-section";
+import {CommentSection} from "./comment-section/comment-section";
 
 export class ProductRoute extends React.Component {
   constructor(props) {
@@ -57,6 +59,13 @@ export class ProductRoute extends React.Component {
                   />
                   <ProductDetailFields
                     {...product}
+                  />
+                  <ProductDescription
+                    {...product}
+                  />
+                  <VisitedSection/>
+                  <CommentSection
+                    productID={product._id}
                   />
                 </div>
               </Breadcrumb>

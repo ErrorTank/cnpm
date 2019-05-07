@@ -275,11 +275,10 @@ const addRecentVisit = ({uID, pID}) => {
 
 
         if(data.recentVisit.find(each => {
-          console.log(each.product.toString().length)
-          console.log(pID.length)
+
           return each.product.toString() === pID
         })){
-          console.log("cac")
+
           return User.findOneAndUpdate({_id: uID, "recentVisit.product": pID}, {$set: {"recentVisit.$.createdAt": Date.now()}})
 
         }else{

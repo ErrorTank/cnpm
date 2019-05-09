@@ -1,5 +1,5 @@
 .zoom-image-container{
-  //position relative
+  position relative
   text-align right
   .img-container{
     position relative
@@ -7,17 +7,29 @@
     display inline-block
     img{
       width 100%
+      cursor pointer
+    }
+    .zoom-len{
+      width 160px
+      height 160px
+      position absolute
+      border 1px solid tikiblack
+      background-color rgba(white, 0.4)
+
+      pointer-events none
     }
   }
   .img-zooming-overlay{
     position absolute
     background-repeat:no-repeat;
-    left 516px
-    top 0
+    left 406px
+    top -24px
     border 1px solid tikiblue
     display none
-    width 450px
-    height 450px
+    background-color white
+    width 480px
+    height 480px
+    background-size 1140px auto
     z-index 1
   }
 

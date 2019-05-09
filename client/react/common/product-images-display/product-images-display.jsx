@@ -14,12 +14,15 @@ export class ProductImagesDisplay extends React.Component{
         let {current} = this.state;
         return(
             <div className="product-images-display">
+
               <ImagesPicker
                 images={images}
                 current={current}
                 onPick={newImg => this.setState({current: newImg})}
               />
-              <ImageDisplay/>
+              <ImageDisplay
+                current={current}
+              />
             </div>
         );
     }

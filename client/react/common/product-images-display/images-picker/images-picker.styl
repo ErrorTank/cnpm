@@ -1,0 +1,27 @@
+.images-picker{
+  display inline-block
+  width 75px
+  vertical-align top
+  .ip-item{
+    width 75px
+    height 75px
+    padding 5px
+    position relative
+    border 1px solid #ececec
+    overflow hidden
+    border-radius 3px
+    margin-bottom 10px
+    &.active{
+      border-color #189eff
+    }
+    cursor pointer
+    img{
+      position absolute
+      top 50%
+      left 50%
+      transform translate(-50%, -50%)
+      max-width 62px
+      max-height 62px
+    }
+  }
+}

@@ -23,6 +23,10 @@ const productSchema = new Schema({
         type: [String],
         default: []
     },
+    brand: {
+        type: ObjectId,
+        ref: "Brand"
+    },
     categories: {
         type: [
             {

@@ -1,3 +1,8 @@
+type Brand{
+    name: String,
+    logo: String
+}
+
 type Deal{
     last: String!
 }
@@ -25,4 +30,5 @@ type Product{
     regularDiscount: Int
     options: [Option!]!
     describeFields: [String]
+    brand: Brand
 }

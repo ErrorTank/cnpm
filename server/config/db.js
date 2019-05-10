@@ -7,6 +7,7 @@ module.exports = () => new Promise((resolve, reject) => {
         .then(() => {
             console.log("Connect to mongoDB successfully!");
             require("../db/model/billing/billing");
+            require("../db/model/brand/brand");
             require("../db/model/category/category");
             require("../db/model/confirm-token/confirm-token");
             require("../db/model/discount-with-code/discount-with-code");

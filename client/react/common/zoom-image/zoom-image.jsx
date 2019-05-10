@@ -17,8 +17,9 @@ export class ZoomImage extends React.Component {
       this.setState({show: true});
     let imgElem = ReactDOM.findDOMNode(this.zoomingImg);
 
-    let posX = e.offsetX ? (e.offsetX) : e.pageX - (imgElem.getBoundingClientRect().top + document.documentElement.scrollTop);
-    let posY = e.offsetY ? (e.offsetY) : e.pageY - imgElem.getBoundingClientRect().left;
+    let posY = e.offsetY ? (e.offsetY) : e.pageY - (imgElem.getBoundingClientRect().top + document.documentElement.scrollTop);
+    let posX = e.offsetX ? (e.offsetX) : e.pageX - imgElem.getBoundingClientRect().left;
+
     let result = {};
     if(posY <= 80.5){
       result.top = 0;
@@ -50,6 +51,7 @@ export class ZoomImage extends React.Component {
     return (
       <div className={classnames("zoom-image-container", className)}>
         <div className="img-container">
+
           <img src={src}
                onMouseMove={this.zoomIn}
                onMouseOut={this.zoomOut}

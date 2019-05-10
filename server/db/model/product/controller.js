@@ -10,10 +10,11 @@ const getIndexDealProducts = ({skip = 0, take = 20}) => {
 
 };
 
+//Todo: provider populate to brand
+
 const getProduct = ({productID}) => {
     return Product.findById(productID).populate("categories", "_id name").populate("provider", "_id fullname phone email picture").populate("comments.author", "fullname picture").populate("comments.subComment.author", "fullname picture").lean()
         .then(data => {
-            console.log(transformProductDescribeFields(data));
             return transformProductDescribeFields(data);
         })
         .catch(err => Promise.reject(err))
@@ -47,7 +48,7 @@ const editComment = ({pID, cId, comment}) => {
 
   return Product.findOneAndUpdate({_id: pID, 'comments._id': cID},
     {'$set': updateBlock},
-    {new:true}, 
+    {new:true},
     (err, doc) => {
       if(err){
         //handle err

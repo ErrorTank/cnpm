@@ -21,24 +21,37 @@ export class ProductRoute extends React.Component {
       product: null,
       loading: true
     };
+    this.fetchData(props.match.params.productID).then(result => this.setState({loading: false, product: {...result}}));
 
-    client.query({
+  };
+
+  fetchData = (pID) => {
+
+    return client.query({
       query: getBasicProductInfo
       ,
       variables: {
-        pID: props.match.params.productID
+        pID
       }
     }).then(({data}) => {
       let result = data.getProduct;
       let info = userInfo.getState();
       createVisitedCacheFunction("add")(info ? info._id : null, pick(result, ["name", "_id", "options", "deal", "description", "regularDiscount"]));
-      this.setState({loading: false, product: {...result}});
+      return result;
     })
   };
+  componentWillReceiveProps(nextProps) {
+    let nextID = nextProps.match.params.productID;
+    if(this.state.product && nextID && (this.state.product._id !== nextID)){
+      this.setState({loading: true});
+      this.fetchData(nextID).then(data => this.setState({product: {...data}, loading: false}));
+    }
+  }
+
 
   render() {
     let {loading, product} = this.state;
-    console.log(product)
+
     return (
       <PageTitle
         title={product ? product.name : "Đang tải thông tin sản phẩm"}
@@ -51,7 +64,7 @@ export class ProductRoute extends React.Component {
               <LoadingInline/>
             ) : (
               <Breadcrumb
-                items={[...product.categories]}
+                items={[...product.categories, {name: product.name}]}
               >
                 <div className="container content-container">
                   <ProductMainPanel
@@ -63,7 +76,9 @@ export class ProductRoute extends React.Component {
                   <ProductDescription
                     {...product}
                   />
-                  <VisitedSection/>
+                  <VisitedSection
+                    filterList={list => list.filter(each => each._id !== product._id)}
+                  />
                   <CommentSection
                     productID={product._id}
                   />

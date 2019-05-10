@@ -7,35 +7,44 @@ export class ZoomImage extends React.Component {
     super(props);
     this.state = {
       show: false,
-      left: 0,
-      top: 0
+      // left: 0,
+      // top: 0
     };
   };
+
 
   zoomIn = (e) => {
     if(this.state.show === false)
       this.setState({show: true});
-    let imgElem = ReactDOM.findDOMNode(this.zoomingImg);
+    else{
+      let imgElem = ReactDOM.findDOMNode(this.zoomingImg);
+      let zoomElem = ReactDOM.findDOMNode(this.zoomLen);
+      let overlayElem = ReactDOM.findDOMNode(this.overlay);
+      let posY = e.offsetY ? (e.offsetY) : e.pageY - (imgElem.getBoundingClientRect().top + document.documentElement.scrollTop);
+      let posX = e.offsetX ? (e.offsetX) : e.pageX - imgElem.getBoundingClientRect().left;
 
-    let posY = e.offsetY ? (e.offsetY) : e.pageY - (imgElem.getBoundingClientRect().top + document.documentElement.scrollTop);
-    let posX = e.offsetX ? (e.offsetX) : e.pageX - imgElem.getBoundingClientRect().left;
+      let result = {};
+      if(posY <= 80.5){
+        result.top = 0;
+      }else if(imgElem.offsetHeight - posY <= 80.5){
+        result.top = imgElem.offsetHeight - 160;
+      }else{
+        result.top = posY - 80;
+      }
+      if(posX <= 80.5){
+        result.left = 0;
+      }else if(imgElem.offsetWidth - posX <= 80.5){
+        result.left = imgElem.offsetWidth - 160;
+      }else{
+        result.left = posX - 80;
+      }
 
-    let result = {};
-    if(posY <= 80.5){
-      result.top = 0;
-    }else if(imgElem.offsetHeight - posY <= 80.5){
-      result.top = imgElem.offsetHeight - 160;
-    }else{
-      result.top = posY - 80;
+      zoomElem.style.left= result.left + "px";
+      zoomElem.style.top= result.top + "px";
+      overlayElem.style.backgroundPosition= (-result.left * 3) + "px " + (-result.top * 3) + "px";
     }
-    if(posX <= 80.5){
-      result.left = 0;
-    }else if(imgElem.offsetWidth - posX <= 80.5){
-      result.left = imgElem.offsetWidth - 160;
-    }else{
-      result.left = posX - 80;
-    }
-    this.setState({...result});
+
+    // this.setState({...result});
   };
 
 
@@ -59,6 +68,7 @@ export class ZoomImage extends React.Component {
           />
           {show && (
             <div className="zoom-len"
+                 ref={len => this.zoomLen = len}
                  style={{
                    left,
                    top
@@ -73,10 +83,11 @@ export class ZoomImage extends React.Component {
         </div>
         {show && (
           <div className="img-zooming-overlay"
+               ref={overlay => this.overlay = overlay}
                style={{
                  display: "inline-block",
                  backgroundImage: `url(${src})`,
-                 backgroundPosition: (-left * 3) + "px " + (-top * 3) + "px"
+                 // backgroundPosition: (-left * 3) + "px " + (-top * 3) + "px"
                }}
           >
 

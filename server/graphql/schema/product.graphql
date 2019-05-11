@@ -23,7 +23,7 @@ type Product{
     name: String!
     provider: [User]!
     deal: Deal
-    categories: [Category]!
+    categories: Category!
     comments: [Comment]!
     description: String
     discountWithCode: DiscountWithCode

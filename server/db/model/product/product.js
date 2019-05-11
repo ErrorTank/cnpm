@@ -28,13 +28,8 @@ const productSchema = new Schema({
         ref: "Brand"
     },
     categories: {
-        type: [
-            {
-                type: ObjectId,
-                ref: "Category"
-            }
-        ],
-        default: []
+        type: ObjectId,
+        ref: "Category"
     },
     comments: [{
         rating: {

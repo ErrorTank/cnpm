@@ -48,6 +48,13 @@ export class ProductRoute extends React.Component {
     }
   }
 
+  transformCategoriesToFuckingArray = (category, result = []) => {
+    let {_id, name, parent} = category;
+    if(!parent)
+      return result;
+    return this.transformCategoriesToFuckingArray(parent, [...result, {_id, name}]);
+  };
+
 
   render() {
     let {loading, product} = this.state;

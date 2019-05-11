@@ -1,5 +1,5 @@
 type Category{
     _id: String
     name: String
-    childrens: [Category]
+    parent: Category
 }

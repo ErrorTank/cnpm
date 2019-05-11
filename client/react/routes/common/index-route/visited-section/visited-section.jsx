@@ -31,7 +31,7 @@ export class VisitedSection extends KComponent {
     let {list} = this.state;
     let {filterList = (l) => l} = this.props;
     return (
-        <div className={classnames("visitedad-section")}>
+        <div className={classnames("visited-section")}>
 
             <p className="section-header">SẢN PHẨM BẠN ĐÃ XEM</p>
             <div className="section-body">

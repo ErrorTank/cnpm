@@ -13,9 +13,10 @@ const getIndexDealProducts = ({skip = 0, take = 20}) => {
     "options.price": 1,
     "options.total": 1,
     "options.sold": 1,
-    "options.picture": 1
+    "options.picture": 1,
+
   }, {skip, limit: take})
-    .then(data => ({...omit(data, "categories"), categories: getCategories(data.categories._id)}))
+    .then(data => data)
     .catch(err => Promise.reject(err))
 
 };

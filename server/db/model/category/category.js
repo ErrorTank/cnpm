@@ -8,15 +8,10 @@ const categorySchema = new Schema({
     type: String,
     required: true
   },
-  childrens: {
-    type: [
-      {
-        type: ObjectId,
-        ref: "Category",
-        default: null
-      }
-    ],
-    default: []
+  parent: {
+    type: ObjectId,
+    ref: "Category",
+    default: null
   }
 });
 

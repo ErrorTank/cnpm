@@ -15,6 +15,12 @@ const categorySchema = new Schema({
   }
 });
 
+const autoPopulateParent = function(next){
+  this.populate("parent");
+  next();
+};
+categorySchema.pre("find", autoPopulateParent).pre("findOne", autoPopulateParent).pre("findMany", autoPopulateParent);
+
 
 const Category = mongoose.model("Category", categorySchema);
 

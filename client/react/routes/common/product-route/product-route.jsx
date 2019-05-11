@@ -51,8 +51,8 @@ export class ProductRoute extends React.Component {
   transformCategoriesToFuckingArray = (category, result = []) => {
     let {_id, name, parent} = category;
     if(!parent)
-      return result;
-    return this.transformCategoriesToFuckingArray(parent, [...result, {_id, name}]);
+      return [{_id, name}, ...result];
+    return this.transformCategoriesToFuckingArray(parent, [{_id, name}, ...result]);
   };
 
 
@@ -71,7 +71,7 @@ export class ProductRoute extends React.Component {
               <LoadingInline/>
             ) : (
               <Breadcrumb
-                items={[...product.categories, {name: product.name}]}
+                items={[...this.transformCategoriesToFuckingArray(product.categories), {name: product.name}]}
               >
                 <div className="container content-container">
                   <ProductMainPanel

@@ -3,6 +3,7 @@ const {transformProductDescribeFields} = require("../../../utils/common");
 const omit = require("lodash/omit");
 const pick = require("lodash/pick");
 const {getCategories} = require("../category/controller");
+const mongoose = require("mongoose");
 
 const getIndexDealProducts = ({skip = 0, take = 20}) => {
   return Product.find({"deal.last": {$gt: new Date()}}, {
@@ -24,10 +25,12 @@ const getIndexDealProducts = ({skip = 0, take = 20}) => {
 //Todo: provider populate to brand
 
 const getProduct = ({productID}) => {
-  return Product.findById(productID).populate("provider", "_id fullname phone email picture").populate("comments.author", "fullname picture").populate("comments.subComment.author", "fullname picture").lean()
+  console.log("cc")
+  return Product.findById(productID).populate("provider", "_id fullname phone email picture").lean()
     .then(data => {
 
       return new Promise((resolve, reject) => {
+
         getCategories(data.categories._id).then((categories) => {
           resolve(transformProductDescribeFields({...omit(data, "categories"), categories}));
         }).catch(err => reject(err));
@@ -37,6 +40,63 @@ const getProduct = ({productID}) => {
     .then(data => data)
     .catch(err => Promise.reject(err))
 };
+const getBasicProduct = ({productID}) => {
+  console.log(productID)
+  return Product.aggregate([
+    {$match: {"_id":  mongoose.Types.ObjectId(productID)}},
+    {"$addFields": {
+        "meanStar": {
+          "$divide": [
+            {
+              "$reduce": {
+                "input": "$comments",
+                "initialValue": 0,
+                "in": { "$add": ["$$value", "$$this.rating"] }
+              }
+            },
+            {
+              "$cond": [
+                { "$ne": [ { "$size": "$comments" }, 0 ] },
+                { "$size": "$comments" },
+                1
+              ]
+            }
+          ]
+        },
+        "commentCount": {
+          $size: "$comments"
+        }
+      }
+    },
+    { $lookup: {from: 'users', localField: 'provider', foreignField: '_id', as: "provider"} },
+    { $lookup: {from: 'brands', localField: 'brand', foreignField: '_id', as: 'brand'} },
+    {
+      $addFields: {
+        brand: {
+           "$arrayElemAt": [ "$brand", 0 ]  ,
+        }
+      }
+    }
+
+
+  ]).exec().then(([{meanStar,commentCount, ...rest}]) => {
+    return new Promise((resolve, reject) => {
+
+      getCategories(rest.categories._id).then((categories) => {
+
+        resolve({
+          info: transformProductDescribeFields({...omit(rest, "categories"), categories}),
+          meanStar: meanStar,
+          commentCount
+        });
+      }).catch(err => reject(err));
+
+    });
+
+  })
+
+};
+
 
 const addComment = ({pID, comment}) => {
   return Product.findOneAndUpdate({_id: pID},
@@ -96,5 +156,6 @@ module.exports = {
   getProduct,
   addComment,
   editComment,
-  deleteComment
+  deleteComment,
+  getBasicProduct
 };

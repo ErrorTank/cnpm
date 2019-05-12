@@ -4,65 +4,73 @@ import {ProductInfoFragment} from "../fragments/product";
 import {CategoryInfoFragment} from "../fragments/category";
 
 const fetchIndexDealProducts = gql`
-  query{
-    getIndexDealProducts(skip: 0, take: 5){
+    query{
+        getIndexDealProducts(skip: 0, take: 5){
 
-      timeLeft
-      product{
-        _id
-        name
-        regularDiscount
-        deal{
-          last
+            timeLeft
+            product{
+                _id
+                name
+                regularDiscount
+                deal{
+                    last
+                }
+                options{
+                    price
+                    total
+                    sold
+                    picture
+
+                }
+            }
+
+
         }
-        options{
-          price
-          total
-          sold
-          picture
-
-        }
-      }
-
-
     }
-  }
 `;
 
 const getFullProductDetails = gql`
-  query($pID: String!){
-    getProduct(productID: $pID){
-      ...ProductInfo
+    query($pID: String!){
+        getProduct(productID: $pID){
+            ...ProductInfo
+        }
     }
-  }
-  ${ProductInfoFragment}
+    ${ProductInfoFragment}
 `;
 
 const getBasicProductInfo = gql`
     query($pID: String!){
-        getProduct(productID: $pID){
-          _id
-          name
-          description
-          regularDiscount
-          provider{
-            ...UserProviderInfo
-          }
-          categories{
-            ...CategoryInfo
-          }
-          deal{
-            last
-          }
-          describeFields
-          options{
-            price
-            description
-            describeFields
-            total
-            sold
-            picture
-          }
+        getBasicProduct(productID: $pID){
+            info{
+                _id
+                name
+                description
+                regularDiscount
+                brand{
+                    name
+                    _id
+                }
+                provider{
+                    ...UserProviderInfo
+                }
+                categories{
+                    ...CategoryInfo
+                }
+                deal{
+                    last
+                }
+                describeFields
+                options{
+                    price
+                    description
+                    describeFields
+                    total
+                    sold
+                    picture
+                }
+            }
+            meanStar
+            commentCount
         }
     }
     ${UserProviderInfoFragment}

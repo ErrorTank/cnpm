@@ -21,6 +21,9 @@ const ProductInfoFragment = gql`
         deal{
             last
         }
+        brand{
+            name
+        }
         describeFields
         options{
             price

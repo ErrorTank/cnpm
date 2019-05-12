@@ -40,6 +40,11 @@ type User implements Node{
 
 }
 
+type BasicProduct{
+    info: Product
+    meanStar: Float
+    commentCount: Int
+}
 
 
 
@@ -51,6 +56,7 @@ type Query {
     checkEmailExisted(email: String!): Boolean
     getIndexDealProducts(skip: Int, take: Int): [IndexDealProduct]
     getProduct(productID: String!): Product
+    getBasicProduct(productID: String!): BasicProduct
     getUser(userID: ID!): User
 }
 

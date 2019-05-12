@@ -4,15 +4,62 @@
   background-color white
   border-radius 0 0 4px 4px
   height auto
+  .scroll-to-comment{
+    color #007ff0
+    font-size 13px
+    margin-left 5px
+    cursor pointer
+    &:hover{
+      color darken(#007ff0, 20%)
+    }
+
+  }
+  .pricing-section{
+    font-size 13px
+    color #9b9b9b
+    padding-left 24px
+    padding-top 10px
+    .value{
+      color #ff3425
+    }
+    .main-price{
+      .value{
+        font-size 19px
+        font-weight 600
+      }
+    }
+  }
+  .brand-name{
+    color #333
+    font-size 13px
+    & > span{
+      color #007ff0
+      cursor pointer
+      &:hover{
+        color darken(#007ff0, 20%)
+      }
+    }
+  }
   .product-left-panel{
     width 527px
     display inline-block
     padding 24px 24px 20px 20px
     border-right 2px solid #f7f7f7
+    vertical-align top
   }
   .product-right-panel{
+    vertical-align top
     width calc(100% - 527px)
     display inline-block
-    padding 24px 24px 20px 20px
+    .header-info{
+      padding 16px 24px 5px
+      border-bottom 1px solid #ececec
+    }
+    .product-name{
+      font-size 24px
+      color #333
+      font-weight 300
+      line-height 30px
+    }
   }
 }

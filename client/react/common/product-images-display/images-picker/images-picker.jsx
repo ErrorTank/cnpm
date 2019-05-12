@@ -3,7 +3,7 @@ import classnames from "classnames"
 
 export const ImagesPicker = props => {
   let {current, images, onPick} = props;
-  console.log(images)
+
   return (
     <div className={classnames("images-picker")}>
       {images.map((each) => (

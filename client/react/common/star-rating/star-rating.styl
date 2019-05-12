@@ -1,0 +1,28 @@
+
+.stars-outer {
+  display: inline-block;
+  position: relative;
+  font-family: 'Font Awesome\ 5 Free';
+  font-size 17px
+  cursor pointer
+  font-weight 900
+  & > span::before {
+    content: "\f005";
+    color #b8b8b8
+  }
+  .stars-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0;
+
+    & > span::before {
+      content: "\f005";
+      color: #f8ce0b;
+
+    }
+  }
+
+}

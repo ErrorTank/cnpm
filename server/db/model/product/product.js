@@ -34,7 +34,8 @@ const productSchema = new Schema({
     comments: [{
         rating: {
             type: Number,
-            enum: [0, 1, 2, 3, 4, 5]
+            enum: [0, 1, 2, 3, 4, 5],
+            default: 0
         },
         author: {
             type: ObjectId,

@@ -1,5 +1,6 @@
 type Brand{
-    name: String,
+    _id: ID
+    name: String
     logo: String
 }
 

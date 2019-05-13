@@ -59,7 +59,29 @@
   }
   .description-section{
     padding 15px 0
-
+    border-bottom 1px solid #ececec
+    .description{
+      color tikiblack
+      font-size 14px
+      margin-bottom 7px
+    }
+    .product-feature{
+      padding 0 0 0 20px !important
+      margin 0 0 5px
+      font-size 13px
+      position relative
+      color tikiblack
+      &::after{
+        content: ""
+        width 5px
+        height 5px
+        border-radius 50%
+        background-color #6d6d6d
+        left 0
+        position absolute
+        top 7px
+      }
+    }
   }
   .pricing-section{
     font-size 13px
@@ -91,10 +113,11 @@
     width 527px
     display inline-block
     padding 24px 24px 20px 20px
-    border-right 2px solid #f7f7f7
+
     vertical-align top
   }
   .product-right-panel{
+    border-right 2px solid #f7f7f7
     vertical-align top
     width calc(100% - 527px)
     display inline-block

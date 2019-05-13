@@ -1,8 +1,5 @@
 import React, {Fragment} from "react";
 import {ProductImagesDisplay} from "../../../../common/product-images-display/product-images-display";
-import {StarRating} from "../../../../common/star-rating/star-rating";
-import {customHistory} from "../../../routes";
-import {calcSalePrice, formatMoney} from "../../../../../common/products-utils";
 import {ProductMainInfo} from "./product-main-info";
 import {ProductHeaderInfo} from "./product-header-info";
 

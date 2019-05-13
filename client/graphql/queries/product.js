@@ -6,11 +6,16 @@ import {CategoryInfoFragment} from "../fragments/category";
 const fetchIndexDealProducts = gql`
     query{
         getIndexDealProducts(skip: 0, take: 5){
-
+            
             timeLeft
             product{
                 _id
                 name
+                discountWithCode{
+                    _id
+                    code
+                    value
+                }
                 regularDiscount
                 deal{
                     last
@@ -46,6 +51,12 @@ const getBasicProductInfo = gql`
                 name
                 description
                 regularDiscount
+                describeFields
+                discountWithCode{
+                    _id
+                    code
+                    value
+                }
                 brand{
                     name
                     _id

@@ -9,6 +9,11 @@ const ProductInfoFragment = gql`
         name
         description
         regularDiscount
+        discountWithCode{
+            value
+            code
+            _id
+        }
         provider{
             ...UserProviderInfo
         }

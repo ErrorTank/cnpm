@@ -1,4 +1,5 @@
 type DiscountWithCode{
+    _id: ID
     code: String
     value: Float
 }

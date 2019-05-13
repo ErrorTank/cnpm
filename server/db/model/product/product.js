@@ -20,8 +20,8 @@ const productSchema = new Schema({
         required: true
     },
     describeFields: {
-        type: [String],
-        default: []
+        type: String,
+        default: null
     },
     brand: {
         type: ObjectId,
@@ -80,8 +80,8 @@ const productSchema = new Schema({
             sold: {type: Number, default: 0},
             picture: [String],
             describeFields: {
-                type: [String],
-                default: []
+                type: String,
+                default: null
             },
 
         }],

@@ -1,5 +1,4 @@
 const Product = require("./product");
-const {transformProductDescribeFields} = require("../../../utils/common");
 const omit = require("lodash/omit");
 const pick = require("lodash/pick");
 const {getCategories} = require("../category/controller");
@@ -11,12 +10,14 @@ const getIndexDealProducts = ({skip = 0, take = 20}) => {
     regularDiscount: 1,
     name: 1,
     deal: 1,
+    discountWithCode: 1,
     "options.price": 1,
     "options.total": 1,
     "options.sold": 1,
     "options.picture": 1,
 
   }, {skip, limit: take})
+    .populate("discountWithCode", "_id code value").lean()
     .then(data => data)
     .catch(err => Promise.reject(err))
 
@@ -25,14 +26,14 @@ const getIndexDealProducts = ({skip = 0, take = 20}) => {
 //Todo: provider populate to brand
 
 const getProduct = ({productID}) => {
-  console.log("cc")
-  return Product.findById(productID).populate("provider", "_id fullname phone email picture").lean()
+
+  return Product.findById(productID).populate("provider", "_id fullname phone email picture").populate("discountWithCode", "_id code value").lean()
     .then(data => {
 
       return new Promise((resolve, reject) => {
 
         getCategories(data.categories._id).then((categories) => {
-          resolve(transformProductDescribeFields({...omit(data, "categories"), categories}));
+          resolve({...omit(data, "categories"), categories});
         }).catch(err => reject(err));
 
       })
@@ -41,7 +42,7 @@ const getProduct = ({productID}) => {
     .catch(err => Promise.reject(err))
 };
 const getBasicProduct = ({productID}) => {
-  console.log(productID)
+
   return Product.aggregate([
     {$match: {"_id":  mongoose.Types.ObjectId(productID)}},
     {"$addFields": {
@@ -70,22 +71,30 @@ const getBasicProduct = ({productID}) => {
     },
     { $lookup: {from: 'users', localField: 'provider', foreignField: '_id', as: "provider"} },
     { $lookup: {from: 'brands', localField: 'brand', foreignField: '_id', as: 'brand'} },
+    { $lookup: {from: 'discountwithcodes', localField: 'discountWithCode', foreignField: '_id', as: 'discountWithCode'} },
     {
       $addFields: {
         brand: {
            "$arrayElemAt": [ "$brand", 0 ]  ,
         }
       }
-    }
+    },
+    {
+      $addFields: {
+        discountWithCode: {
+          "$arrayElemAt": [ "$discountWithCode", 0 ]  ,
+        }
+      }
+    },
 
 
   ]).exec().then(([{meanStar,commentCount, ...rest}]) => {
     return new Promise((resolve, reject) => {
-
+      console.log(rest)
       getCategories(rest.categories._id).then((categories) => {
 
         resolve({
-          info: transformProductDescribeFields({...omit(rest, "categories"), categories}),
+          info: {...omit(rest, "categories"), categories},
           meanStar: meanStar,
           commentCount
         });

@@ -11,7 +11,7 @@ const userSchema = new Schema({
     required: true
   },
   provider: {
-    // address: String,
+    address: String,
     name: String,
     phone: String,
     email:String,

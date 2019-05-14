@@ -31,6 +31,7 @@ const ProductInfoFragment = gql`
         }
         describeFields
         options{
+            _id
             price
             description
             describeFields
@@ -54,6 +55,7 @@ const ProductCacheFragment = gql`
             last
         }
         options{
+            _id
             price
             description
             total

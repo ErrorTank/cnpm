@@ -2,8 +2,9 @@ import {calcSalePrice, formatMoney} from "../../../../../common/products-utils";
 import {Fragment} from "react";
 import React from "react";
 import {Badge} from "../../../../common/badge/badge";
+import {ProductOptionSelect} from "./product-option-select/product-option-select";
 
-export const ProductMainInfo = ({commonInfo, optionInfo, onChangeOption}) => {
+export const ProductMainInfo = ({commonInfo, optionInfo, onChangeOption, options}) => {
   let {regularDiscount, discountWithCode} = commonInfo;
   let {price, description, describeFields} = optionInfo;
   return (
@@ -32,7 +33,7 @@ export const ProductMainInfo = ({commonInfo, optionInfo, onChangeOption}) => {
               </div>
               <div className="right-info">
                 <div>Chỉ còn</div>
-                <div className="value">{formatMoney(calcSalePrice(Number(price), Number(discountWithCode.value)))} ₫</div>
+                <div className="value">{formatMoney(calcSalePrice(Number(calcSalePrice(Number(price), Number(regularDiscount))), Number(discountWithCode.value)))} ₫</div>
               </div>
             </div>
           )}
@@ -52,6 +53,11 @@ export const ProductMainInfo = ({commonInfo, optionInfo, onChangeOption}) => {
           )}
 
         </div>
+        <ProductOptionSelect
+          options={options}
+          onChange={onChangeOption}
+          current={optionInfo}
+        />
       </div>
 
 

@@ -9,6 +9,7 @@ type Deal{
 }
 
 type Option{
+    _id: ID
     price: Float
     description: String
     total: Int
@@ -30,6 +31,6 @@ type Product{
     discountWithCode: DiscountWithCode
     regularDiscount: Int
     options: [Option!]!
-    describeFields: [String]
+    describeFields: String
     brand: Brand
 }

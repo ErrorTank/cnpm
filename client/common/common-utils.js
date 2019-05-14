@@ -5,6 +5,8 @@ const wait = (fn, amount = 2000) => new Promise((res, rej) => {
   }, amount)
 });
 
+
+
 export {
   wait
 }

@@ -1,5 +1,6 @@
 
 
+
 const calcSalePrice = (price, sale) => {
  return (price * (100 - sale)) / 100;
 };

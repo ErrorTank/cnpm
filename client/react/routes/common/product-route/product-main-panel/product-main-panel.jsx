@@ -22,6 +22,8 @@ export class ProductMainPanel extends React.Component {
         <ProductRightPanel
           optionInfo={currentOption}
           commonInfo={rest}
+          options={options}
+          onChangeOption={option => this.setState({currentOption: option})}
         />
       </div>
     );
@@ -48,6 +50,7 @@ const ProductRightPanel = (props) => {
         {...props}
       />
       <ProductMainInfo
+
         {...props}
       />
     </div>

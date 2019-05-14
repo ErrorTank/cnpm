@@ -21,6 +21,7 @@ const fetchIndexDealProducts = gql`
                     last
                 }
                 options{
+                    _id
                     price
                     total
                     sold
@@ -72,6 +73,7 @@ const getBasicProductInfo = gql`
                 }
                 describeFields
                 options{
+                    _id
                     price
                     description
                     describeFields

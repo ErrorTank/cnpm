@@ -1,0 +1,46 @@
+.qty-controller{
+  .label{
+    margin-bottom 12px
+    color #7b7b7b
+    font-size 12px
+    line-height 0px
+  }
+  .controller{
+    display inline-block
+    color tikiblack
+    .mutate-qty{
+      width 28px
+      height 28px
+      vertical-align top
+      display inline-block
+      text-align center
+
+      &:hover{
+        background-color darken(white, 10%)
+      }
+      font-size 12px
+      line-height 28px
+      border 1px solid #dfdfdf
+      cursor pointer
+      &:first-of-type{
+        border-radius 4px 0 0 4px
+      }
+      &:last-of-type{
+        border-radius 0 4px 4px 0
+      }
+      background-color #fff
+
+    }
+    .qty-input{
+      border 0
+      vertical-align top
+      display inline-block
+      border-top 1px solid #dfdfdf
+      border-bottom 1px solid #dfdfdf
+      width 28px
+      height 28px
+      font-size 12px
+      text-align center
+    }
+  }
+}

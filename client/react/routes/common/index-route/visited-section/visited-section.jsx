@@ -30,6 +30,7 @@ export class VisitedSection extends KComponent {
   render() {
     let {list} = this.state;
     let {filterList = (l) => l} = this.props;
+
     return (
         <div className={classnames("visited-section")}>
 

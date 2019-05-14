@@ -86,6 +86,7 @@ export const ProductPanel = ({data, isDeal}) => {
 
 export const ProductsRow = (props) => {
   let {rowList, cols, deal, className} = props;
+
   return (
     <TransitionGroup
       className={classnames("products-row m-0 p-0", {"c5": cols === 5}, className)}

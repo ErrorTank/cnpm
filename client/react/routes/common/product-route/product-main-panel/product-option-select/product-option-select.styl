@@ -1,8 +1,51 @@
 .product-option-select{
   padding 15px 0
   border-bottom 1px solid #ececec
+  .buyer-actions{
+    margin-top 22px
+    white-space pre-wrap
+    .left-action
+    .right-action
+    {
+      display inline-block
+      vertical-align top
+    }
+    .right-action{
+      margin-left 30px
+      .add-to-fav{
+        font-size 30px
+        cursor pointer
+        margin-left 20px
+        vertical-align middle
+        color grey
+        display inline-block
+        &:hover{
+          color #ff3945
+        }
+      }
+      .add-to-cart{
+        text-align center
+        padding 10px 30px
+        display inline-block
+        vertical-align middle
+        color white
+        background-color #ff3945
+        font-size 15px
+        border-radius 5px
+        transition background-color 0.1s ease
+        &:hover{
+          background-color lighten( #ff3945, 25%)
+        }
+        i{
+          font-size 18px
+          margin-right 10px
+        }
+      }
+    }
+  }
   .option-select{
     white-space pre-wrap
+
     .p-option{
       text-align center
       color tikiblue

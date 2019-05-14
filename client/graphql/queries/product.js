@@ -6,7 +6,6 @@ import {CategoryInfoFragment} from "../fragments/category";
 const fetchIndexDealProducts = gql`
     query{
         getIndexDealProducts(skip: 0, take: 5){
-            
             timeLeft
             product{
                 _id

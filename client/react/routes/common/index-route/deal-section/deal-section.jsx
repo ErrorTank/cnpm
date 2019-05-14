@@ -14,7 +14,7 @@ export class DealSection extends React.Component {
       return client.query({
           query: fetchIndexDealProducts
       }).then(({data}) => {
-          console.log(data.getIndexDealProducts);
+
           return data.getIndexDealProducts.map(each => ({...each.product, timeLeft: each.timeLeft}));
       });
   };

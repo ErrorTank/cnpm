@@ -17,6 +17,7 @@ export class StaticProductList extends React.Component {
   render() {
     let {deal, list} = this.props;
     let renderList = this.getRenderList(list);
+
     return (
       <div className="index-product-list">
         <div className="products-wrapper">

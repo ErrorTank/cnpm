@@ -1,5 +1,6 @@
 import React from "react";
 import classnames from "classnames"
+import {QuantityController} from "../../../../../common/quantity-controller/quantity-controller";
 
 const POption = ({content, onClick, active}) => {
   return (
@@ -30,13 +31,36 @@ const OptionSelect = ({onChange, options, current}) => {
   );
 };
 
-const BuyerAction = props => {
-  return (
-    <div className="buyer-actions">
-
-    </div>
-  )
-};
+class BuyerAction extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      qty: 1
+    };
+  };
+  render() {
+    let {qty} = this.state;
+    return (
+      <div className="buyer-actions">
+        <div className="left-action">
+          <QuantityController
+            value={qty}
+            onChange={qty => this.setState({qty})}
+            label={"Số lượng:"}
+          />
+        </div>
+        <div className="right-action">
+          <button className="btn add-to-cart"
+                  onClick={() => null}
+          >
+            <i className="fas fa-shopping-cart"></i> Chọn mua
+          </button>
+          <i className="far fa-heart add-to-fav"></i>
+        </div>
+      </div>
+    )
+  }
+}
 
 export class ProductOptionSelect extends React.Component {
   constructor(props) {

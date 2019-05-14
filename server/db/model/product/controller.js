@@ -15,10 +15,13 @@ const getIndexDealProducts = ({skip = 0, take = 20}) => {
     "options.total": 1,
     "options.sold": 1,
     "options.picture": 1,
-
+    "options._id": 1,
   }, {skip, limit: take})
     .populate("discountWithCode", "_id code value").lean()
-    .then(data => data)
+    .then(data => {
+
+      return data;
+    })
     .catch(err => Promise.reject(err))
 
 };
@@ -90,7 +93,7 @@ const getBasicProduct = ({productID}) => {
 
   ]).exec().then(([{meanStar,commentCount, ...rest}]) => {
     return new Promise((resolve, reject) => {
-      console.log(rest)
+
       getCategories(rest.categories._id).then((categories) => {
 
         resolve({

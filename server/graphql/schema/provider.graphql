@@ -1,4 +1,7 @@
 type Provider{
-    name: String
     products:[Product]!
+    address: String
+    name: String
+    phone: String
+    email:String
 }

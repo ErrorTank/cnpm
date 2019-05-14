@@ -4,17 +4,17 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 
 //0: Regular user, 1: Seller(include Regular)
 const userSchema = new Schema({
-  fullname:  {
+  fullname: {
     type: String,
     minlength: 6,
     maxlength: 50,
     required: true
   },
   provider: {
-    name: {
-      type: String,
-
-    },
+    // address: String,
+    name: String,
+    phone: String,
+    email:String,
     products: {
       type: [
         {
@@ -49,12 +49,29 @@ const userSchema = new Schema({
     unique: true
   },
   password: {type: String},
-  dob: { type: Date},
+  dob: {type: Date},
   gender: {type: Boolean, default: false},
   picture: String,
   subscribe: {type: Boolean, default: false},
-  updatedAt: { type: Date},
-  createdAt: { type: Date, default: Date.now},
+  updatedAt: {type: Date},
+  createdAt: {type: Date, default: Date.now},
+  cart: {
+    type: [{
+      product: {
+        type: ObjectId,
+        ref: "Product"
+      },
+      quantity: Number
+    }],
+    default: []
+  },
+  favorites: {
+    type: [{
+      type: ObjectId,
+      ref: "Product"
+    }],
+    default: []
+  },
   role: {type: Number, required: true, default: 0},
   isVerify: {type: Boolean, default: false, required: true},
   social: {

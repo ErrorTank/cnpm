@@ -79,11 +79,7 @@ const getBasicProduct = ({productID}) => {
       $addFields: {
         brand: {
            "$arrayElemAt": [ "$brand", 0 ]  ,
-        }
-      }
-    },
-    {
-      $addFields: {
+        },
         discountWithCode: {
           "$arrayElemAt": [ "$discountWithCode", 0 ]  ,
         }
@@ -95,7 +91,7 @@ const getBasicProduct = ({productID}) => {
     return new Promise((resolve, reject) => {
 
       getCategories(rest.categories._id).then((categories) => {
-
+        console.log(categories)
         resolve({
           info: {...omit(rest, "categories"), categories},
           meanStar: meanStar,

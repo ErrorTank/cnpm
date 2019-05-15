@@ -34,10 +34,10 @@ export class ProductRoute extends React.Component {
         pID
       }
     }).then(({data}) => {
-      let {info: product, meanStar, commentCount} = data.getBasicProduct;
+      let {info: product, meanStar, commentCount, timeLeft} = data.getBasicProduct;
       let info = userInfo.getState();
       createVisitedCacheFunction("add")(info ? info._id : null, pick(product, ["name", "_id", "options", "deal", "description", "regularDiscount"]));
-      return {...product, meanStar, commentCount, describeFields: JSON.parse(product.describeFields)};
+      return {...product, meanStar, commentCount, describeFields: JSON.parse(product.describeFields), timeLeft};
     })
   };
   componentWillReceiveProps(nextProps) {

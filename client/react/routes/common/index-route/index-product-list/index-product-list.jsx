@@ -66,7 +66,7 @@ export const ProductPanel = ({data, isDeal}) => {
             <Process
               total={totalAmount}
               value={totalSold}
-              content={() => ((totalSold / totalAmount) * 100) > 85 ? `Sắp bán hết` :`Đã bán ${totalSold}`}
+              content={() => ((totalSold / totalAmount) * 100) > 85 ? `Sắp bán hết` : ((totalSold / totalAmount) * 100) < 5 ? `Vừa mở bán` :`Đã bán ${totalSold}`}
             />
           </div>
           <div className="path">

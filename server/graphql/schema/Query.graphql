@@ -44,6 +44,7 @@ type BasicProduct{
     info: Product
     meanStar: Float
     commentCount: Int
+    timeLeft: String
 }
 
 

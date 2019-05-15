@@ -39,7 +39,9 @@ const Query = {
     return getProduct(args).then(data => data).catch(err => throw err);
   },
   getBasicProduct: async (parent, args, {request}, info) => {
-    return getBasicProduct(args).then(data => data).catch(err => throw err);
+    return getBasicProduct(args).then(data => {
+      return {...data, timeLeft: new Date(data.info.deal.last).getTime() - new Date().getTime()};
+    }).catch(err => throw err);
   },
   getUser: async (parent, args, {request}, info) => {
     return getUser(args).then(data => {

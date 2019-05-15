@@ -12,7 +12,10 @@ export class Process extends React.Component {
     return (
       <div className={`process ${className}`}>
         <div className="current-value" style={{width: `${((Number(value) / Number(total)) * 100).toFixed(1)}px`}}>
-          <span className={"process-content"}>{content()}</span>
+          {content && (
+            <span className={"process-content"}>{content()}</span>
+          )}
+
 
         </div>
       </div>

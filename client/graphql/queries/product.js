@@ -83,6 +83,7 @@ const getBasicProductInfo = gql`
             }
             meanStar
             commentCount
+            timeLeft
         }
     }
     ${UserProviderInfoFragment}

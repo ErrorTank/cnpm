@@ -36,7 +36,6 @@ const productSchema = new Schema({
                     }, "Options cate length must > 0"],
 
                 },
-
                 discountWithCode: {
                     type: ObjectId,
                     ref: "DiscountWithCode"

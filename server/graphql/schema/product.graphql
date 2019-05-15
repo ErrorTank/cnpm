@@ -16,21 +16,24 @@ type Option{
     sold: Int
     picture: [String]
     describeFields: [String]
+}
 
+type Provider{
+    owner: User
+    options: [Option!]!
+    discountWithCode: DiscountWithCode
 }
 
 
 type Product{
     _id: ID
     name: String!
-    provider: [User]!
+    provider: [Provider]!
     deal: Deal
     categories: Category!
     comments: [Comment]!
     description: String
-    discountWithCode: DiscountWithCode
     regularDiscount: Int
-    options: [Option!]!
     describeFields: String
     brand: Brand
 }

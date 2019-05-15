@@ -30,15 +30,7 @@ const ProductInfoFragment = gql`
             name
         }
         describeFields
-        options{
-            _id
-            price
-            description
-            describeFields
-            total
-            sold
-            picture
-        }
+        
     }
     ${UserProviderInfoFragment}
     ${CategoryInfoFragment}
@@ -54,13 +46,15 @@ const ProductCacheFragment = gql`
         deal{
             last
         }
-        options{
-            _id
-            price
-            description
-            total
-            sold
-            picture
+        provider{
+            options{
+                _id
+                price
+                description
+                total
+                sold
+                picture
+            }
         }
     }
 `;

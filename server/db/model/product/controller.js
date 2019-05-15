@@ -5,25 +5,71 @@ const {getCategories} = require("../category/controller");
 const mongoose = require("mongoose");
 
 const getIndexDealProducts = ({skip = 0, take = 20}) => {
-  return Product.find({"deal.last": {$gt: new Date()}}, {
-    _id: 1,
-    regularDiscount: 1,
-    name: 1,
-    deal: 1,
-    discountWithCode: 1,
-    "options.price": 1,
-    "options.total": 1,
-    "options.sold": 1,
-    "options.picture": 1,
-    "options._id": 1,
-  }, {skip, limit: take})
-    .populate("discountWithCode", "_id code value").lean()
-    .then(data => {
+  // return Product.find({"deal.last": {$gt: new Date()}}, {
+  //   _id: 1,
+  //   regularDiscount: 1,
+  //   name: 1,
+  //   deal: 1,
+  //   discountWithCode: 1,
+  //   "options.price": 1,
+  //   "options.total": 1,
+  //   "options.sold": 1,
+  //   "options.picture": 1,
+  //   "options._id": 1,
+  // }, {skip, limit: take})
+  //   .populate("discountWithCode", "_id code value").lean()
+  //   .then(data => {
+  //
+  //     return data;
+  //   })
+  //   .catch(err => Promise.reject(err))
+    return Product.aggregate([
+      {
+        $match:
+          {
+           "deal.last": {$gt: new Date()}
+          }
+      },
+      {$skip: skip},
+      {$limit: take},
+      {
+        $project: {
+          _id: 1,
+          regularDiscount: 1,
+          name: 1,
+          deal: 1,
+          provider: {
+            $arrayElemAt: ["$provider", 0]
+          }
+        }
+
+      },
+      {
+        $addFields: {
+
+          _id: 1,
+          regularDiscount: 1,
+          name: 1,
+          deal: 1,
+          "provider.options": {
+            $arrayElemAt: ["$provider.options", 0]
+          }
+        }
+
+      },
+      { $lookup: {from: 'discountwithcodes', localField: 'discountWithCode', foreignField: '_id', as: "discountWithCode"} },
+      {
+        $addFields: {
+          discountWithCode: {
+            "$arrayElemAt": [ "$discountWithCode", 0 ]  ,
+          }
+        }
+      },
+    ]).exec().then(data => {
 
       return data;
     })
-    .catch(err => Promise.reject(err))
-
+      .catch(err => Promise.reject(err))
 };
 
 //Todo: provider populate to brand

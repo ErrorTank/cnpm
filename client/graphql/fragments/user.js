@@ -18,6 +18,15 @@ const UserInfoFragment = gql`
 const UserProviderInfoFragment = gql`
     fragment UserProviderInfo on User{
         provider{
+            options{
+                _id
+                price
+                description
+                describeFields
+                total
+                sold
+                picture
+            }
             address
             name
             phone

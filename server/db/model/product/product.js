@@ -13,8 +13,34 @@ const productSchema = new Schema({
     provider: {
         type: [
             {
-                type: ObjectId,
-                ref: "User"
+                owner: {
+                    type: ObjectId,
+                    ref: "User"
+                },
+                options: {
+                    type: [{
+                        price: Number,
+                        description: String,
+                        total: Number,
+                        sold: {type: Number, default: 0},
+                        picture: [String],
+                        describeFields: {
+                            type: String,
+                            default: null
+                        },
+
+                    }],
+                    required: true,
+                    validate: [(array)=>{
+                        return array.length >= 1;
+                    }, "Options cate length must > 0"],
+
+                },
+
+                discountWithCode: {
+                    type: ObjectId,
+                    ref: "DiscountWithCode"
+                },
             }
         ],
         required: true
@@ -64,33 +90,11 @@ const productSchema = new Schema({
     }],
     description: String,
 
-    discountWithCode: {
-        type: ObjectId,
-        ref: "DiscountWithCode"
-    },
     regularDiscount: Number,
     deal: {
         last: Date
     },
-    options: {
-        type: [{
-            price: Number,
-            description: String,
-            total: Number,
-            sold: {type: Number, default: 0},
-            picture: [String],
-            describeFields: {
-                type: String,
-                default: null
-            },
 
-        }],
-        required: true,
-        validate: [(array)=>{
-            return array.length >= 1;
-        }, "Options cate length must > 0"],
-
-    },
 
 });
 

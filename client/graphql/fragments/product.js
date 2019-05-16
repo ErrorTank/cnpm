@@ -1,5 +1,4 @@
 import {gql} from "apollo-boost"
-import {UserProviderInfoFragment} from "./user";
 import {CategoryInfoFragment} from "./category";
 import {CommentInfoFragment} from "./comment";
 
@@ -9,13 +8,28 @@ const ProductInfoFragment = gql`
         name
         description
         regularDiscount
-        discountWithCode{
-            value
-            code
-            _id
-        }
+        
         provider{
-            ...UserProviderInfo
+            owner{
+                address
+                name
+                phone
+                email
+            }
+            discountWithCode{
+                value
+                code
+                _id
+            }
+            options{
+                _id
+                price
+                description
+                total
+                sold
+                picture
+            }
+            
         }
         categories{
             ...CategoryInfo
@@ -32,7 +46,6 @@ const ProductInfoFragment = gql`
         describeFields
         
     }
-    ${UserProviderInfoFragment}
     ${CategoryInfoFragment}
     ${CommentInfoFragment}
 `;

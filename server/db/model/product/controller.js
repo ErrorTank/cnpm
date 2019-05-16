@@ -39,34 +39,19 @@ const getIndexDealProducts = ({skip = 0, take = 20}) => {
           name: 1,
           deal: 1,
           provider: {
-            $arrayElemAt: ["$provider", 0]
-          }
+            $slice: ["$provider", 0 , 1]
+          },
+
         }
 
       },
-      {
-        $addFields: {
 
-          _id: 1,
-          regularDiscount: 1,
-          name: 1,
-          deal: 1,
-          "provider.options": {
-            $arrayElemAt: ["$provider.options", 0]
-          }
-        }
 
-      },
-      { $lookup: {from: 'discountwithcodes', localField: 'discountWithCode', foreignField: '_id', as: "discountWithCode"} },
-      {
-        $addFields: {
-          discountWithCode: {
-            "$arrayElemAt": [ "$discountWithCode", 0 ]  ,
-          }
-        }
-      },
+
+
+
     ]).exec().then(data => {
-
+      console.log(data[0]);
       return data;
     })
       .catch(err => Promise.reject(err))
@@ -118,7 +103,6 @@ const getBasicProduct = ({productID}) => {
         }
       }
     },
-    { $lookup: {from: 'users', localField: 'provider', foreignField: '_id', as: "provider"} },
     { $lookup: {from: 'brands', localField: 'brand', foreignField: '_id', as: 'brand'} },
     { $lookup: {from: 'discountwithcodes', localField: 'discountWithCode', foreignField: '_id', as: 'discountWithCode'} },
     {
@@ -131,13 +115,55 @@ const getBasicProduct = ({productID}) => {
         }
       }
     },
+    {$unwind: "$provider"},
+    { $lookup: {from: 'users', localField: 'provider.owner', foreignField: '_id', as: "provider.owner"} },
+    {
+      $addFields: {
+        'provider.owner': {
+          "$arrayElemAt": [ '$provider.owner', 0 ]  ,
+        },
+
+      }
+    },
+    {$group: {
+        _id: "$_id",
+        name: {
+          $first: '$name'
+        },
+        description: {
+          $first: '$description'
+        },
+        regularDiscount: {
+          $first: '$regularDiscount'
+        },
+        describeFields: {
+          $first: '$describeFields'
+        },
+        brand: {
+          $first: '$brand'
+        },
+        commentCount: {
+          $first: '$commentCount'
+        },
+        meanStar: {
+          $first: '$meanStar'
+        },
+        deal: {
+          $first: '$deal'
+        },
+        categories: {
+          $first: '$categories'
+        },
+        provider: { $push: "$provider"}
+      }
+    }
 
 
   ]).exec().then(([{meanStar,commentCount, ...rest}]) => {
     return new Promise((resolve, reject) => {
-
+      console.log(rest.provider[0].owner)
       getCategories(rest.categories._id).then((categories) => {
-        console.log(categories)
+
         resolve({
           info: {...omit(rest, "categories"), categories},
           meanStar: meanStar,

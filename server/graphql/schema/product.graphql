@@ -18,7 +18,9 @@ type Option{
     describeFields: [String]
 }
 
-type Provider{
+
+
+type ProductProvider{
     owner: User
     options: [Option!]!
     discountWithCode: DiscountWithCode
@@ -28,7 +30,7 @@ type Provider{
 type Product{
     _id: ID
     name: String!
-    provider: [Provider]!
+    provider: [ProductProvider]!
     deal: Deal
     categories: Category!
     comments: [Comment]!

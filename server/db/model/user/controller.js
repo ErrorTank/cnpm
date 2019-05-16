@@ -260,10 +260,9 @@ const changePassword = payload => {
 
 const getUser = ({userID}) => {
   return User.findById(userID)
-
-    .populate("recentVisit.product", "_id name description deal regularDiscount options")
-    .populate("provider.products", "_id name description deal regularDiscount options")
-    .then(data => data)
+    .populate("recentVisit.product", "_id name description deal regularDiscount provider")
+    .populate("provider.products", "_id name description deal regularDiscount provider")
+    .then(data => data.map(each => ({...each, provider: [each.provider[0]]})))
     .catch(err => Promise.reject(err))
 };
 

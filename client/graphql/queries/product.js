@@ -10,21 +10,28 @@ const fetchIndexDealProducts = gql`
             product{
                 _id
                 name
-                discountWithCode{
-                    _id
-                    code
-                    value
-                }
                 regularDiscount
                 deal{
                     last
                 }
-                options{
-                    _id
-                    price
-                    total
-                    sold
-                    picture
+                provider{
+                    owner{
+                        ...UserProviderInfo
+                    }
+                    discountWithCode{
+                        _id
+                        code
+                        value
+                    }
+                    options{
+                        _id
+                        price
+                        description
+                        describeFields
+                        total
+                        sold
+                        picture
+                    }
 
                 }
             }
@@ -32,6 +39,7 @@ const fetchIndexDealProducts = gql`
 
         }
     }
+    ${UserProviderInfoFragment}
 `;
 
 const getFullProductDetails = gql`
@@ -51,18 +59,30 @@ const getBasicProductInfo = gql`
                 name
                 description
                 regularDiscount
-                describeFields
-                discountWithCode{
-                    _id
-                    code
-                    value
-                }
+                
                 brand{
                     name
                     _id
                 }
                 provider{
-                    ...UserProviderInfo
+                    owner{
+                        ...UserProviderInfo
+                    }
+                    discountWithCode{
+                        _id
+                        code
+                        value
+                    }
+                    options{
+                        _id
+                        price
+                        description
+                        describeFields
+                        total
+                        sold
+                        picture
+                    }
+                    
                 }
                 categories{
                     ...CategoryInfo
@@ -71,15 +91,7 @@ const getBasicProductInfo = gql`
                     last
                 }
                 describeFields
-                options{
-                    _id
-                    price
-                    description
-                    describeFields
-                    total
-                    sold
-                    picture
-                }
+                
             }
             meanStar
             commentCount

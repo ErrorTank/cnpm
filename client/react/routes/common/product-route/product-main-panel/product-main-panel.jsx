@@ -2,17 +2,25 @@ import React, {Fragment} from "react";
 import {ProductImagesDisplay} from "../../../../common/product-images-display/product-images-display";
 import {ProductMainInfo} from "./product-main-info";
 import {ProductHeaderInfo} from "./product-header-info";
+import pick from "lodash/pick"
+import omit from "lodash/omit"
 
-export class ProductMainPanel extends React.Component {
+class MainPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentOption: props.options[0]
+      currentOption: props.providerInfo.options[0]
     };
   };
 
+  componentWillReceiveProps(props) {
+    if (this.state.currentOption._id !== props.providerInfo.options[0]._id) {
+      this.setState({currentOption:  props.providerInfo.options[0]});
+    }
+
+  }
+
   render() {
-    let {options, ...rest} = this.props;
     let {currentOption} = this.state;
     return (
       <div className="product-main-panel">
@@ -21,11 +29,31 @@ export class ProductMainPanel extends React.Component {
         />
         <ProductRightPanel
           optionInfo={currentOption}
-          commonInfo={rest}
-          options={options}
+          commonInfo={omit(this.props, ["provider", "providerInfo", "onChangeProvider"])}
+          {...pick(this.props, ["provider", "providerInfo", "onChangeProvider"])}
           onChangeOption={option => this.setState({currentOption: option})}
         />
       </div>
+    )
+  }
+}
+
+export class ProductMainPanel extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentProvider: props.provider[0]
+    };
+  };
+
+  render() {
+    let {currentProvider} = this.state;
+    return (
+      <MainPanel
+        {...this.props}
+        providerInfo={currentProvider}
+        onChangeProvider={provider => this.setState({currentProvider: provider})}
+      />
     );
   }
 }

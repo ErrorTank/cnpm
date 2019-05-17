@@ -59,5 +59,6 @@ type Query {
     getProduct(productID: String!): Product
     getBasicProduct(productID: String!): BasicProduct
     getUser(userID: ID!): User
+    getUserRecentVisited(userID: ID!): User
 }
 

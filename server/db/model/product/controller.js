@@ -51,7 +51,7 @@ const getIndexDealProducts = ({skip = 0, take = 20}) => {
 
 
     ]).exec().then(data => {
-      console.log(data[0]);
+
       return data;
     })
       .catch(err => Promise.reject(err))
@@ -104,25 +104,27 @@ const getBasicProduct = ({productID}) => {
       }
     },
     { $lookup: {from: 'brands', localField: 'brand', foreignField: '_id', as: 'brand'} },
-    { $lookup: {from: 'discountwithcodes', localField: 'discountWithCode', foreignField: '_id', as: 'discountWithCode'} },
+
     {
       $addFields: {
         brand: {
            "$arrayElemAt": [ "$brand", 0 ]  ,
         },
-        discountWithCode: {
-          "$arrayElemAt": [ "$discountWithCode", 0 ]  ,
-        }
+
       }
     },
     {$unwind: "$provider"},
     { $lookup: {from: 'users', localField: 'provider.owner', foreignField: '_id', as: "provider.owner"} },
+    { $lookup: {from: 'discountwithcodes', localField: 'provider.discountWithCode', foreignField: '_id', as: 'provider.discountWithCode'} },
     {
       $addFields: {
         'provider.owner': {
           "$arrayElemAt": [ '$provider.owner', 0 ]  ,
         },
+        "provider.discountWithCode": {
 
+          "$arrayElemAt": [ "$provider.discountWithCode", 0 ]  ,
+        }
       }
     },
     {$group: {
@@ -161,7 +163,7 @@ const getBasicProduct = ({productID}) => {
 
   ]).exec().then(([{meanStar,commentCount, ...rest}]) => {
     return new Promise((resolve, reject) => {
-      console.log(rest.provider[0].owner)
+
       getCategories(rest.categories._id).then((categories) => {
 
         resolve({

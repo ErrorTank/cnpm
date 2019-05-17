@@ -22,6 +22,7 @@ export class VisitedSection extends KComponent {
   getRecentVisited = () => {
     let info = userInfo.getState();
     createVisitedCacheFunction("get")(info ? info._id : null).then(arr => {
+      console.log(arr)
       this.setState({list: arr || []});
     });
   };

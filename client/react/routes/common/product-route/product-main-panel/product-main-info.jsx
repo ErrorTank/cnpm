@@ -7,9 +7,11 @@ import {ProviderSection} from "./provider-section/provider-section";
 import {CountDown} from "../../../../common/countdown/countdown";
 import {Process} from "../../../../common/process/process";
 
-export const ProductMainInfo = ({commonInfo, optionInfo, onChangeOption, options}) => {
-  let {regularDiscount, discountWithCode, timeLeft} = commonInfo;
-  let {price, description, describeFields} = optionInfo;
+export const ProductMainInfo = ({commonInfo, optionInfo, onChangeOption, providerInfo}) => {
+  let {regularDiscount, timeLeft} = commonInfo;
+  let {discountWithCode, options} = providerInfo;
+  let {price, description, describeFields, } = optionInfo;
+
   let totalSold = options.reduce((t, c) => t + Number(c.sold),0);
   let totalAmount = options.reduce((t, c) => t + Number(c.total),0);
   return (
@@ -42,26 +44,31 @@ export const ProductMainInfo = ({commonInfo, optionInfo, onChangeOption, options
               </div>
             </div>
           )}
-          <div className="p-deal">
-            <div className="countdown">
-              <i className="fas fa-clock"></i>
-              <span>Khuyến mãi kết thúc sau </span>
-              <CountDown
-                value={timeLeft}
-                render={({year, month, day, hour, minute, second}) => (
-                  <span className="deal-countdown">{year && (<Fragment><span className="cd-val">{year}</span> năm </Fragment>)}{month && (<Fragment><span className="cd-val">{month}</span> tháng </Fragment>)}{day && (<Fragment><span className="cd-val">{day}</span> ngày </Fragment>)}<span className="cd-val">{hour && (hour + " : ")}{minute && (minute + " : ")}{second && (second)}</span></span>
-                )}
-              />
+          {Number(timeLeft) > 0 && (
+            <div className="p-deal">
+              <div className="countdown">
+                <i className="fas fa-clock"></i>
+                <span>Khuyến mãi kết thúc sau </span>
+                <CountDown
+                  value={timeLeft}
+                  render={({year, month, day, hour, minute, second}) => (
+                    <span className="deal-countdown">{year && (<Fragment><span className="cd-val">{year}</span> năm </Fragment>)}{month && (<Fragment><span className="cd-val">{month}</span> tháng </Fragment>)}{day && (<Fragment><span className="cd-val">{day}</span> ngày </Fragment>)}<span className="cd-val">{hour && (hour + " : ")}{minute && (minute + " : ")}{second && (second)}</span></span>
+                  )}
+                />
+              </div>
+              <div className="p-deal-process">
+                <span>{((totalSold / totalAmount) * 100) > 85 ? `Sắp bán hết` : ((totalSold / totalAmount) * 100) < 5 ? `Vừa mở bán` :`Đã bán ${totalSold}`}</span>
+                <Process
+                  className={"p-left"}
+                  total={totalAmount}
+                  value={totalSold}
+                />
+              </div>
             </div>
-            <div className="p-deal-process">
-              <span>{((totalSold / totalAmount) * 100) > 85 ? `Sắp bán hết` : ((totalSold / totalAmount) * 100) < 5 ? `Vừa mở bán` :`Đã bán ${totalSold}`}</span>
-              <Process
-                className={"p-left"}
-                total={totalAmount}
-                value={totalSold}
-              />
-            </div>
-          </div>
+          )
+
+          }
+
 
         </div>
         <div className="description-section">

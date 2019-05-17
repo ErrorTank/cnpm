@@ -14,7 +14,7 @@ const getBasicUserInfo = gql`
 
 const getUserRecentVisited = gql`
   query($id: ID!){
-    getUser(userID: $id){
+    getUserRecentVisited(userID: $id){
       recentVisit{
         createdAt
         product{

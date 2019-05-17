@@ -1,4 +1,5 @@
 const User = require("./user");
+const mongoose = require("mongoose");
 const Product = require("../product/product");
 const TokenConfirmation = require("../confirm-token/confirm-token");
 const ResetPasswordToken = require("../reset-password-token/reset-password-token");
@@ -258,11 +259,44 @@ const changePassword = payload => {
         .catch(err => Promise.reject(err))
 };
 
+const getUserRecentVisited = ({userID}) => {
+  return User.aggregate([
+    {$match: {"_id":  mongoose.Types.ObjectId(userID)}},
+    {$unwind: "$recentVisit"},
+    { $lookup: {from: 'products', localField: 'recentVisit.product', foreignField: '_id', as: "recentVisit.product"} },
+    {
+      $addFields: {
+        'recentVisit.product': {
+          $arrayElemAt: ["$recentVisit.product", 0]
+        }
+      }
+    },
+    {$group: {
+        "_id": "$_id",
+        "recentVisit": {
+          $push: "$recentVisit"
+        },
+        "doc":{"$first":"$$ROOT"}
+      }
+    }
+  ])
+
+    .then(data => {
+      // console.log(data)
+      console.log({...omit(data[0], "doc"), ...omit(data[0].doc, "recentVisit")})
+      return {...omit(data[0], "doc"), ...omit(data[0].doc, "recentVisit")}
+    })
+    .catch(err => Promise.reject(err))
+};
+
 const getUser = ({userID}) => {
-  return User.findById(userID)
-    .populate("recentVisit.product", "_id name description deal regularDiscount provider")
-    .populate("provider.products", "_id name description deal regularDiscount provider")
-    .then(data => data.map(each => ({...each, provider: [each.provider[0]]})))
+  return User.findById(userID).lean()
+
+    .then(data => {
+      // console.log(data)
+
+      return data
+    })
     .catch(err => Promise.reject(err))
 };
 
@@ -308,5 +342,6 @@ module.exports = {
     confirmForgotPassword,
     changePassword,
     getUser,
-    addRecentVisit
+    addRecentVisit,
+  getUserRecentVisited
 };

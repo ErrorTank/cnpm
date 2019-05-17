@@ -3,6 +3,7 @@ import {IndexProductList} from "../index-product-list/index-product-list";
 import {client} from "../../../../../graphql";
 import {fetchIndexDealProducts} from "../../../../../graphql/queries/product";
 import {customHistory} from "../../../routes";
+import omit from "lodash/omit"
 
 export class DealSection extends React.Component {
   constructor(props) {
@@ -11,12 +12,16 @@ export class DealSection extends React.Component {
   };
 
   fetchDealProducts = () => {
-      return client.query({
-          query: fetchIndexDealProducts
-      }).then(({data}) => {
+    return client.query({
+      query: fetchIndexDealProducts
+    }).then(({data}) => {
 
-          return data.getIndexDealProducts.map(each => ({...each.product, timeLeft: each.timeLeft}));
-      });
+      return data.getIndexDealProducts.map(each => ({
+        ...omit(each.product, ["provider"]),
+        options: [...each.product.provider[0].options],
+        timeLeft: each.timeLeft
+      }));
+    });
   };
 
   render() {

@@ -32,7 +32,9 @@ export class IndexRoute extends KComponent {
           </div>
 
           <div className="container content-container">
-            <VisitedSection/>
+            <VisitedSection
+
+            />
           </div>
           <div className="container content-container">
             <DealSection/>

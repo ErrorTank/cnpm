@@ -5,6 +5,7 @@ import {client} from "../../../../graphql";
 import {createVisitedCacheFunction} from "../../../../common/cache/recent-product-guest-visit-cache";
 import {getBasicProductInfo, getFullProductDetails} from "../../../../graphql/queries/product";
 import pick from "lodash/pick"
+import omit from "lodash/omit"
 import {userInfo} from "../../../../common/states/user-info";
 import {Breadcrumb} from "../../../common/breadcrumb/breadcrumb";
 import {LoadingInline} from "../../../common/loading-inline/loading-inline";
@@ -36,13 +37,18 @@ export class ProductRoute extends React.Component {
     }).then(({data}) => {
       let {info: product, meanStar, commentCount, timeLeft} = data.getBasicProduct;
       let info = userInfo.getState();
-      createVisitedCacheFunction("add")(info ? info._id : null, pick(product, ["name", "_id", "options", "deal", "description", "regularDiscount"]));
+      let {options} = product.provider[0];
+      createVisitedCacheFunction("add")(info ? info._id : null, {
+        ...pick(omit(product, "provider"), ["name", "_id", "deal", "description", "regularDiscount"]),
+        options: [...product.provider[0].options]
+      });
       return {...product, meanStar, commentCount, describeFields: JSON.parse(product.describeFields), timeLeft};
     })
   };
+
   componentWillReceiveProps(nextProps) {
     let nextID = nextProps.match.params.productID;
-    if(this.state.product && nextID && (this.state.product._id !== nextID)){
+    if (this.state.product && nextID && (this.state.product._id !== nextID)) {
       this.setState({loading: true});
       this.fetchData(nextID).then(data => this.setState({product: {...data}, loading: false}));
     }
@@ -50,7 +56,7 @@ export class ProductRoute extends React.Component {
 
   transformCategoriesToFuckingArray = (category, result = []) => {
     let {_id, name, parent} = category;
-    if(!parent)
+    if (!parent)
       return [{_id, name}, ...result];
     return this.transformCategoriesToFuckingArray(parent, [{_id, name}, ...result]);
   };

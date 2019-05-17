@@ -3,6 +3,7 @@ import {client} from "../../graphql";
 import {addRecentVisit, getAuthenUser, getUserRecentVisited} from "../../graphql/queries/user";
 import {userInfo} from "../states/user-info";
 import {authenCache} from "./authen-cache";
+import omit from "lodash/omit"
 
 export const createLocalStorageCache  = ({maxCache = 20, key, compare}) =>  {
     const cache = new Cache(localStorage);
@@ -41,9 +42,10 @@ const authenActions = {
             },
             fetchPolicy: "no-cache"
         }).then(({data}) => {
-            let result = [...data.getUser.recentVisit];
+            let result = [...data.getUserRecentVisited.recentVisit];
             result.sort((a,b) => Number(b.createdAt) - Number(a.createdAt));
-            return result.map(each => each.product)
+
+            return result.map(each => ({...omit(each.product, ["provider"]), options: [...each.product.provider[0].options]}))
         })
 
 

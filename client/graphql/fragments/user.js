@@ -17,6 +17,7 @@ const UserInfoFragment = gql`
 
 const UserProviderInfoFragment = gql`
     fragment UserProviderInfo on User{
+        _id
         provider{
             address
             name

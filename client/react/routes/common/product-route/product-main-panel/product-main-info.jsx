@@ -7,7 +7,7 @@ import {ProviderSection} from "./provider-section/provider-section";
 import {CountDown} from "../../../../common/countdown/countdown";
 import {Process} from "../../../../common/process/process";
 
-export const ProductMainInfo = ({commonInfo, optionInfo, onChangeOption, providerInfo}) => {
+export const ProductMainInfo = ({commonInfo, optionInfo, onChangeOption, providerInfo, provider, onChangeProvider}) => {
   let {regularDiscount, timeLeft} = commonInfo;
   let {discountWithCode, options} = providerInfo;
   let {price, description, describeFields, } = optionInfo;
@@ -91,7 +91,12 @@ export const ProductMainInfo = ({commonInfo, optionInfo, onChangeOption, provide
           current={optionInfo}
         />
       </div>
-      <ProviderSection/>
+      <ProviderSection
+        providerInfo={providerInfo}
+        providers={provider.filter(each => each.owner._id !== providerInfo.owner._id)}
+        onChange={onChangeProvider}
+        discount={regularDiscount}
+      />
 
 
     </div>

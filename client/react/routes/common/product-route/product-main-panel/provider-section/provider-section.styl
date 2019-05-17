@@ -1,0 +1,107 @@
+.provider-section{
+  .provider-container{
+    margin-top 11px
+    border-radius 4px
+    border 1px solid #ececec
+    padding 10px 5px 10px 5px
+    .current-info{
+      padding-bottom 10px
+      border-bottom 1px dashed rgba(0,0,0,.12)
+      a{
+        display block !important
+        text-decoration none !important
+      }
+      .to-shop{
+        background-color tikiblue
+        color white
+        margin-top 8px
+        padding 4px 0
+        font-size 12px
+        transition background-color 0.1s ease
+        &:hover{
+          background-color darken(tikiblue, 20%)
+
+        }
+      }
+      .shop-name{
+        position relative
+        padding-left 34px
+        font-size 13px
+        line-height 18px
+
+        i{
+          position absolute
+          left 0
+          font-size 21px
+
+          top 50%
+          transform translateY(-50%)
+          color tikiyellow
+        }
+        .name{
+          color tikiblue
+          font-weight bold
+          cursor pointer
+          overflow hidden
+          text-overflow ellipsis
+          display block
+
+        }
+        .shop-sub{
+          color tikiblack
+        }
+      }
+    }
+    .provider-list{
+      padding-top 10px
+      .pl-list{
+        margin-top 6px
+        .pl-list-toggle{
+          text-align center
+          font-size 13px
+          margin-top 2px
+          cursor pointer
+          color tikiblue
+        }
+        .pl-list-item{
+          position relative
+          line-height 18px
+          font-size 13px
+          padding 6px 60px 6px 0
+          .provider-name{
+            color tikiblack
+            text-overflow ellipsis
+            overflow hidden
+          }
+          .p-price{
+
+            text-overflow ellipsis
+
+            color #ff3323
+          }
+        }
+        .swap-provider{
+          position absolute
+          top 50%
+          transform translateY(-50%)
+          padding-top 5px
+          padding-bottom 5px
+          border-radius 4px
+          transition background-color 0.1s ease
+          &:hover{
+            background-color darken(white, 5%)
+          }
+          right 0
+          background-color white
+          color tikiblack
+          border 1px solid #d8d8d8
+          font-size 12px !important
+        }
+      }
+      .pl-title{
+        color tikiblack
+        font-size 14px
+      }
+    }
+  }
+}

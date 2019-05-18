@@ -306,17 +306,22 @@ const addToCart = ({userID, productID, qty, option}) => {
       if(!data){
         return Promise.reject(new ApolloError("user_not_found"))
       }
-
-      return data.carts.map(each => each.product.option.toString()).includes(option);
+      let isExisted = data.carts.map(each => each.option.toString()).includes(option);
+      if(!isExisted && data.carts.length === 10){
+        return Promise.reject(new ApolloError("full_cart"))
+      }
+      return isExisted;
     })
     .then((isExisted) => {
-
-      console.log(isExisted)
-      let updateExpr = isExisted ? {$pull: {carts: {option: mongoose.Types.ObjectId(option)}}} :{$push: {product: mongoose.Types.ObjectId(productID), quantity: qty, option: mongoose.Types.ObjectId(option)}} ;
-      return  User.findOneAndUpdate({_id: userID},updateExpr , {
+      let updateFunc = isExisted ? () => User.findOneAndUpdate({_id: userID, "carts.option": option}, {$inc: {"carts.$.quantity": Number(qty)}}, {
         new: true,
         fields: "-password"
-      }).lean();
+      }) : () => User.findOneAndUpdate({_id: userID}, {$push: {carts: {product: mongoose.Types.ObjectId(productID), quantity: qty, option: mongoose.Types.ObjectId(option)}}},  {
+        new: true,
+        fields: "-password"
+      });
+
+      return  updateFunc().lean();
     })
 
 };

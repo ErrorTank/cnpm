@@ -22,10 +22,14 @@ const addToFavorites = gql`
 `;
 
 const addToCart = gql`
-    mutation ($uID: ID!, $pID: ID!, $qty: Int, $option: ID){
+    mutation ($uID: ID!, $pID: ID!, $qty: Int!, $option: ID!){
         addToCart(userID: $uID, productID: $pID, qty: $qty, option: $option){
             _id
-            carts
+            carts{
+                product
+                option
+                quantity
+            }
         }
     }
 `;

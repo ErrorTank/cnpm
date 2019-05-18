@@ -38,7 +38,7 @@ export class ProductRoute extends React.Component {
       let {info: product, meanStar, commentCount, timeLeft} = data.getBasicProduct;
       let info = userInfo.getState();
       let {options} = product.provider[0];
-      createVisitedCacheFunction("add")(info ? info._id : null, {
+      createVisitedCacheFunction("set")(info ? info._id : null, {
         ...pick(omit(product, "provider"), ["name", "_id", "deal", "description", "regularDiscount"]),
         options: [...product.provider[0].options]
       });

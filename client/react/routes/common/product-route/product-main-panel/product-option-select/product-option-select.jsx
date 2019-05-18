@@ -107,7 +107,7 @@ class BuyerAction extends KComponent {
 
 
     }
-    createUserCartCacheFunction("add")({
+    createUserCartCacheFunction("set")({
       product: productID,
       quantity: qty,
       option: optionID
@@ -117,7 +117,7 @@ class BuyerAction extends KComponent {
   render() {
     let {qty, adding, pushing} = this.state;
     let favs = userFavorites.getState();
-
+    console.log(userCart.getState())
     return (
       <div className="buyer-actions">
         <div className="left-action">

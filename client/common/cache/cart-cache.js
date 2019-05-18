@@ -1,14 +1,34 @@
-
 import {createLocalStorageCache} from "./recent-product-guest-visit-cache";
 
 const userCartCache = createLocalStorageCache({
   key: "guess-cart",
-  compare: (item1, item2) => item1.option === item2.option,
-  maxCache: 10
+
 });
 
+const userCacheActions = {
+  get() {
+    return userCartCache.get();
+
+
+  },
+  async set(cartItem) {
+
+    let previousItems = await userCartCache.get();
+    let index = previousItems.findIndex(each => each.option === cartItem.option);
+
+    if (index !== -1) {
+      previousItems[index].quantity += cartItem.quantity;
+      return userCartCache.set([...previousItems]);
+    } else if (previousItems.length === 20) {
+      return Promise.reject();
+
+    }
+    return userCartCache.set([cartItem, ...previousItems]);
+
+  }
+};
 
 
 export const createUserCartCacheFunction = (actionName) => {
-  return userCartCache[actionName]
+  return userCacheActions[actionName]
 };

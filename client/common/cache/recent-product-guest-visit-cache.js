@@ -5,7 +5,8 @@ import {userInfo} from "../states/common";
 import {authenCache} from "./authen-cache";
 import omit from "lodash/omit"
 
-export const createLocalStorageCache  = ({maxCache = 20, key, compare}) =>  {
+
+export const createLocalStorageCache  = ({key}) =>  {
     const cache = new Cache(localStorage);
     return {
         async clear(){
@@ -14,23 +15,15 @@ export const createLocalStorageCache  = ({maxCache = 20, key, compare}) =>  {
         async get(){
             return cache.get(key) || []
         },
-        async add(temp, item){
-            let previousItems = cache.get(key) || [];
-            let index = previousItems.findIndex(each => compare(each, item));
-            if(index !== -1){
-               previousItems.splice(index, 1);
-            }else if(previousItems.length === maxCache){
-                previousItems.pop();
-            }
-            return cache.set([item, ...previousItems], key);
+        async set(value){
+            return cache.set(value, key);
+
         }
     }
 };
 
 const recentVisitedCache = createLocalStorageCache({
     key: "recent-visited-products",
-    compare: (item1, item2) => item1._id === item2._id,
-    maxCache: 10
 });
 
 const authenActions = {
@@ -50,7 +43,8 @@ const authenActions = {
 
 
     },
-    add(userID, product){
+   set(userID, product){
+
         return client.mutate({
             mutation: addRecentVisit,
             variables: {
@@ -61,7 +55,26 @@ const authenActions = {
     }
 };
 
+const unAuthenActions = {
+    get(){
+        return recentVisitedCache.get();
+
+
+    },
+    async set(userID, product){
+        let previousItems = await recentVisitedCache.get();
+        let index = previousItems.findIndex(each =>  each._id === product._id);
+        if(index !== -1){
+            previousItems.splice(index, 1)
+        }else if(previousItems.length === 10){
+            previousItems.pop()
+
+        }
+        return recentVisitedCache.set([product, ...previousItems]);
+    }
+};
+
 export const createVisitedCacheFunction = (actionName) => {
   let authen = authenCache.getAuthen();
-  return !authen ? recentVisitedCache[actionName] : authenActions[actionName]
+  return !authen ? unAuthenActions[actionName] : authenActions[actionName]
 };

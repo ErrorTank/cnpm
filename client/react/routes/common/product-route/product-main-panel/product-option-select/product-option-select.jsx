@@ -1,6 +1,11 @@
 import React from "react";
 import classnames from "classnames"
 import {QuantityController} from "../../../../../common/quantity-controller/quantity-controller";
+import {userInfo} from "../../../../../../common/states/user-info";
+import {KComponent} from "../../../../../common/k-component";
+import {client} from "../../../../../../graphql";
+import {addToFavorites} from "../../../../../../graphql/queries/user";
+import {userActionModal} from "../../../../../common/modal/user-actions/user-actions";
 
 const POption = ({content, onClick, active}) => {
   return (
@@ -31,15 +36,55 @@ const OptionSelect = ({onChange, options, current}) => {
   );
 };
 
-class BuyerAction extends React.Component {
+class BuyerAction extends KComponent {
   constructor(props) {
     super(props);
     this.state = {
-      qty: 1
+      qty: 1,
+      adding: false
     };
+    this.onUnmount(userInfo.onChange((nextState) => {
+      this.forceUpdate();
+    }));
   };
+
+  addToFavorites = (info) => {
+    return client.mutate({
+      mutation: addToFavorites,
+      variables: {
+        pID: this.props.productID,
+        uID: info._id
+      }
+    }).then(({data}) => {
+      return userInfo.setState({...info, favorites: [...data.addToFavorites.favorites]});
+    }).catch(err => {
+      console.log(err);
+      return;
+    });
+
+
+  };
+
+  ensureLogin = () => {
+    let info = userInfo.getState();
+    if(info){
+      this.setState({adding: true});
+      return this.addToFavorites(info).then(() => this.setState({adding: false}));
+
+    }
+    userActionModal.open().then(isLogin => {
+      if(isLogin){
+        let newInfo = userInfo.getState();
+        this.setState({adding: true});
+        return this.addToFavorites(newInfo).then(() => this.setState({adding: false}));
+      }
+    })
+  };
+
   render() {
-    let {qty} = this.state;
+    let {qty, adding} = this.state;
+    let info = userInfo.getState();
+    console.log(info)
     return (
       <div className="buyer-actions">
         <div className="left-action">
@@ -55,7 +100,15 @@ class BuyerAction extends React.Component {
           >
             <i className="fas fa-shopping-cart"></i> Chọn mua
           </button>
-          <i className="far fa-heart add-to-fav"></i>
+
+
+
+          {(info && info.favorites.includes(this.props.productID)) ? (
+            <i className={classnames("fas fa-heart add-to-fav", {onAdding: adding})} onClick={this.ensureLogin}></i>
+          ) : (
+            <i className={classnames("far fa-heart add-to-fav", {onAdding: adding})} onClick={this.ensureLogin}></i>
+          )}
+
         </div>
       </div>
     )
@@ -75,7 +128,7 @@ export class ProductOptionSelect extends React.Component {
           {...this.props}
         />
         <BuyerAction
-
+          productID={this.props.productID}
         />
       </div>
     );

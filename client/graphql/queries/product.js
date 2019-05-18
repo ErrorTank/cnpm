@@ -42,6 +42,8 @@ const fetchIndexDealProducts = gql`
     ${UserProviderInfoFragment}
 `;
 
+
+
 const getFullProductDetails = gql`
     query($pID: String!){
         getProduct(productID: $pID){

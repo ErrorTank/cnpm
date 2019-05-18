@@ -19,9 +19,20 @@
         vertical-align middle
         color grey
         display inline-block
+        &.onAdding{
+          opacity 0.6
+          pointer-events none
+        }
         &:hover{
           color #ff3945
         }
+        &.fas{
+          color #ff3945
+          &:hover{
+            color lighten(#ff3945, 20%)
+          }
+        }
+
       }
       .add-to-cart{
         text-align center

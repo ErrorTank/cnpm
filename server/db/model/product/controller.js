@@ -59,6 +59,9 @@ const getIndexDealProducts = ({skip = 0, take = 20}) => {
 
 //Todo: provider populate to brand
 
+
+
+
 const getProduct = ({productID}) => {
 
   return Product.findById(productID).populate("provider", "_id fullname phone email picture").populate("discountWithCode", "_id code value").lean()

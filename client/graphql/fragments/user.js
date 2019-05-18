@@ -12,6 +12,30 @@ const UserInfoFragment = gql`
         isVerify
         picture
         subscribe
+        favorites
+        carts{
+            product
+            quantity
+        }
+    }
+`;
+const UserCacheInfoFragment = gql`
+    fragment UserCacheInfo on User{
+        _id
+        fullname
+        phone
+        email
+        gender
+        dob
+        role
+        isVerify
+        picture
+        subscribe
+        favorites
+        carts{
+            product
+            quantity
+        }
     }
 `;
 
@@ -27,4 +51,4 @@ const UserProviderInfoFragment = gql`
     }
 `;
 
-export {UserInfoFragment, UserProviderInfoFragment}
+export {UserInfoFragment, UserProviderInfoFragment, UserCacheInfoFragment}

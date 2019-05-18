@@ -6,4 +6,5 @@ type Mutation{
     confirmForgotPassword(email: String!): Boolean
     changePassword(payload: ResetPasswordInput!): Boolean
     addRecentVisit(uID: ID!, pID: ID!): Boolean
+    addToFavorites(userID: ID!, productID: ID!): User
 }

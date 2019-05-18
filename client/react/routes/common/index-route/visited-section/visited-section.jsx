@@ -16,9 +16,12 @@ export class VisitedSection extends KComponent {
       loading: true
     };
     this.getRecentVisited();
-    this.onUnmount(userInfo.onChange((nextState) => {
-      this.setState({loading: true});
-      this.getRecentVisited();
+    this.onUnmount(userInfo.onChange((nextState, oldState) => {
+      if(!nextState || !oldState){
+        this.setState({loading: true});
+        this.getRecentVisited();
+      }
+
     }));
   };
 

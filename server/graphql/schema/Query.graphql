@@ -20,6 +20,11 @@ type recentVisitedOuput{
     product: Product!
 }
 
+type CartItem{
+    product: ID
+    quantity: Int
+}
+
 type User implements Node{
     _id: ID!
     fullname: String!
@@ -37,6 +42,8 @@ type User implements Node{
     social: Social
     provider: Provider
     recentVisit: [recentVisitedOuput]!
+    favorites: [ID]!
+    carts: [CartItem]!
 
 }
 

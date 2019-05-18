@@ -55,7 +55,7 @@ const userSchema = new Schema({
   subscribe: {type: Boolean, default: false},
   updatedAt: {type: Date},
   createdAt: {type: Date, default: Date.now},
-  cart: {
+  carts: {
     type: [{
       product: {
         type: ObjectId,

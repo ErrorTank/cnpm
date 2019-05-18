@@ -61,7 +61,8 @@ const userSchema = new Schema({
         type: ObjectId,
         ref: "Product"
       },
-      quantity: Number
+      quantity: Number,
+      option: ObjectId
     }],
     default: []
   },

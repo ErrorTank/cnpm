@@ -8,9 +8,10 @@ import {SocialAuthActions} from "../social-auth-actions/social-auth-actions";
 import {client} from "../../../../../graphql";
 import {getSocialUserInfo, regularLogin, resendConfirmEmail} from "../../../../../graphql/queries/user";
 import {authenCache} from "../../../../../common/cache/authen-cache";
-import {userInfo} from "../../../../../common/states/user-info";
+import {userInfo} from "../../../../../common/states/common";
 import {getErrorObject} from "../../../../../graphql/utils/errors";
 import {ForgotPasswordPanel} from "./forgot-password-panel/forgot-password-panel";
+import {mutateAppStores} from "../../../../../common/system/system";
 
 export class Login extends KComponent {
   constructor(props) {
@@ -73,7 +74,7 @@ export class Login extends KComponent {
     }).then(({data}) => {
       let {user, token} = data.regularLogin;
       authenCache.setAuthen(token, {expire: 30});
-      userInfo.setState({...user});
+      mutateAppStores({...user});
       this.props.onLoginSuccess();
     }).catch(err => this.setState({loading: false, error: getErrorObject(err).message}));
   };
@@ -131,7 +132,7 @@ export class Login extends KComponent {
       }).then(({data}) => {
         let {user, token} = data.getSocialUserInfo;
         authenCache.setAuthen(token, {expire: 30});
-        userInfo.setState({...user});
+        mutateAppStores({...user});
         this.props.onLoginSuccess();
       }).catch(err => {
         let errMsg = getErrorObject(err).message;

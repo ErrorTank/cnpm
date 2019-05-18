@@ -1,5 +1,5 @@
 import {gql} from "apollo-boost"
-import {UserInfoFragment, UserCacheInfoFragment} from "../fragments/user";
+import {UserInfoFragment} from "../fragments/user";
 import {ProductCacheFragment} from "../fragments/product";
 
 
@@ -17,6 +17,15 @@ const addToFavorites = gql`
         addToFavorites(userID: $uID, productID: $pID){
             _id
             favorites
+        }
+    }
+`;
+
+const addToCart = gql`
+    mutation ($uID: ID!, $pID: ID!, $qty: Int, $option: ID){
+        addToCart(userID: $uID, productID: $pID, qty: $qty, option: $option){
+            _id
+            carts
         }
     }
 `;
@@ -39,10 +48,10 @@ const getUserRecentVisited = gql`
 const getAuthenUser = gql`
     query{
         getAuthenUser{
-            ...UserCacheInfo
+            ...UserInfo
         }
     }
-    ${UserCacheInfoFragment}
+    ${UserInfoFragment}
 `;
 
 const register = gql`
@@ -161,6 +170,6 @@ export {
   changePassword,
   getUserRecentVisited,
   addRecentVisit,
-  addToFavorites
-
+  addToFavorites,
+  addToCart
 }

@@ -23,6 +23,7 @@ type recentVisitedOuput{
 type CartItem{
     product: ID
     quantity: Int
+    option: ID
 }
 
 type User implements Node{

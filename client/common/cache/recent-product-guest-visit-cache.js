@@ -1,7 +1,7 @@
 import {Cache} from "./cache";
 import {client} from "../../graphql";
 import {addRecentVisit, getAuthenUser, getUserRecentVisited} from "../../graphql/queries/user";
-import {userInfo} from "../states/user-info";
+import {userInfo} from "../states/common";
 import {authenCache} from "./authen-cache";
 import omit from "lodash/omit"
 

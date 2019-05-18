@@ -12,7 +12,8 @@ import {register, registerSocial} from "../../../../../graphql/queries/user";
 import {getErrorObject} from "../../../../../graphql/utils/errors";
 import {userRegisterSchema} from "./schema";
 import {authenCache} from "../../../../../common/cache/authen-cache";
-import {userInfo} from "../../../../../common/states/user-info";
+import {userInfo} from "../../../../../common/states/common";
+import {mutateAppStores} from "../../../../../common/system/system";
 
 export class Register extends KComponent {
   constructor(props) {
@@ -63,7 +64,8 @@ export class Register extends KComponent {
         if(this.props.confirmRegisterData){
           let {user, token} = response.data.registerSocial;
           authenCache.setAuthen(token, {expire: 30});
-          userInfo.setState({...user});
+          mutateAppStores({...user});
+
           this.props.onConfirmSocial();
         } else{
           this.handleServerResponse({message: response.data.register.message, data: this.form.getData()});

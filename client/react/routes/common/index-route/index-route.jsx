@@ -7,7 +7,7 @@ import {ScrollToFetch} from "../../../common/scroll-to-fetch/scroll-to-fetch";
 import {DealSection} from "./deal-section/deal-section";
 import {VisitedSection} from "./visited-section/visited-section";
 import {createVisitedCacheFunction} from "../../../../common/cache/recent-product-guest-visit-cache";
-import {userInfo} from "../../../../common/states/user-info";
+import {userInfo} from "../../../../common/states/common";
 import {KComponent} from "../../../common/k-component";
 import {customHistory} from "../../routes";
 

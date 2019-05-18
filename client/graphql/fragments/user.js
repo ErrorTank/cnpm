@@ -16,28 +16,12 @@ const UserInfoFragment = gql`
         carts{
             product
             quantity
+            option
         }
+       
     }
 `;
-const UserCacheInfoFragment = gql`
-    fragment UserCacheInfo on User{
-        _id
-        fullname
-        phone
-        email
-        gender
-        dob
-        role
-        isVerify
-        picture
-        subscribe
-        favorites
-        carts{
-            product
-            quantity
-        }
-    }
-`;
+
 
 const UserProviderInfoFragment = gql`
     fragment UserProviderInfo on User{
@@ -51,4 +35,4 @@ const UserProviderInfoFragment = gql`
     }
 `;
 
-export {UserInfoFragment, UserProviderInfoFragment, UserCacheInfoFragment}
+export {UserInfoFragment, UserProviderInfoFragment,}

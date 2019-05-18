@@ -12,7 +12,7 @@ import {Process} from "../../../../common/process/process";
 
 export const ProductPanel = ({data, isDeal}) => {
   let {regularDiscount, name, _id, deal, options, timeLeft} = data;
-  console.log(data);
+
   let {picture, price} = options[0];
   let totalSold = options.reduce((t, c) => t + Number(c.sold),0);
   let totalAmount = options.reduce((t, c) => t + Number(c.total),0);

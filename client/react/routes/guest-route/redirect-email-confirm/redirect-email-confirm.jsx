@@ -5,9 +5,10 @@ import {PageTitle} from "../../../common/page-title/page-title";
 import {client} from "../../../../graphql";
 import {checkConfirm} from "../../../../graphql/queries/user";
 import {authenCache} from "../../../../common/cache/authen-cache";
-import {userInfo} from "../../../../common/states/user-info";
+import {userInfo} from "../../../../common/states/common";
 import {wait} from "../../../../common/common-utils";
 import {getErrorObject} from "../../../../graphql/utils/errors";
+import {mutateAppStores} from "../../../../common/system/system";
 
 export class RedirectEmailConfirm extends React.Component {
   constructor(props) {
@@ -26,7 +27,7 @@ export class RedirectEmailConfirm extends React.Component {
       }).then((res) => {
         this.setState({stage: 1});
         authenCache.setAuthen(res.data.checkConfirm.token, {expire: 30});
-        userInfo.setState({...res.data.checkConfirm.user});
+        mutateAppStores({...res.data.checkConfirm.user});
       }).catch((err) => {
         let errMsg = getErrorObject(err).message;
         this.setState({stage: 1, msg: errMsg});

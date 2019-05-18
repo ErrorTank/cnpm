@@ -1,11 +1,13 @@
 import React from "react";
 import classnames from "classnames"
 import {QuantityController} from "../../../../../common/quantity-controller/quantity-controller";
-import {userInfo} from "../../../../../../common/states/user-info";
+import {userCart, userFavorites, userInfo} from "../../../../../../common/states/common";
 import {KComponent} from "../../../../../common/k-component";
 import {client} from "../../../../../../graphql";
-import {addToFavorites} from "../../../../../../graphql/queries/user";
+import {addToCart, addToFavorites} from "../../../../../../graphql/queries/user";
 import {userActionModal} from "../../../../../common/modal/user-actions/user-actions";
+import {createUserCartCacheFunction} from "../../../../../../common/cache/cart-cache";
+import {LoadingInline} from "../../../../../common/loading-inline/loading-inline";
 
 const POption = ({content, onClick, active}) => {
   return (
@@ -41,9 +43,13 @@ class BuyerAction extends KComponent {
     super(props);
     this.state = {
       qty: 1,
-      adding: false
+      adding: false,
+      pushing: false
     };
-    this.onUnmount(userInfo.onChange((nextState) => {
+    this.onUnmount(userFavorites.onChange((nextState) => {
+      this.forceUpdate();
+    }));
+    this.onUnmount(userCart.onChange((nextState) => {
       this.forceUpdate();
     }));
   };
@@ -56,7 +62,7 @@ class BuyerAction extends KComponent {
         uID: info._id
       }
     }).then(({data}) => {
-      return userInfo.setState({...info, favorites: [...data.addToFavorites.favorites]});
+      return userFavorites.setState([...data.addToFavorites.favorites]);
     }).catch(err => {
       console.log(err);
       return;
@@ -65,15 +71,15 @@ class BuyerAction extends KComponent {
 
   };
 
-  ensureLogin = () => {
+  ensureLoginForAddToFav = () => {
     let info = userInfo.getState();
-    if(info){
+    if (info) {
       this.setState({adding: true});
       return this.addToFavorites(info).then(() => this.setState({adding: false}));
 
     }
     userActionModal.open().then(isLogin => {
-      if(isLogin){
+      if (isLogin) {
         let newInfo = userInfo.getState();
         this.setState({adding: true});
         return this.addToFavorites(newInfo).then(() => this.setState({adding: false}));
@@ -81,10 +87,37 @@ class BuyerAction extends KComponent {
     })
   };
 
-  render() {
-    let {qty, adding} = this.state;
+  addToCart = () => {
+    let {qty} = this.state;
+    let {productID, optionID} = this.props;
     let info = userInfo.getState();
-    console.log(info)
+    if (info) {
+      this.setState({pushing: true});
+      return client.mutate({
+        mutation: addToCart,
+        variables: {
+          pID: productID,
+          uID: info._id,
+          qty,
+          option: optionID
+        }
+      }).then(({data}) => {
+        userCart.setState(data.addToCart.carts).then(() => this.setState({pushing: false}));
+      });
+
+
+    }
+    createUserCartCacheFunction("add")({
+      product: productID,
+      quantity: qty,
+      option: optionID
+    }).then(() => this.setState({pushing: false}));
+  };
+
+  render() {
+    let {qty, adding, pushing} = this.state;
+    let favs = userFavorites.getState();
+
     return (
       <div className="buyer-actions">
         <div className="left-action">
@@ -95,18 +128,22 @@ class BuyerAction extends KComponent {
           />
         </div>
         <div className="right-action">
-          <button className="btn add-to-cart"
-                  onClick={() => null}
+          <button className={classnames("btn add-to-cart", {onPushing: pushing})}
+                  onClick={this.addToCart}
           >
             <i className="fas fa-shopping-cart"></i> Chọn mua
+            {pushing && (
+              <LoadingInline/>
+            )}
           </button>
 
 
-
-          {(info && info.favorites.includes(this.props.productID)) ? (
-            <i className={classnames("fas fa-heart add-to-fav", {onAdding: adding})} onClick={this.ensureLogin}></i>
+          {(favs.length && favs.includes(this.props.productID)) ? (
+            <i className={classnames("fas fa-heart add-to-fav", {onAdding: adding})}
+               onClick={this.ensureLoginForAddToFav}></i>
           ) : (
-            <i className={classnames("far fa-heart add-to-fav", {onAdding: adding})} onClick={this.ensureLogin}></i>
+            <i className={classnames("far fa-heart add-to-fav", {onAdding: adding})}
+               onClick={this.ensureLoginForAddToFav}></i>
           )}
 
         </div>
@@ -129,6 +166,7 @@ export class ProductOptionSelect extends React.Component {
         />
         <BuyerAction
           productID={this.props.productID}
+          optionID={this.props.current._id}
         />
       </div>
     );

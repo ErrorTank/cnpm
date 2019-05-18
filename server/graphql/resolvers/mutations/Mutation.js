@@ -1,7 +1,7 @@
 
 
 const {authorizationUser} = require("../../../authorization/auth");
-const {register, resendConfirmEmail, registerSocial, confirmForgotPassword, changePassword, addRecentVisit, addToFavorites} = require("../../../db/model/user/controller");
+const {register, resendConfirmEmail, registerSocial, confirmForgotPassword, changePassword, addRecentVisit, addToFavorites, addToCart} = require("../../../db/model/user/controller");
 
 const Mutation = {
   register: async (parent, {data}, {request}, info) => {
@@ -27,6 +27,9 @@ const Mutation = {
   },
   addToFavorites: async (parent, args, {request}, info) => {
     return addToFavorites(args).then(res => res).catch(err => throw err);
+  },
+  addToCart: async (parent, args, {request}, info) => {
+    return addToCart(args).then(res => res).catch(err => throw err);
   },
 };
 

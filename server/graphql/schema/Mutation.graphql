@@ -7,4 +7,5 @@ type Mutation{
     changePassword(payload: ResetPasswordInput!): Boolean
     addRecentVisit(uID: ID!, pID: ID!): Boolean
     addToFavorites(userID: ID!, productID: ID!): User
+    addToCart(userID: ID!, productID: ID!, qty: Int!, option: ID!): User
 }

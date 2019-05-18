@@ -2,7 +2,7 @@ import React, {Fragment} from "react";
 import {IndexProductList} from "../index-product-list/index-product-list";
 import {createVisitedCacheFunction} from "../../../../../common/cache/recent-product-guest-visit-cache";
 import {customHistory} from "../../../routes";
-import {userInfo} from "../../../../../common/states/user-info";
+import {userInfo} from "../../../../../common/states/common";
 import {KComponent} from "../../../../common/k-component";
 import {StaticProductList} from "../static-product-list/static-product-list";
 import classnames from "classnames"

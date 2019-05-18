@@ -1,5 +1,5 @@
 import React from "react";
-import {rolesHelper, userInfo} from "../../../common/states/user-info";
+import {rolesHelper, userInfo} from "../../../common/states/common";
 import {Route, Redirect} from "react-router-dom"
 import {TrackLocation} from "../../common/location-tracker";
 import {AuthenLayout} from "../../layout/authen-layout/authen-layout";

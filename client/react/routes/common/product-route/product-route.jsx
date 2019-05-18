@@ -6,7 +6,7 @@ import {createVisitedCacheFunction} from "../../../../common/cache/recent-produc
 import {getBasicProductInfo, getFullProductDetails} from "../../../../graphql/queries/product";
 import pick from "lodash/pick"
 import omit from "lodash/omit"
-import {userInfo} from "../../../../common/states/user-info";
+import {userInfo} from "../../../../common/states/common";
 import {Breadcrumb} from "../../../common/breadcrumb/breadcrumb";
 import {LoadingInline} from "../../../common/loading-inline/loading-inline";
 import {ProductMainPanel} from "./product-main-panel/product-main-panel";

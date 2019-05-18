@@ -12,7 +12,7 @@ import Alert from "../../../common/alert/alert";
 import {getErrorObject} from "../../../../graphql/utils/errors";
 import {parseQueryString} from "../../../../string-utils";
 import {customHistory} from "../../routes";
-import {userInfo} from "../../../../common/states/user-info";
+import {userInfo} from "../../../../common/states/common";
 
 export class ResetPassword extends KComponent {
   constructor(props) {

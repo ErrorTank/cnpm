@@ -1,6 +1,6 @@
 import React from "react";
 import {KComponent} from "../../common/k-component";
-import {userInfo} from "../../../common/states/user-info";
+import {userInfo} from "../../../common/states/common";
 import {Navbar} from "./nav-bar/nav-bar";
 
 

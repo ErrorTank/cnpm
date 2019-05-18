@@ -123,6 +123,8 @@ const getSocialUserInfo = socialID => {
 
 };
 
+
+
 const registerSocial = user => {
 
   return User.findOne({email: user.email}).lean()
@@ -298,7 +300,26 @@ const getUserRecentVisited = ({userID}) => {
     })
     .catch(err => Promise.reject(err))
 };
+const addToCart = ({userID, productID, qty, option}) => {
+  return User.findOne({_id: userID}).lean()
+    .then(data => {
+      if(!data){
+        return Promise.reject(new ApolloError("user_not_found"))
+      }
 
+      return data.carts.map(each => each.product.option.toString()).includes(option);
+    })
+    .then((isExisted) => {
+
+      console.log(isExisted)
+      let updateExpr = isExisted ? {$pull: {carts: {option: mongoose.Types.ObjectId(option)}}} :{$push: {product: mongoose.Types.ObjectId(productID), quantity: qty, option: mongoose.Types.ObjectId(option)}} ;
+      return  User.findOneAndUpdate({_id: userID},updateExpr , {
+        new: true,
+        fields: "-password"
+      }).lean();
+    })
+
+};
 
 const addToFavorites = ({userID, productID}) => {
   return User.findOne({_id: userID}).lean()
@@ -379,5 +400,6 @@ module.exports = {
   getUser,
   addRecentVisit,
   getUserRecentVisited,
-  addToFavorites
+  addToFavorites,
+  addToCart
 };

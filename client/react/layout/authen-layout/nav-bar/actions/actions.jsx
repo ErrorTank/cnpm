@@ -4,8 +4,8 @@ import {customHistory} from "../../../../routes/routes";
 import {userActionModal} from "../../../../common/modal/user-actions/user-actions";
 import {authenCache} from "../../../../../common/cache/authen-cache";
 import {KComponent} from "../../../../common/k-component";
-import {userInfo} from "../../../../../common/states/user-info";
-import {isLogin} from "../../../../../common/system/system";
+import {userInfo} from "../../../../../common/states/common";
+import {clearAppStores, isLogin} from "../../../../../common/system/system";
 import {HoverDropdown} from "../../../../common/hover-dropdown/hover-dropdown";
 import {CommonDropdown} from "../../../../common/hover-dropdown/common-dropdown/common-dropdown";
 import classnames from "classnames"
@@ -54,7 +54,7 @@ export class Actions extends KComponent {
         ),
         onClick: () => {
           authenCache.clearAuthen();
-          userInfo.setState(null);
+          clearAppStores();
 
         },
         className: "sign-out-action"

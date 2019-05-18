@@ -1,9 +1,11 @@
-import {userInfo} from "../states/user-info";
+import {userInfo, userCart, userFavorites} from "../states/common";
 import {Cache} from "./cache"
 import Cookies from "js-cookie";
 import {client} from "../../graphql";
 import {getBasicUserInfo, getAuthenUser} from "../../graphql/queries/user";
-
+import omit from "lodash/omit"
+import pick from "lodash/pick"
+import {mutateAppStores} from "../system/system";
 
 const cookiesEngine = {
   getItem: Cookies.get,
@@ -11,36 +13,40 @@ const cookiesEngine = {
   removeItem: Cookies.remove
 };
 
-export const authenCache = (() =>  {
+
+export const authenCache = (() => {
   const cache = new Cache(cookiesEngine);
   return {
-    clearAuthen(){
+    clearAuthen() {
       cache.set(null, "k-authen-token");
     },
-    loadAuthen(){
+    loadAuthen() {
       return new Promise((resolve, reject) => {
         let authen = cache.get("k-authen-token");
-        if(!authen){
+        if (!authen) {
           reject();
-        }else{
+        } else {
           client.query({
             query: getAuthenUser,
           }).then(({data}) => {
             console.log(data);
-            if(!data)
+            if (!data)
               reject();
-            else
-              resolve(userInfo.setState(data.getAuthenUser));
+            else {
+              mutateAppStores(data.getAuthenUser);
+              resolve();
+            }
+
           }).catch(err => reject());
 
         }
       });
 
     },
-    getAuthen(){
+    getAuthen() {
       return cache.get("k-authen-token")
     },
-    setAuthen(authen, options){
+    setAuthen(authen, options) {
       cache.set(authen, "k-authen-token", options);
     }
   }

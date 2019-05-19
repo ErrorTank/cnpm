@@ -89,7 +89,8 @@ export const ProductMainInfo = ({commonInfo, optionInfo, onChangeOption, provide
           options={options}
           onChange={onChangeOption}
           current={optionInfo}
-          productID={commonInfo._id}
+          commonInfo={commonInfo}
+
         />
       </div>
       <ProviderSection

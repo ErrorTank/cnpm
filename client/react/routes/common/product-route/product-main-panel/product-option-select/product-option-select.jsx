@@ -8,6 +8,8 @@ import {addToCart, addToFavorites} from "../../../../../../graphql/queries/user"
 import {userActionModal} from "../../../../../common/modal/user-actions/user-actions";
 import {createUserCartCacheFunction} from "../../../../../../common/cache/cart-cache";
 import {LoadingInline} from "../../../../../common/loading-inline/loading-inline";
+import {cartChangePopup} from "../../../../../layout/authen-layout/nav-bar/cart/cart-btn/cart-change-popup";
+import {customHistory} from "../../../../routes";
 
 const POption = ({content, onClick, active}) => {
   return (
@@ -58,7 +60,7 @@ class BuyerAction extends KComponent {
     return client.mutate({
       mutation: addToFavorites,
       variables: {
-        pID: this.props.productID,
+        pID: this.props.commonInfo._id,
         uID: info._id
       }
     }).then(({data}) => {
@@ -89,7 +91,19 @@ class BuyerAction extends KComponent {
 
   addToCart = () => {
     let {qty} = this.state;
-    let {productID, optionID} = this.props;
+    let {commonInfo, current} = this.props;
+    let {_id: productID, name} = commonInfo;
+    let {_id: optionID, description} = current;
+    let publishInfo = () => {
+      cartChangePopup.publish({
+        "cartCount": (
+          <span className="cart-notify">
+            Sản phẩm <span className="product-name">{name} - {description}</span> vừa được thêm vào <span
+            className="to-cart" onClick={() => customHistory.push("/cart")}>Giỏ hàng</span>
+          </span>
+        )
+      });
+    };
     let info = userInfo.getState();
     if (info) {
       this.setState({pushing: true});
@@ -102,7 +116,10 @@ class BuyerAction extends KComponent {
           option: optionID
         }
       }).then(({data}) => {
-        userCart.setState(data.addToCart.carts).then(() => this.setState({pushing: false}));
+        userCart.setState(data.addToCart.carts).then(() => {
+          this.setState({pushing: false})
+          publishInfo()
+        });
       });
 
 
@@ -111,7 +128,10 @@ class BuyerAction extends KComponent {
       product: productID,
       quantity: qty,
       option: optionID
-    }).then(() => this.setState({pushing: false}));
+    }).then(() => {
+      this.setState({pushing: false});
+      publishInfo()
+    });
   };
 
   render() {
@@ -138,7 +158,7 @@ class BuyerAction extends KComponent {
           </button>
 
 
-          {(favs.length && favs.includes(this.props.productID)) ? (
+          {(favs.length && favs.includes(this.props.commonInfo._id)) ? (
             <i className={classnames("fas fa-heart add-to-fav", {onAdding: adding})}
                onClick={this.ensureLoginForAddToFav}></i>
           ) : (
@@ -165,8 +185,8 @@ export class ProductOptionSelect extends React.Component {
           {...this.props}
         />
         <BuyerAction
-          productID={this.props.productID}
-          optionID={this.props.current._id}
+          commonInfo={this.props.commonInfo}
+          current={this.props.current}
         />
       </div>
     );

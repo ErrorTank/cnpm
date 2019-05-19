@@ -1,6 +1,7 @@
 import React from "react";
 import debounce from "lodash/debounce"
 
+
 export class AppNotificationPopup extends React.Component {
   constructor(props) {
     super(props);
@@ -8,6 +9,7 @@ export class AppNotificationPopup extends React.Component {
       content: null
     };
     props.setSubcriber((content) => {
+      console.log(content)
       this.setState({content});
       this.hidePopup();
 
@@ -28,16 +30,25 @@ export const createNotificationPopup = ({timeout}) => {
   let listeners = [];
   return {
     publish: (keyMap) => {
-      listeners.forEach(({func, itemKey}) => {
-        if(Object.keys(keyMap).includes(itemKey)){
-          func(keyMap[itemKey]);
+      console.log(listeners)
+
+      listeners.forEach(({func, key}) => {
+        console.log(key)
+        Object.keys(keyMap)
+        if(Object.keys(keyMap).includes(key)){
+          func(keyMap[key]);
         }
       })
     },
     installPopup: (key, renderLayout) => {
+
       return (
         <AppNotificationPopup
           setSubcriber={(func) => {
+            let index = listeners.findIndex(each => each.key === key);
+            if(index !== -1){
+              listeners.splice(index, 1);
+            }
             listeners.push({func, key});
           }}
           renderLayout={renderLayout}

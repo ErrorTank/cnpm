@@ -1,15 +1,13 @@
 import {createLocalStorageCache} from "./recent-product-guest-visit-cache";
 
-const userCartCache = createLocalStorageCache({
+export const userCartCache = createLocalStorageCache({
   key: "guess-cart",
 
 });
 
 const userCacheActions = {
-  get() {
-    return userCartCache.get();
-
-
+  get({async}) {
+    return userCartCache.get(async);
   },
   async set(cartItem) {
 

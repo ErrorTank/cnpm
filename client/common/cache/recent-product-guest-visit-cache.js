@@ -8,17 +8,31 @@ import omit from "lodash/omit"
 
 export const createLocalStorageCache  = ({key}) =>  {
     const cache = new Cache(localStorage);
+    let listeners = [];
     return {
         async clear(){
-            return cache.set(null, key);
+            cache.set(null, key);
+            let prevCache = cache.get(key);
+            return Promise.all(listeners.map((l) => l(prevCache, null)));
         },
-        async get(){
-            return cache.get(key) || []
+        get(async = true){
+
+            return async ? Promise.resolve(cache.get(key) || []) : (cache.get(key) || [])
         },
         async set(value){
-            return cache.set(value, key);
+            let prevCache = cache.get(key);
+            cache.set(value, key);
+            return Promise.all(listeners.map((l) => l(prevCache, cache.get(key))));
+        },
+        onChange(listener) {
+            listeners.push(listener);
 
+            return () => {
+                let i = listeners.indexOf(listener);
+                listeners.splice(i, 1);
+            };
         }
+
     }
 };
 

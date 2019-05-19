@@ -4,19 +4,24 @@ import {customHistory} from "../../../../routes/routes";
 import {userActionModal} from "../../../../common/modal/user-actions/user-actions";
 import {authenCache} from "../../../../../common/cache/authen-cache";
 import {KComponent} from "../../../../common/k-component";
-import {userInfo} from "../../../../../common/states/common";
+import {userCart, userFavorites, userInfo} from "../../../../../common/states/common";
 import {clearAppStores, isLogin} from "../../../../../common/system/system";
 import {HoverDropdown} from "../../../../common/hover-dropdown/hover-dropdown";
 import {CommonDropdown} from "../../../../common/hover-dropdown/common-dropdown/common-dropdown";
 import classnames from "classnames"
+import {createUserCartCacheFunction, userCartCache} from "../../../../../common/cache/cart-cache";
 
 export class Actions extends KComponent {
   constructor(props) {
     super(props);
     this.state = {};
-    this.onUnmount(userInfo.onChange(() => {
+    this.onUnmount(userCart.onChange(() => {
       this.forceUpdate();
     }));
+    this.onUnmount(userCartCache.onChange(() => {
+      this.forceUpdate();
+    }));
+
   };
 
   handleClickLogin = () => {
@@ -25,9 +30,9 @@ export class Actions extends KComponent {
 
   handleClickShowBill = () => {
     let authen = authenCache.getAuthen();
-    if(authen){
+    if (authen) {
       customHistory.push("/bills")
-    }else{
+    } else {
       userActionModal.open().then(status => status && customHistory.push("/bills"));
     }
   };
@@ -35,19 +40,21 @@ export class Actions extends KComponent {
   actions = {
     0: [
       {
-        label: "Đơn hàng của tôi",
+        label: () => "Đơn hàng của tôi",
         onClick: () => customHistory.push("/bills")
       }, {
-        label: "Tài khoản của tôi",
+        label: () => "Tài khoản của tôi",
         onClick: () => customHistory.push("/customer/account")
       }, {
-        label: "Sản phẩm đã xem",
+        label: () => "Sản phẩm đã xem",
         onClick: () => customHistory.push("/danh-rieng-cho-ban")
       }, {
-        label: "Sản phẩm yêu thích",
+        label: () => (
+          <Fragment><span className="ua-count">{userFavorites.getState().length}</span>Sản phẩm yêu thích</Fragment>
+        ),
         onClick: () => customHistory.push("/customer/wishlist")
       }, {
-        label: (
+        label: () => (
           <span>
             Đăng xuất
           </span>
@@ -65,6 +72,8 @@ export class Actions extends KComponent {
   render() {
 
     let info = userInfo.getState();
+
+    let cartCount = info ? userCart.getState().length : createUserCartCacheFunction("get")({async: false}).length;
     return (
       <div className="actions nav-section">
         <div className="nav-box"
@@ -91,7 +100,7 @@ export class Actions extends KComponent {
                       <div className={classnames("action", each.className)} key={i}
                            onClick={each.onClick}
                       >
-                        {each.label}
+                        {each.label()}
                       </div>
                     ))}
                   </div>
@@ -109,7 +118,7 @@ export class Actions extends KComponent {
         )}
         <CartBtn
           onClick={() => customHistory.push("/cart")}
-          cartCount={0}
+          cartCount={cartCount}
         />
 
       </div>

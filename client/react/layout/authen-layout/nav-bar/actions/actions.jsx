@@ -21,7 +21,9 @@ export class Actions extends KComponent {
     this.onUnmount(userCartCache.onChange(() => {
       this.forceUpdate();
     }));
-
+    this.onUnmount(userFavorites.onChange(() => {
+      this.forceUpdate();
+    }));
   };
 
   handleClickLogin = () => {

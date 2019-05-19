@@ -1,12 +1,19 @@
 import React from "react";
 import {Badge} from "../../../../../common/badge/badge";
+import {
+  AppNotificationPopup,
+  cartChangePopup
+} from "../../../../../common/app-notification-popup/app-notification-popup";
 
 
 export class CartBtn extends React.Component {
   constructor(props) {
     super(props);
 
+
   };
+
+
 
 
 
@@ -21,6 +28,7 @@ export class CartBtn extends React.Component {
           className={"cart-count"}
           content={this.props.cartCount}
         />
+
       </div>
     );
   }

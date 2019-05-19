@@ -10,7 +10,7 @@ export class ProviderSection extends React.Component {
 
   render() {
     let {providerInfo, providers, onChange, discount} = this.props;
-
+    console.log(providerInfo.owner)
     let {name} = providerInfo.owner.provider;
     return (
       <div className="provider-section">

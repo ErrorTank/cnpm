@@ -70,8 +70,8 @@ const authenActions = {
 };
 
 const unAuthenActions = {
-    get(){
-        return recentVisitedCache.get();
+    get(temp, async){
+        return recentVisitedCache.get(async);
 
 
     },

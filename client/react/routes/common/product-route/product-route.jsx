@@ -33,15 +33,18 @@ export class ProductRoute extends React.Component {
       ,
       variables: {
         pID
-      }
+      },
+      fetchPolicy: "no-cache"
     }).then(({data}) => {
       let {info: product, meanStar, commentCount, timeLeft} = data.getBasicProduct;
+      console.log(product)
       let info = userInfo.getState();
       let {options} = product.provider[0];
       createVisitedCacheFunction("set")(info ? info._id : null, {
         ...pick(omit(product, "provider"), ["name", "_id", "deal", "description", "regularDiscount"]),
         options: [...product.provider[0].options]
       });
+
       return {...product, meanStar, commentCount, describeFields: JSON.parse(product.describeFields), timeLeft};
     })
   };
@@ -64,7 +67,7 @@ export class ProductRoute extends React.Component {
 
   render() {
     let {loading, product} = this.state;
-
+    // console.log(product)
     return (
       <PageTitle
         title={product ? product.name : "Đang tải thông tin sản phẩm"}

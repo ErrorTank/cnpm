@@ -1,28 +1,39 @@
 import React from "react";
 import debounce from "lodash/debounce"
+import {CSSTransition} from "react-transition-group";
 
 
 export class AppNotificationPopup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      content: null
+      content: null,
+      show: false
     };
     props.setSubcriber((content) => {
-      console.log(content)
-      this.setState({content});
-      this.hidePopup();
+
+      this.setState({content, show: true});
+      if(props.autoHide){
+        this.hidePopup();
+      }
 
     });
+
+  };
+
+  deleteContent = () => {
+    this.setState({content: null});
   };
 
   hidePopup = debounce(() => {
-    this.setState({content: null});
-  }, this.props.timeout);
+    this.setState({show: false});
+  }, this.props.timeout || 0);
+
 
 
   render() {
-    return this.state.content ?  this.props.renderLayout(this.state.content) : null;
+
+    return this.props.renderLayout({content: this.state.content, show: this.state.show, deleteContent: () =>  this.deleteContent(), hidePopup: () => this.hidePopup()});
   }
 }
 
@@ -30,17 +41,16 @@ export const createNotificationPopup = ({timeout}) => {
   let listeners = [];
   return {
     publish: (keyMap) => {
-      console.log(listeners)
+
 
       listeners.forEach(({func, key}) => {
-        console.log(key)
-        Object.keys(keyMap)
+
         if(Object.keys(keyMap).includes(key)){
           func(keyMap[key]);
         }
       })
     },
-    installPopup: (key, renderLayout) => {
+    installPopup: (key, {autoHide, renderLayout}) => {
 
       return (
         <AppNotificationPopup
@@ -53,6 +63,7 @@ export const createNotificationPopup = ({timeout}) => {
           }}
           renderLayout={renderLayout}
           timeout={timeout}
+          autoHide={autoHide}
         />
       )
     }

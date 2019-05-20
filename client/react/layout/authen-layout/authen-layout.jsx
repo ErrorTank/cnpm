@@ -2,7 +2,7 @@ import React from "react";
 import {KComponent} from "../../common/k-component";
 import {userInfo} from "../../../common/states/common";
 import {Navbar} from "./nav-bar/nav-bar";
-import {CartChangePopup, cartChangePopup} from "./nav-bar/cart/cart-btn/cart-change-popup";
+import {cartChangePopup, CartChangePopupUI} from "./nav-bar/cart/cart-btn/cart-change-popup";
 
 export class AuthenLayout extends KComponent {
   constructor(props) {
@@ -21,7 +21,10 @@ export class AuthenLayout extends KComponent {
 
     return (
       <div className="authen-layout">
-        {cartChangePopup.installPopup("cartCount", content => <CartChangePopup content={content}/>)}
+        {cartChangePopup.installPopup("cartCount",{
+          renderLayout:  props => <CartChangePopupUI {...props}/>,
+          autoHide: true
+        })}
         <Navbar
           {...this.props}
         />

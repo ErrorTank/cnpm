@@ -23,43 +23,38 @@ const getIndexDealProducts = ({skip = 0, take = 20}) => {
   //     return data;
   //   })
   //   .catch(err => Promise.reject(err))
-    return Product.aggregate([
-      {
-        $match:
-          {
-           "deal.last": {$gt: new Date()}
-          }
-      },
-      {$skip: skip},
-      {$limit: take},
-      {
-        $project: {
-          _id: 1,
-          regularDiscount: 1,
-          name: 1,
-          deal: 1,
-          provider: {
-            $slice: ["$provider", 0 , 1]
-          },
-
+  return Product.aggregate([
+    {
+      $match:
+        {
+          "deal.last": {$gt: new Date()}
         }
+    },
+    {$skip: skip},
+    {$limit: take},
+    {
+      $project: {
+        _id: 1,
+        regularDiscount: 1,
+        name: 1,
+        deal: 1,
+        provider: {
+          $slice: ["$provider", 0, 1]
+        },
 
-      },
+      }
+
+    },
 
 
+  ]).exec().then(data => {
 
-
-
-    ]).exec().then(data => {
-
-      return data;
-    })
-      .catch(err => Promise.reject(err))
+    return data;
+  })
+    .catch(err => Promise.reject(err))
 };
 
 //Todo: provider populate to brand
-
-
 
 
 const getProduct = ({productID}) => {
@@ -78,24 +73,106 @@ const getProduct = ({productID}) => {
     .then(data => data)
     .catch(err => Promise.reject(err))
 };
+
+const getProductComments = ({productID, skip, take, sortByStar}) => {
+  let getSort = {
+    "ASC": 1,
+    "DESC": -1,
+  };
+  let pipeline = [
+    {$match: {"_id": mongoose.Types.ObjectId(productID)}},
+    {
+      $project: {
+        "comments": 1,
+        "_id": 1
+      }
+    },
+    {
+      $unwind: "$comments"
+    },
+    {$lookup: {from: 'users', localField: 'comments.author', foreignField: '_id', as: 'comments.author'}},
+    {
+      $addFields: {
+        'comments.author': {
+          "$arrayElemAt": ['$comments.author', 0],
+        },
+
+      }
+    },
+    {
+      $unwind: "$comments.subComment"
+    },
+
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'comments.subComment.author',
+        foreignField: '_id',
+        as: 'comments.subComment.author'
+      }
+    },
+    {
+      $addFields: {
+        'comments.subComment.author': {
+          "$arrayElemAt": ['$comments.subComment.author', 0],
+        },
+
+      }
+    },
+    {
+      $group: {
+        "_id": "$comments._id",
+        "oldID": {$first: "$_id"},
+        "comments": {$first: "$comments"},
+        "subComment": {$push: "$comments.subComment"},
+
+      }
+    },
+    {
+      $addFields: {
+        "comments.subComment": "$subComment"
+      }
+    },
+    {
+      $group: {
+        "_id": "$oldID",
+        "comments": {$push: "$comments"},
+      }
+    },
+
+  ];
+  if(getSort.hasOwnProperty(sortByStar)){
+    pipeline.push({$sort: {"comments.rating": getSort[sortByStar]}});
+  }else{
+    pipeline.push({$sort: {"comments.updatedAt": -1}});
+  }
+  pipeline = pipeline.concat([{$skip: skip}, {$limit: take}]);
+  return Product.aggregate(pipeline)
+    .then((data) => {
+      console.log(data[0].comments[0].subComment)
+      return data[0];
+    })
+};
+
 const getBasicProduct = ({productID}) => {
 
   return Product.aggregate([
-    {$match: {"_id":  mongoose.Types.ObjectId(productID)}},
-    {"$addFields": {
+    {$match: {"_id": mongoose.Types.ObjectId(productID)}},
+    {
+      "$addFields": {
         "meanStar": {
           "$divide": [
             {
               "$reduce": {
                 "input": "$comments",
                 "initialValue": 0,
-                "in": { "$add": ["$$value", "$$this.rating"] }
+                "in": {"$add": ["$$value", "$$this.rating"]}
               }
             },
             {
               "$cond": [
-                { "$ne": [ { "$size": "$comments" }, 0 ] },
-                { "$size": "$comments" },
+                {"$ne": [{"$size": "$comments"}, 0]},
+                {"$size": "$comments"},
                 1
               ]
             }
@@ -106,31 +183,39 @@ const getBasicProduct = ({productID}) => {
         }
       }
     },
-    { $lookup: {from: 'brands', localField: 'brand', foreignField: '_id', as: 'brand'} },
+    {$lookup: {from: 'brands', localField: 'brand', foreignField: '_id', as: 'brand'}},
 
     {
       $addFields: {
         brand: {
-           "$arrayElemAt": [ "$brand", 0 ]  ,
+          "$arrayElemAt": ["$brand", 0],
         },
 
       }
     },
     {$unwind: "$provider"},
-    { $lookup: {from: 'users', localField: 'provider.owner', foreignField: '_id', as: "provider.owner"} },
-    { $lookup: {from: 'discountwithcodes', localField: 'provider.discountWithCode', foreignField: '_id', as: 'provider.discountWithCode'} },
+    {$lookup: {from: 'users', localField: 'provider.owner', foreignField: '_id', as: "provider.owner"}},
+    {
+      $lookup: {
+        from: 'discountwithcodes',
+        localField: 'provider.discountWithCode',
+        foreignField: '_id',
+        as: 'provider.discountWithCode'
+      }
+    },
     {
       $addFields: {
         'provider.owner': {
-          "$arrayElemAt": [ '$provider.owner', 0 ]  ,
+          "$arrayElemAt": ['$provider.owner', 0],
         },
         "provider.discountWithCode": {
 
-          "$arrayElemAt": [ "$provider.discountWithCode", 0 ]  ,
+          "$arrayElemAt": ["$provider.discountWithCode", 0],
         }
       }
     },
-    {$group: {
+    {
+      $group: {
         _id: "$_id",
         name: {
           $first: '$name'
@@ -159,12 +244,12 @@ const getBasicProduct = ({productID}) => {
         categories: {
           $first: '$categories'
         },
-        provider: { $push: "$provider"}
+        provider: {$push: "$provider"}
       }
     }
 
 
-  ]).exec().then(([{meanStar,commentCount, ...rest}]) => {
+  ]).exec().then(([{meanStar, commentCount, ...rest}]) => {
     return new Promise((resolve, reject) => {
 
       getCategories(rest.categories._id).then((categories) => {
@@ -236,11 +321,13 @@ const deleteComment = ({pID, cID}) => {
     })
 };
 
+
 module.exports = {
   getIndexDealProducts,
   getProduct,
   addComment,
   editComment,
   deleteComment,
+  getProductComments,
   getBasicProduct
 };

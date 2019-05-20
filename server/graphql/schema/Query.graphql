@@ -57,6 +57,7 @@ type BasicProduct{
 
 
 
+
 type Query {
     getAuthenUser: User
     checkConfirm(token: String!): loginOutputType
@@ -68,5 +69,6 @@ type Query {
     getBasicProduct(productID: String!): BasicProduct
     getUser(userID: ID!): User
     getUserRecentVisited(userID: ID!): User
+    getProductComments(productID: ID!, skip: Int!, take: Int!, sortByStar: SortEnum): Product
 }
 

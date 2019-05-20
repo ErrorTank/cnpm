@@ -3,7 +3,7 @@ import {createNotificationPopup} from "../../../../../common/app-notification-po
 import {CSSTransition, TransitionGroup} from "react-transition-group";
 
 export const cartChangePopup = createNotificationPopup({
-  timeout: 4000
+  timeout: 5000
 });
 
 

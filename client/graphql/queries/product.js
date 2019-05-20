@@ -2,6 +2,7 @@ import {gql} from "apollo-boost"
 import {UserInfoFragment, UserProviderInfoFragment} from "../fragments/user";
 import {ProductInfoFragment} from "../fragments/product";
 import {CategoryInfoFragment} from "../fragments/category";
+import {CommentInfoFragment} from "../fragments/comment";
 
 const fetchIndexDealProducts = gql`
     query{
@@ -51,6 +52,18 @@ const getFullProductDetails = gql`
         }
     }
     ${ProductInfoFragment}
+`;
+
+const getProductComments = gql`
+  query($productID: ID!, $skip: Int!, $take: Int!, $sortByStar: SortEnum){
+      getProductComments(productID: $productID, skip: $skip, take: $take, sortByStar: $sortByStar){
+          _id
+          comments{
+              ...CommentInfo
+          }
+      }
+  }
+    ${CommentInfoFragment}
 `;
 
 const getBasicProductInfo = gql`
@@ -108,5 +121,6 @@ const getBasicProductInfo = gql`
 export {
   fetchIndexDealProducts,
   getFullProductDetails,
-  getBasicProductInfo
+  getBasicProductInfo,
+    getProductComments
 }

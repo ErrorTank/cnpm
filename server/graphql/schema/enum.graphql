@@ -2,3 +2,7 @@ enum SocialType{
     FACEBOOK
     GOOGLE
 }
+enum SortEnum{
+    ASC
+    DESC
+}

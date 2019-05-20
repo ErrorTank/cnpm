@@ -1,9 +1,11 @@
 type SubComment{
+    _id: ID
     author: User
     content: String
 }
 
 type Comment{
+    _id: ID
     rating: Int
     author: User
     updatedAt: String

@@ -1,5 +1,28 @@
-.product-rating-section{
+.product-rating-section {
   border-bottom 1px solid #f4f4f4
   white-space nowrap
   overflow hidden
+
+  .toggle-rating-panel {
+    text-align center
+    width calc(100% - 825px);
+
+    p {
+      color #4a4a4a
+      margin-top 40px
+      font-size 14px
+    }
+
+    .rating-toggle-btn {
+      color tikiblack
+      background-color tikiyellow
+      font-size: 13px;
+      margin-top: 15px;
+      width: 220px;
+      padding: 10px 20px;
+      &:hover{
+        background-color darken(tikiyellow, 18%);
+      }
+    }
+  }
 }

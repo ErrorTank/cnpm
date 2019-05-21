@@ -3,6 +3,12 @@ enum SocialType{
     GOOGLE
 }
 enum SortEnum{
+    ALL
     ASC
     DESC
+    ONE
+    TWO
+    THREE
+    FOUR
+    FIVE
 }

@@ -79,6 +79,14 @@ const getProductComments = ({productID, skip, take, sortByStar}) => {
     "ASC": 1,
     "DESC": -1,
   };
+  let starFilter = {
+    "ONE": 1,
+    "TWO": 2,
+    "THREE": 3,
+    "FOUR": 4,
+    "FIVE": 5
+  };
+
   let pipeline = [
     {$match: {"_id": mongoose.Types.ObjectId(productID)}},
     {
@@ -141,15 +149,28 @@ const getProductComments = ({productID, skip, take, sortByStar}) => {
     },
 
   ];
-  if(getSort.hasOwnProperty(sortByStar)){
+  if (getSort.hasOwnProperty(sortByStar)) {
     pipeline.push({$sort: {"comments.rating": getSort[sortByStar]}});
+  } else if (starFilter.hasOwnProperty(sortByStar)) {
+    pipeline.push({
+      $project: {
+        "_id": 1,
+        "comments": {
+          $filter: {
+            input: "$comments",
+            as: "comment",
+            cond: {$eq: [{$floor: "$$comment.rating"}, starFilter[sortByStar]]}
+          }
+        }
+      }
+    });
   }else{
     pipeline.push({$sort: {"comments.updatedAt": -1}});
   }
   pipeline = pipeline.concat([{$skip: skip}, {$limit: take}]);
   return Product.aggregate(pipeline)
     .then((data) => {
-      console.log(data[0].comments[0].subComment)
+
       return data[0];
     })
 };

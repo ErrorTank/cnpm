@@ -1,4 +1,6 @@
-
+const calcCommentsAvgRating = comments => {
+  return comments.reduce((total, cmt) => total + cmt.rating, 0) / comments.length;
+};
 
 
 const calcSalePrice = (price, sale) => {
@@ -20,5 +22,6 @@ const formatMoney = (money, fix = 0) => {
 
 export {
   calcSalePrice,
-  formatMoney
+  formatMoney,
+  calcCommentsAvgRating
 }

@@ -13,12 +13,17 @@ export class ProductRatingSection extends React.Component {
 
   render() {
     let {showRatingPanel} = this.state;
+    let {comments} = this.props;
     return (
       <div className="product-rating-section">
         <div className="display-panel">
-          <ProductAvgRating/>
-          <RatingVisualization/>
-          <div className="toggle-rating-panel">
+          <ProductAvgRating
+            comments={comments}
+          />
+          <RatingVisualization
+            comments={comments}
+          />
+          <div className="toggle-rating-panel prs-panel">
             <p>Chia sẻ nhận xét về sản phẩm</p>
             <button className="btn rating-toggle-btn" onClick={() => this.setState({showRatingPanel: !showRatingPanel})}>
               {showRatingPanel ? "Đóng" : "Viết nhận xét của bạn"}

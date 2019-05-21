@@ -1,7 +1,41 @@
-.product-detail-fields{
+.product-comment-section{
   width 100%
-  white-space nowrap
   margin-top 50px
+  .cmt-list-actions{
+    color tikiblack
+    .cmt-select{
+      width 120px
+      vertical-align middle
+      display inline-block
+      font-size sm - 0.3rem
+      margin-right 20px
+    }
+    .filter-title{
+      display inline-block
+      vertical-align middle
+      font-size 14px
+    }
+  }
+  .comments-list-section{
+    padding 10px 0
+    border-top 1px solid #f4f4f4
+    background-color white
+  }
+  .product-rating-section{
+    white-space nowrap
+
+    .prs-panel{
+      display inline-block
+      vertical-align top
+    }
+  }
+  .unseen-notify{
+    padding-top 100px
+    color tikiblack
+    text-align center
+    font-size 35px
+
+  }
   .section-header{
     padding 10px 0
     margin-bottom 5px
@@ -13,6 +47,12 @@
     border-radius 3px
     min-height 250px
     padding 20px
-
+    position relative
+    .loading-inline{
+      i{
+        font-size 50px !important
+        color tikiblue
+      }
+    }
   }
 }

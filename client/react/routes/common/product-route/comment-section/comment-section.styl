@@ -3,23 +3,39 @@
   margin-top 50px
   .cmt-list-actions{
     color tikiblack
-    .cmt-select{
-      width 120px
+    margin 20px 0
+    white-space nowrap
+    .actions-list{
+      width calc(100% - 190px)
       vertical-align middle
       display inline-block
-      font-size sm - 0.3rem
-      margin-right 20px
+      .cmt-select{
+        width 180px
+        cursor pointer
+        margin-left 20px
+        font-size sm - 0.3rem
+      }
     }
+
     .filter-title{
       display inline-block
       vertical-align middle
       font-size 14px
+      width 190px
+      text-align center
     }
   }
   .comments-list-section{
     padding 10px 0
     border-top 1px solid #f4f4f4
     background-color white
+    position relative
+    min-height 150px
+    & > .loading-inline{
+      i{
+        display none
+      }
+    }
   }
   .product-rating-section{
     white-space nowrap
@@ -30,12 +46,13 @@
     }
   }
   .unseen-notify{
-    padding-top 100px
+    padding 80px 0 50px 0
     color tikiblack
     text-align center
-    font-size 35px
+    font-size 20px
 
   }
+
   .section-header{
     padding 10px 0
     margin-bottom 5px
@@ -50,7 +67,7 @@
     position relative
     .loading-inline{
       i{
-        font-size 50px !important
+        font-size 50px
         color tikiblue
       }
     }

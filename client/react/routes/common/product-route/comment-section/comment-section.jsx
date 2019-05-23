@@ -6,13 +6,15 @@ import {client} from "../../../../../graphql";
 import {ScrollToFetch} from "../../../../common/scroll-to-fetch/scroll-to-fetch";
 import {getProductComments} from "../../../../../graphql/queries/product";
 import {LoadingInline} from "../../../../common/loading-inline/loading-inline";
+import {Refetch} from "../../../../common/refetch";
+import isEqual from "lodash/isEqual"
 
 export class CommentSection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       comments: [],
-      filter:{
+      filter: {
         skip: 0,
         take: 5,
         sortByStar: "ALL"
@@ -23,17 +25,23 @@ export class CommentSection extends React.Component {
 
   };
 
-  fetchComments = () =>{
-    client.query({
-      query: getProductComments,
-      variables: {
-        productID: this.props.productID,
-        ...this.state.filter
-      }
-    }).then(({data}) => {
-      console.log(data.getProductComments)
-      this.setState({comments: [...data.getProductComments.comments], loading: false});
+  fetchComments = () => {
+    return new Promise((resolve, reject) => {
+      client.query({
+        query: getProductComments,
+        variables: {
+          productID: this.props.productID,
+          ...this.state.filter
+        },
+        fetchPolicy: "no-cache"
+      }).then(({data}) => {
+        console.log(data.getProductComments)
+        this.setState({comments: [...data.getProductComments.comments], loading: false}, () => {
+          resolve();
+        });
+      }).catch(err => reject());
     });
+
   };
 
   render() {
@@ -41,6 +49,7 @@ export class CommentSection extends React.Component {
     return (
       <ScrollToFetch
         api={this.fetchComments}
+
       >
         <div className="product-comment-section">
 
@@ -49,29 +58,55 @@ export class CommentSection extends React.Component {
           <div className="section-body">
             {loading ? (
               <LoadingInline/>
-            ) : comments.length ? (
+            ) : (
 
               <Fragment>
                 <ProductRatingSection
                   comments={comments}
                 />
-                <div className="comments-list-section">
-                  <CmtListActions
-                    filter={filter}
-                  />
-                  <CommentsList
-                    filter={filter}
-                    comments={comments}
-                  />
-                </div>
+                <Refetch
+                  api={this.fetchComments}
+                  filter={filter}
+                  cond={({filter: prevFilter}, {filter: nextFilter}) => !isEqual(prevFilter, nextFilter)}
+                  render={(load) => {
+                    return (
+                      <div className="comments-list-section">
+                        <CmtListActions
+                          filter={filter}
+                          onChange={filter => this.setState({filter})}
+                        />
+
+                        {load && (
+                          <LoadingInline/>
+                        )}
+                        {
+                          comments.length ? (
+                            <CommentsList
+
+                              comments={comments}
+                            />
+                          ) : (
+                            <p className="unseen-notify">Không có nhận xét nào cho sản phẩm này</p>
+                          )
+                        }
+
+
+                      </div>
+                    );
+
+
+
+                  }}
+                />
+
               </Fragment>
-            ) : (
-              <p className="unseen-notify">Không có nhận xét nào cho sản phẩm này</p>
             )}
 
           </div>
 
         </div>
+
+
       </ScrollToFetch>
     );
   }

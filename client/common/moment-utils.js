@@ -1,8 +1,7 @@
 import moment from "moment"
+moment.locale("vi");
 
-const createMomentLocale = (lang) => {
-  return moment.locale(lang);
-};
+
 
 const convertMilToDifferent = (mil) => {
   let left = mil;
@@ -43,9 +42,9 @@ const convertMilToDifferent = (mil) => {
 
   return result;
 };
-const viMoment = createMomentLocale("vi");
+
 
 export {
-  viMoment,
+  moment,
   convertMilToDifferent
 }

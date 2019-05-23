@@ -7,13 +7,14 @@ export class ProductRatingSection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showRatingPanel: false
+      showRatingPanel: false,
+      comments: props.comments
     };
   };
 
   render() {
     let {showRatingPanel} = this.state;
-    let {comments} = this.props;
+    let {comments} = this.state;
     return (
       <div className="product-rating-section">
         <div className="display-panel">

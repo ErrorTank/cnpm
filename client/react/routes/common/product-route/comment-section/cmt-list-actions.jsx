@@ -1,5 +1,5 @@
 import React from "react";
-import {Select} from "../../../../common/select/select";
+import Select from "react-select"
 
 export class CmtListActions extends React.Component {
   constructor(props) {
@@ -42,16 +42,20 @@ export class CmtListActions extends React.Component {
     return (
       <div className="cmt-list-actions">
         <p className="filter-title">Chọn xem nhận xét</p>
-        <Select
-          className={"cmt-select"}
-          value={filter.sortByStar}
-          onChange={v => {
-            onChange({...filter, sortByStar: v})
-          }}
-          options={this.starSorter}
-          placeholder={"Lọc theo sao"}
-          isClearable={false}
-        />
+        <div className={"actions-list"}>
+          <Select
+            className={"cmt-select"}
+            value={this.starSorter.find(each => each.value === filter.sortByStar)}
+            getOptionValue={each => each.value}
+            onChange={v => {
+              onChange({...filter, sortByStar: v.value})
+            }}
+            options={this.starSorter}
+            placeholder={"Lọc theo sao"}
+            isClearable={false}
+          />
+        </div>
+
       </div>
     );
   }

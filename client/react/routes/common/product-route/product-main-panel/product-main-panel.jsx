@@ -76,6 +76,7 @@ const ProductRightPanel = (props) => {
     <div className="product-right-panel">
       <ProductHeaderInfo
         {...props}
+
       />
       <ProductMainInfo
 

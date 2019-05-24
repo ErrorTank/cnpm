@@ -11,7 +11,7 @@ export class MoreInfoList extends React.Component {
 
   render() {
     let {className, renderItem, list, renderToggle, threshold} = this.props;
-    let renderList = list.length <= threshold ? list :list.slice(0, this.state.show ? list.length : threshold);
+    let renderList = list.length <= threshold ? list : list.slice(0, this.state.show ? list.length : threshold);
     return (
       <div className={classnames("more-info-list", className)}>
         {renderList.map((each, i) => (
@@ -22,7 +22,9 @@ export class MoreInfoList extends React.Component {
           </div>
         ))}
         {list.length > threshold && (
-          <div className="toggle">
+          <div className="toggle"
+               onClick={() => this.setState({show: !this.state.show})}
+          >
             {renderToggle(this.state.show)}
           </div>
         )}

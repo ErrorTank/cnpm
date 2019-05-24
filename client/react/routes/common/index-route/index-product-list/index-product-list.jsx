@@ -5,11 +5,11 @@ import classnames from "classnames"
 import {customHistory} from "../../../routes";
 import {calcSalePrice, formatMoney} from "../../../../../common/products-utils";
 import {CSSTransition, TransitionGroup} from "react-transition-group";
-
+import isNil from "lodash/isNil"
 import {CountDown} from "../../../../common/countdown/countdown";
 import {Process} from "../../../../common/process/process";
 
-
+//Todo fix regular dícount =0 render 0
 export const ProductPanel = ({data, isDeal}) => {
   let {regularDiscount, name, _id, deal, options, timeLeft} = data;
 
@@ -44,9 +44,9 @@ export const ProductPanel = ({data, isDeal}) => {
           ) : (
               <Fragment>
                 <div>
-                  <span className="main-price">{formatMoney(calcSalePrice(Number(price), Number(regularDiscount)))} ₫</span>{regularDiscount && <span className="discount-display">-{regularDiscount}%</span>}
+                  <span className="main-price">{formatMoney(calcSalePrice(Number(price), Number(regularDiscount)))} ₫</span>{(regularDiscount !== 0) && <span className="discount-display">-{regularDiscount}%</span>}
                 </div>
-                {regularDiscount && (
+                {(regularDiscount !== 0) && (
                     <div>
                       <span className="sale-price m-0">{formatMoney(Number(price))} ₫</span>
                     </div>

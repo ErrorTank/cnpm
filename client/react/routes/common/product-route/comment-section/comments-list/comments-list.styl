@@ -18,6 +18,7 @@
     .user-cmt-info{
       display inline-block
       vertical-align top
+      height 100%
     }
     .user-info{
       width 200px
@@ -30,18 +31,115 @@
     }
     .user-cmt-info{
       width calc(100% - 200px)
+      padding-left 20px
+      .sub-cmt-list{
+        .toggle{
+          text-align center
+          font-size 13px
+          color tikiblue
+          margin-top 15px
+          span{
+            cursor pointer
+            &:hover{
+              color darken(tikiblue, 25%)
+            }
+          }
+        }
+        .item{
+
+          clear both
+          margin-top 22px
+          .sub-cmt{
+
+            .sub-ava{
+              float left
+              margin-right 10px
+              width 45px
+              height 45px
+              img{
+                max-height 46px
+              }
+              .fake-ava{
+                width 45px
+                height 45px
+                line-height 45px
+                font-size 18px
+              }
+
+            }
+            color tikiblack
+            .sub-name{
+              font-weight bold
+              font-size 14px
+
+
+            }
+            .sub-content{
+              font-size 13px
+              white-space pre-wrap
+              margin-left 55px
+            }
+          }
+
+        }
+
+      }
+      .user-cmt-actions{
+        .reply-toggle{
+          font-size 14px
+          display inline-block
+          cursor pointer
+          color tikiblue
+          &:hover{
+            color darken(tikiblue, 20%)
+          }
+          &.active{
+            text-decoration underline
+          }
+        }
+      }
       .cmt-info{
-        padding-left 20px
+
+        .ci-body{
+          margin-top 10px
+          font-size 14px
+          .cmt-content{
+            white-space pre-wrap
+          }
+          color tikiblack
+          .cmt-images-display{
+            margin-top 10px
+            .img-block{
+              margin-right 10px
+              width 75px
+              height 75px
+              overflow hidden
+              display inline-block
+              position relative
+              img{
+                position absolute
+                max-width 76px
+                max-height 76px
+                top 50%
+                left 50%
+                transform translate(-50%,-50%)
+              }
+            }
+          }
+        }
         .ci-header{
+          line-height 20px
           .cmt-title{
             color tikiblack
             margin-left 15px
-            font-size 15px
+            font-size 16px
+            font-weight bold
           }
           .stars-outer{
             font-size 15px
           }
         }
+
       }
     }
   }

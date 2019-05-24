@@ -150,7 +150,13 @@ const getProductComments = ({productID, skip, take, sortByStar}) => {
 
   ];
   if (getSort.hasOwnProperty(sortByStar)) {
-    pipeline.push({$sort: {"comments.rating": getSort[sortByStar]}});
+    console.log(getSort[sortByStar])
+    pipeline = pipeline.concat([
+        {$unwind: "$comments"},
+        {$sort: {"comments.rating": getSort[sortByStar]}},
+        {$group: {_id: '$_id', 'comments': {$push: '$comments'}}},
+      ]
+    );
   } else if (starFilter.hasOwnProperty(sortByStar)) {
     pipeline.push({
       $project: {
@@ -164,13 +170,19 @@ const getProductComments = ({productID, skip, take, sortByStar}) => {
         }
       }
     });
-  }else{
-    pipeline.push({$sort: {"comments.updatedAt": -1}});
+  } else {
+    pipeline = pipeline.concat([
+        {$unwind: "$comments"},
+        {$sort: {"comments.updatedAt": -1}},
+        {$group: {_id: '$_id', 'comments': {$push: '$comments'}}},
+      ]
+    );
+
   }
   pipeline = pipeline.concat([{$skip: skip}, {$limit: take}]);
   return Product.aggregate(pipeline)
     .then((data) => {
-
+      console.log(data[0].comments.map(each => each.rating))
       return data[0];
     })
 };

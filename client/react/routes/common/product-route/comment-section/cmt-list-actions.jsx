@@ -29,10 +29,10 @@ export class CmtListActions extends React.Component {
       label: "1 Sao"
     },{
       value: "ASC",
-      label: "Tăng dần"
+      label: "Tiêu cực nhất"
     },{
       value: "DESC",
-      label: "Giảm dần"
+      label: "Tích cực nhất"
     },
 
   ];

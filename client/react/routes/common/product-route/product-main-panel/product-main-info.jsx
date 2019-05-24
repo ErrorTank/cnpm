@@ -20,7 +20,7 @@ export const ProductMainInfo = ({commonInfo, optionInfo, onChangeOption, provide
         <div className="pricing-section">
           <div className="main-price">Giá: <span
             className="value">{formatMoney(calcSalePrice(Number(price), Number(regularDiscount)))} ₫</span></div>
-          {regularDiscount && (
+          {(regularDiscount !== 0) && (
             <Fragment>
               <div className="sale-sale">Tiết kiệm: <span
                 className="value">-{regularDiscount}%</span> ({formatMoney(Number(price) - calcSalePrice(Number(price), Number(regularDiscount)))} ₫)

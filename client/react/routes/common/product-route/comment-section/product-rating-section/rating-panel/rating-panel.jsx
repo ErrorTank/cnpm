@@ -4,6 +4,8 @@ import {KComponent} from "../../../../../../common/k-component";
 import {createSimpleForm} from "../../../../../../common/form-validator/form-validator";
 import {InputBase} from "../../../../../../common/base-input/base-input";
 import * as yup from "yup";
+import {UploadBtn} from "../../../../../../common/upload-btn/upload-btn";
+import {UploadImagesDisplay} from "../../../../../../common/upload-btn/upload-images-display/upload-images-display";
 
 export class RatingPanel extends KComponent {
   constructor(props) {
@@ -14,6 +16,9 @@ export class RatingPanel extends KComponent {
       content: yup.string().min(20, "Nội dung chứa ít nhất 20 ký tự").max(100, "Nội dung không được quá 500 kí tự."),
       picture: yup.array()
     });
+    this.state = {
+      uploadErr: null
+    };
     this.form = createSimpleForm(schema, {
       initData: {
         star: 0,
@@ -84,6 +89,36 @@ export class RatingPanel extends KComponent {
                 {...others}
               />
             ), true)}
+          </div>
+          <div className="add-picture">
+            <span>Thêm hình sản phẩm nếu có (tối đa 5 hình):</span>
+            {this.form.enhanceComponent("picture", ({error, onChange, value, ...others}) => (
+              <Fragment>
+                <UploadBtn
+                  onError={(err) => this.setState({uploadErr: err})}
+                  limit={5}
+                  onChange={files => {
+
+                    onChange(files);
+                  }}
+                  value={value}
+                  renderBtn={({onClick}) => (
+                    <button className="btn upload-img-cmt" onClick={onClick}>Chọn hình</button>
+                  )}
+                />
+                {this.state.uploadErr && (
+                  <p className="err-text">{this.state.uploadErr}</p>
+                )}
+                <UploadImagesDisplay
+                  images={value}
+                  onRemove={data => onChange(data)}
+
+                />
+              </Fragment>
+
+            ), true)}
+
+
           </div>
           <div className="mt-5 text-right">
             <button className="btn yellow-btn create-cmt" disabled={!canPost}>Gửi nhận xét</button>

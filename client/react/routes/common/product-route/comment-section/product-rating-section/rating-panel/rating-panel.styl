@@ -7,6 +7,30 @@
     margin-bottom 10px
   }
   .cmt-form{
+    .add-picture{
+      & > span{
+        color tikiblack
+        font-size 14px
+      }
+      .upload-img-cmt{
+        font-size 13px
+        color tikiblue
+        margin-left 10px
+        padding 7px 16px
+        border-radius 4px
+        background-color white
+        border 1px solid tikiblue
+        transition all 0.1s ease
+        &:disabled{
+          pointer-events none
+        }
+        &:hover{
+          color white
+          background-color tikiblue
+        }
+      }
+    }
+
     .create-cmt{
       &:disabled{
         pointer-events none

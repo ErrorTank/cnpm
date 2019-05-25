@@ -111,7 +111,10 @@ export class RatingPanel extends KComponent {
                 )}
                 <UploadImagesDisplay
                   images={value}
-                  onRemove={data => onChange(data)}
+                  onRemove={data => {
+                    this.setState({uploadErr: null});
+                    onChange(data);
+                  }}
 
                 />
               </Fragment>

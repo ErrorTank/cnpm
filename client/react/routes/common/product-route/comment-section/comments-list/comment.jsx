@@ -6,12 +6,15 @@ import {UserCmtInfo} from "./user-cmt-info";
 import classnames from "classnames"
 import {MoreInfoList} from "../../../../../common/more-info-list/more-info-list";
 import {calcSalePrice, formatMoney} from "../../../../../../common/products-utils";
+import {InputBase} from "../../../../../common/base-input/base-input";
+import {SubCommentInput} from "./sub-comment-input";
 
 export class Comment extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showSubForm: false
+      showSubForm: false,
+
     };
   };
 
@@ -34,6 +37,11 @@ export class Comment extends React.Component {
             <span className={classnames("reply-toggle", {active: showSubForm})} onClick={() => this.setState({showSubForm: !showSubForm})}>Gửi trả lời</span>
 
           </div>
+          {showSubForm && (
+            <SubCommentInput
+              onCancel={() => this.setState({showSubForm: false})}
+            />
+          )}
           <MoreInfoList
             className={"sub-cmt-list"}
             threshold={2}
@@ -59,6 +67,8 @@ export class Comment extends React.Component {
     );
   }
 }
+
+
 
 
 

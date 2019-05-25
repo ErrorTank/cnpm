@@ -12,7 +12,10 @@ export class UploadImagesDisplay extends React.Component {
       <div className="upload-img-display">
         {images.map(each => (
           <div className="upload-img-block" key={each.file.name}>
-            <img src={each.src}/>
+            <div className="img-container">
+              <img src={each.src}/>
+            </div>
+
             <i className="fas fa-times-circle rm-img"
                onClick={() => onRemove(images.filter(img => img.file.name !== each.file.name))}
             />

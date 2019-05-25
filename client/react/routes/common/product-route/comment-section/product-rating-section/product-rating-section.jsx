@@ -8,7 +8,7 @@ export class ProductRatingSection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showRatingPanel: true,
+      showRatingPanel: false,
       comments: props.comments
     };
   };

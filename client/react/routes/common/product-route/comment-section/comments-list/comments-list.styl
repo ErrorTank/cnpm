@@ -1,5 +1,37 @@
 .comments-list{
   .comment{
+    .sub-cmt-input{
+      margin-top 20px
+      .rp-input{
+        padding-bottom 0 !important
+        textarea
+        {
+          font-size 14px
+          margin-top 6px
+          height 120px !important
+        }
+      }
+      .sci-actions{
+        text-align center
+        margin-top 20px
+        button{
+          font-size 13px
+          padding 5px 10px
+          color #4a4a4a
+          margin 8px
+          width auto !important
+          &:disabled{
+            pointer-events none
+          }
+          &.cancel-btn{
+            background-color #f1f1f1
+            &:hover{
+              background-color darken(#f1f1f1, 5%)
+            }
+          }
+        }
+      }
+    }
 
     .user-cmt-avatar{
       text-align center

@@ -96,95 +96,114 @@ const getProductComments = ({productID, skip, take, sortByStar}) => {
       }
     },
     {
-      $unwind: "$comments"
-    },
-    {$lookup: {from: 'users', localField: 'comments.author', foreignField: '_id', as: 'comments.author'}},
-    {
-      $addFields: {
-        'comments.author': {
-          "$arrayElemAt": ['$comments.author', 0],
-        },
-
+      $unwind: {
+        "path": "$comments",
+        "preserveNullAndEmptyArrays": true
       }
-    },
-    {
-      $unwind: "$comments.subComment"
+
     },
 
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'comments.subComment.author',
-        foreignField: '_id',
-        as: 'comments.subComment.author'
-      }
-    },
-    {
-      $addFields: {
-        'comments.subComment.author': {
-          "$arrayElemAt": ['$comments.subComment.author', 0],
-        },
-
-      }
-    },
-    {
-      $group: {
-        "_id": "$comments._id",
-        "oldID": {$first: "$_id"},
-        "comments": {$first: "$comments"},
-        "subComment": {$push: "$comments.subComment"},
-
-      }
-    },
-    {
-      $addFields: {
-        "comments.subComment": "$subComment"
-      }
-    },
-    {
-      $group: {
-        "_id": "$oldID",
-        "comments": {$push: "$comments"},
-      }
-    },
 
   ];
-  if (getSort.hasOwnProperty(sortByStar)) {
-    console.log(getSort[sortByStar])
-    pipeline = pipeline.concat([
-        {$unwind: "$comments"},
-        {$sort: {"comments.rating": getSort[sortByStar]}},
-        {$group: {_id: '$_id', 'comments': {$push: '$comments'}}},
-      ]
-    );
-  } else if (starFilter.hasOwnProperty(sortByStar)) {
-    pipeline.push({
-      $project: {
-        "_id": 1,
-        "comments": {
-          $filter: {
-            input: "$comments",
-            as: "comment",
-            cond: {$eq: [{$floor: "$$comment.rating"}, starFilter[sortByStar]]}
-          }
-        }
-      }
-    });
-  } else {
-    pipeline = pipeline.concat([
-        {$unwind: "$comments"},
-        {$sort: {"comments.updatedAt": -1}},
-        {$group: {_id: '$_id', 'comments': {$push: '$comments'}}},
-      ]
-    );
 
-  }
-  pipeline = pipeline.concat([{$skip: skip}, {$limit: take}]);
-  return Product.aggregate(pipeline)
-    .then((data) => {
-      console.log(data[0].comments.map(each => each.rating))
-      return data[0];
-    })
+
+  return Product.findById(productID).lean()
+    .then(item => {
+
+      if (item.comments.length) {
+
+        pipeline = pipeline.concat([
+          {$lookup: {from: 'users', localField: 'comments.author', foreignField: '_id', as: 'comments.author'}},
+          {
+            $addFields: {
+              'comments.author': {
+                "$arrayElemAt": ['$comments.author', 0],
+              },
+
+            }
+          },
+          {
+            $unwind: "$comments.subComment"
+          },
+
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'comments.subComment.author',
+              foreignField: '_id',
+              as: 'comments.subComment.author'
+            }
+          },
+          {
+            $addFields: {
+              'comments.subComment.author': {
+                "$arrayElemAt": ['$comments.subComment.author', 0],
+              },
+
+            }
+          },
+          {
+            $group: {
+              "_id": "$comments._id",
+              "oldID": {$first: "$_id"},
+              "comments": {$first: "$comments"},
+              "subComment": {$push: "$comments.subComment"},
+
+            }
+          },
+          {
+            $addFields: {
+              "comments.subComment": "$subComment"
+            }
+          },
+          {
+            $group: {
+              "_id": "$oldID",
+              "comments": {$push: "$comments"},
+            }
+          },
+        ]);
+        if (getSort.hasOwnProperty(sortByStar)) {
+          console.log(getSort[sortByStar])
+          pipeline = pipeline.concat([
+              {$unwind: "$comments"},
+              {$sort: {"comments.rating": getSort[sortByStar]}},
+              {$group: {_id: '$_id', 'comments': {$push: '$comments'}}},
+            ]
+          );
+        } else if (starFilter.hasOwnProperty(sortByStar)) {
+          pipeline.push({
+            $project: {
+              "_id": 1,
+              "comments": {
+                $filter: {
+                  input: "$comments",
+                  as: "comment",
+                  cond: {$eq: [{$floor: "$$comment.rating"}, starFilter[sortByStar]]}
+                }
+              }
+            }
+          });
+        } else {
+          pipeline = pipeline.concat([
+              {$unwind: "$comments"},
+              {$sort: {"comments.updatedAt": -1}},
+              {$group: {_id: '$_id', 'comments': {$push: '$comments'}}},
+            ]
+          );
+
+        }
+        pipeline = pipeline.concat([{$skip: skip}, {$limit: take}]);
+        return Product.aggregate(pipeline)
+          .then((data) => {
+
+            console.log(data[0].comments.map(each => each.rating))
+            return data[0];
+          })
+      }
+      return item;
+    });
+
 };
 
 const getBasicProduct = ({productID}) => {

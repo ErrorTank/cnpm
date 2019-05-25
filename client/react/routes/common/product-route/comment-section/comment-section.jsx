@@ -9,6 +9,8 @@ import {LoadingInline} from "../../../../common/loading-inline/loading-inline";
 import {Refetch} from "../../../../common/refetch";
 import isEqual from "lodash/isEqual"
 
+
+
 export class CommentSection extends React.Component {
   constructor(props) {
     super(props);
@@ -61,9 +63,12 @@ export class CommentSection extends React.Component {
             ) : (
 
               <Fragment>
-                <ProductRatingSection
-                  comments={comments}
-                />
+                {!!comments.length && (
+                  <ProductRatingSection
+                    comments={comments}
+                  />
+                )}
+
                 <Refetch
                   api={this.fetchComments}
                   filter={filter}

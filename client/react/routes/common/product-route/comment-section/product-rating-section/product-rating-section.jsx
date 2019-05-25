@@ -3,6 +3,7 @@ import {ProductAvgRating} from "./product-avg-rating/product-avg-rating";
 import {RatingVisualization} from "./rating-visualization/rating-visualization";
 import {RatingPanel} from "./rating-panel/rating-panel";
 
+
 export class ProductRatingSection extends React.Component {
   constructor(props) {
     super(props);

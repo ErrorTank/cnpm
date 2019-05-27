@@ -10,7 +10,8 @@ export class UploadBtn extends React.Component {
   handleUpload = e => {
     e.preventDefault();
     let {value: imagesPreview, onChange, onError, limit = 2} = this.props;
-    const files = e.target.files;
+    const files = [...e.target.files];
+    e.target.value = '';
 
     if (files.length + imagesPreview.length > limit) {
       onError("Số lượng file không được vượt quá " + limit);
@@ -57,7 +58,7 @@ export class UploadBtn extends React.Component {
           type="file"
           onChange={this.handleUpload}
           accept="image/*"
-          style={{display: "none"}}
+          style={{width: 0, height: 0}}
           ref={elem => this.inputElem = elem}
           multiple={true}
           name="uploadImg"

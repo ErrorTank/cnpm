@@ -8,12 +8,13 @@ export class CommentsList extends React.Component {
   };
 
   render() {
-    let {comments} = this.props;
+    let {comments, onReply} = this.props;
     return (
       <div className="comments-list">
         {comments.map(each => (
           <Comment
             key={each._id}
+            onReply={(data) => onReply(each._id, data)}
             {...each}
           />
         ))}

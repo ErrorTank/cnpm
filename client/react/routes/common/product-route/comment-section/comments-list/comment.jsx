@@ -4,10 +4,12 @@ import {StarRating} from "../../../../../common/star-rating/star-rating";
 import {Avatar} from "../../../../../common/avatar/avatar";
 import {UserCmtInfo} from "./user-cmt-info";
 import classnames from "classnames"
+import reverse from "lodash/reverse"
 import {MoreInfoList} from "../../../../../common/more-info-list/more-info-list";
-import {calcSalePrice, formatMoney} from "../../../../../../common/products-utils";
-import {InputBase} from "../../../../../common/base-input/base-input";
+
 import {SubCommentInput} from "./sub-comment-input";
+import {userInfo} from "../../../../../../common/states/common";
+import {userActionModal} from "../../../../../common/modal/user-actions/user-actions";
 
 export class Comment extends React.Component {
   constructor(props) {
@@ -18,8 +20,9 @@ export class Comment extends React.Component {
     };
   };
 
+
   render() {
-    let {author, updatedAt, subComment, ...rest} = this.props;
+    let {author, updatedAt, subComment, onReply, ...rest} = this.props;
     let {showSubForm} = this.state;
     return (
       <div className="comment">
@@ -34,12 +37,20 @@ export class Comment extends React.Component {
             {...rest}
           />
           <div className="user-cmt-actions">
-            <span className={classnames("reply-toggle", {active: showSubForm})} onClick={() => this.setState({showSubForm: !showSubForm})}>Gửi trả lời</span>
+            <span className={classnames("reply-toggle", {active: showSubForm})} onClick={() => {
+              if (userInfo.getState()) {
+                this.setState({showSubForm: !showSubForm})
+              } else {
+                userActionModal.open();
+              }
+
+            }}>Gửi trả lời</span>
 
           </div>
           {showSubForm && (
             <SubCommentInput
               onCancel={() => this.setState({showSubForm: false})}
+              addReply={onReply}
             />
           )}
           <MoreInfoList
@@ -67,9 +78,6 @@ export class Comment extends React.Component {
     );
   }
 }
-
-
-
 
 
 const UserCmtAvatar = props => {

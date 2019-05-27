@@ -1,4 +1,7 @@
-
+input SubCommentInput{
+    author: ID
+    content: String
+}
 input SocialInput{
     id: String!
     type: SocialType!

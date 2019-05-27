@@ -206,6 +206,24 @@ const getProductComments = ({productID, skip, take, sortByStar}) => {
 
 };
 
+const replyComment = ({productID, commentID, data}) => {
+  let newID = mongoose.Types.ObjectId();
+  return Product.findOneAndUpdate({
+    _id: mongoose.Types.ObjectId(productID),
+    "comments._id": mongoose.Types.ObjectId(commentID)
+  }, {
+    $push: {
+      "comments.$.subComment": {
+        $each: [{...data, _id: newID}],
+        $position: 0
+      }
+    }
+  }, {new: true}).populate("comments.subComment.author", "_id fullname picture").lean().then((newProduct) => {
+    console.log(newProduct.comments.find(each => each._id.toString() === commentID).subComment.find(each => each._id.toString() === newID.toString()))
+    return newProduct.comments.find(each => each._id.toString() === commentID).subComment.find(each => each._id.toString() === newID.toString());
+  });
+};
+
 const getBasicProduct = ({productID}) => {
 
   return Product.aggregate([
@@ -381,5 +399,6 @@ module.exports = {
   editComment,
   deleteComment,
   getProductComments,
-  getBasicProduct
+  getBasicProduct,
+  replyComment
 };

@@ -36,7 +36,7 @@ export class CommentSection extends React.Component {
         },
         fetchPolicy: "no-cache"
       }).then(({data}) => {
-        console.log(data.getProductComments)
+
         this.setState({comments: [...data.getProductComments.comments], loading: false}, () => {
           resolve();
         });
@@ -57,12 +57,6 @@ export class CommentSection extends React.Component {
       }).then(({data}) => {
         let newSubList = [...this.state.comments.find(each => each._id === cmtID).subComment];
         newSubList.unshift(data.replyComment);
-        console.log(this.state.comments.map((each) => {
-          if (each._id === cmtID) {
-            return {...each, subComment: newSubList}
-          }
-          return {...each};
-        }))
         this.setState({
           comments: this.state.comments.map((each) => {
             if (each._id === cmtID) {

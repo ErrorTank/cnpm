@@ -6,6 +6,7 @@ import {InputBase} from "../../../../../../common/base-input/base-input";
 import * as yup from "yup";
 import {UploadBtn} from "../../../../../../common/upload-btn/upload-btn";
 import {UploadImagesDisplay} from "../../../../../../common/upload-btn/upload-images-display/upload-images-display";
+import {LoadingInline} from "../../../../../../common/loading-inline/loading-inline";
 
 export class RatingPanel extends KComponent {
   constructor(props) {
@@ -17,7 +18,8 @@ export class RatingPanel extends KComponent {
       picture: yup.array()
     });
     this.state = {
-      uploadErr: null
+      uploadErr: null,
+      commenting: false
     };
     this.form = createSimpleForm(schema, {
       initData: {
@@ -31,6 +33,11 @@ export class RatingPanel extends KComponent {
       this.forceUpdate()
     }));
     this.form.validateData();
+  };
+
+  handleComment = () => {
+    this.setState({commenting: true});
+
   };
 
   render() {
@@ -59,7 +66,7 @@ export class RatingPanel extends KComponent {
           </div>
           <div className="add-title rp-form-gr">
             <span className="label">2. Tiêu đề của nhận xét:</span>
-            {this.form.enhanceComponent("title", ({error, onChange, onEnter,...others}) => (
+            {this.form.enhanceComponent("title", ({error, onChange, onEnter, ...others}) => (
               <InputBase
                 className="rp-input pt-0"
                 error={error}
@@ -123,7 +130,12 @@ export class RatingPanel extends KComponent {
 
           </div>
           <div className="mt-5 text-right">
-            <button className="btn yellow-btn create-cmt" disabled={!canPost}>Gửi nhận xét</button>
+            <button className="btn yellow-btn create-cmt" disabled={!canPost} onClick={this.handleComment}>
+              Gửi nhận xét
+              {this.state.commenting && (
+                <LoadingInline/>
+              )}
+            </button>
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React from 'react'
 import { createUserCartCacheFunction } from "../../../../../common/cache/cart-cache";
 import { userCart, userInfo } from "../../../../../common/states/common";
 import { KComponent } from '../../../../common/k-component';
@@ -19,18 +19,24 @@ class CheckoutCart extends KComponent {
         let cartList = info ? userCart.getState() : createUserCartCacheFunction("get")({ async: false });
     
         let checkOut = cartCount !== 0 ? (
-            <div className="container checkout">
-                <p>cart</p>
-                <p><Tinh tien/></p>
+            <div className="container checkout ">
+                
             </div>
         ) : (
-            <div className="container empty-cart ">
-                    <img src="./assets/img/shopping-cart.png" alt=""/>
+            <div className="row">
+                <div className="col-xl-12">
+                    <h5 className="cart-counting">Giỏ hàng <span>({cartCount} sản phấm)</span></h5>
+                    <div className="container empty-cart ">
+                            <span className="cart-icon"></span>
+                            <p>Không có sản phẩm nào trong giỏ hàng của bạn!</p>
+                            <button className="btn yellow-btn" type="button" onClick={() => customHistory.push("/recent-visited")}>Tiếp tục mua sắm</button>
+                    </div>
+                </div>
             </div>
         );
         return(
             <div className="container">
-                <div>{checkOut}</div>
+                {checkOut}
             </div>
         );
     }

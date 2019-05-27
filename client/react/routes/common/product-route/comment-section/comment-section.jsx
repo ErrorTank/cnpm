@@ -63,11 +63,9 @@ export class CommentSection extends React.Component {
             ) : (
 
               <Fragment>
-                {!!comments.length && (
-                  <ProductRatingSection
-                    comments={comments}
-                  />
-                )}
+                <ProductRatingSection
+                  comments={comments}
+                />
 
                 <Refetch
                   api={this.fetchComments}

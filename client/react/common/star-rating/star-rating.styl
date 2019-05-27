@@ -6,6 +6,9 @@
   font-size 17px
   cursor pointer
   font-weight 900
+  &.editable{
+    cursor pointer
+  }
   & > span::before {
     content: "\f005";
     color #b8b8b8
@@ -15,6 +18,7 @@
     top: 0;
     left: 0;
     white-space: nowrap;
+    pointer-events none
     overflow: hidden;
     width: 0;
 

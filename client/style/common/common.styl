@@ -2,6 +2,11 @@
 html,body{
   background-color #f4f4f4
 }
+.err-text{
+  font-size 12px
+  margin-top 5px
+  color #f4516c
+}
 .btn-disabled{
   pointer-events none
   opacity 0.5
@@ -12,6 +17,16 @@ html,body{
   -moz-user-select: none
   -ms-user-select: none
   user-select: none
+}
+.yellow-btn{
+  color tikiblack
+  background-color tikiyellow
+  font-size: 13px;
+  width: 220px;
+  padding: 10px 20px;
+  &:hover{
+    background-color darken(tikiyellow, 18%);
+  }
 }
 .content-container{
   width 1200px !important

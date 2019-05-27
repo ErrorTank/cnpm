@@ -98,7 +98,6 @@ export class RatingPanel extends KComponent {
                   onError={(err) => this.setState({uploadErr: err})}
                   limit={5}
                   onChange={files => {
-
                     onChange(files);
                   }}
                   value={value}

@@ -1,16 +1,33 @@
 import React from "react";
 import {InputBase} from "../../../../../common/base-input/base-input";
+import {LoadingInline} from "../../../../../common/loading-inline/loading-inline";
+import {userInfo} from "../../../../../../common/states/common";
+import {userActionModal} from "../../../../../common/modal/user-actions/user-actions";
 
 export class SubCommentInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      subContent: ""
+      subContent: "",
+      adding: false
     };
   };
 
-  render() {
+
+  addReply = () => {
     let {subContent} = this.state;
+    this.setState({adding: true});
+    this.props.addReply({content: subContent, author: userInfo.getState()._id}).then(() => {
+      this.setState({adding: false, subContent: ""});
+    });
+
+
+
+  };
+
+
+  render() {
+    let {subContent, adding} = this.state;
     let canSend = (subContent && subContent.length <= 300);
     return (
       <div className="sub-cmt-input">
@@ -18,8 +35,9 @@ export class SubCommentInput extends React.Component {
           className="rp-input pt-0"
           type={"text"}
           onKeyDown={e => {
-            if(e.keyCode === 13){
-              this.props.addReply(subContent)
+            if (e.keyCode === 13) {
+              this.addReply();
+
             }
           }}
           inputType={"textarea"}
@@ -30,7 +48,12 @@ export class SubCommentInput extends React.Component {
           value={subContent}
         />
         <div className="sci-actions">
-          <button className="btn yellow-btn" disabled={!canSend}>Gửi trả lời của bạn</button>
+          <button className="btn yellow-btn reply-btn" onClick={this.addReply} disabled={!canSend || adding}>Gửi trả
+            lời của bạn
+            {adding && (
+              <LoadingInline/>
+            )}
+          </button>
           <button className="btn cancel-btn" onClick={this.props.onCancel}>Hủy bỏ</button>
         </div>
       </div>

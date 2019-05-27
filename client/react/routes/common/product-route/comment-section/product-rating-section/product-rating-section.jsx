@@ -2,6 +2,8 @@ import React from "react";
 import {ProductAvgRating} from "./product-avg-rating/product-avg-rating";
 import {RatingVisualization} from "./rating-visualization/rating-visualization";
 import {RatingPanel} from "./rating-panel/rating-panel";
+import {userInfo} from "../../../../../../common/states/common";
+import {userActionModal} from "../../../../../common/modal/user-actions/user-actions";
 
 
 export class ProductRatingSection extends React.Component {
@@ -27,7 +29,13 @@ export class ProductRatingSection extends React.Component {
           />
           <div className="toggle-rating-panel prs-panel">
             <p>Chia sẻ nhận xét về sản phẩm</p>
-            <button className="btn rating-toggle-btn yellow-btn" onClick={() => this.setState({showRatingPanel: !showRatingPanel})}>
+            <button className="btn rating-toggle-btn yellow-btn" onClick={() => {
+              if (userInfo.getState())
+                this.setState({showRatingPanel: !showRatingPanel});
+              else {
+                userActionModal.open();
+              }
+            }}>
               {showRatingPanel ? "Đóng" : "Viết nhận xét của bạn"}
             </button>
           </div>

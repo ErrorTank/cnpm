@@ -4,11 +4,10 @@ import {CommentsList} from "./comments-list/comments-list";
 import {CmtListActions} from "./cmt-list-actions";
 import {client} from "../../../../../graphql";
 import {ScrollToFetch} from "../../../../common/scroll-to-fetch/scroll-to-fetch";
-import {getProductComments} from "../../../../../graphql/queries/product";
+import {getProductComments, replyComment} from "../../../../../graphql/queries/product";
 import {LoadingInline} from "../../../../common/loading-inline/loading-inline";
 import {Refetch} from "../../../../common/refetch";
 import isEqual from "lodash/isEqual"
-
 
 
 export class CommentSection extends React.Component {
@@ -42,6 +41,38 @@ export class CommentSection extends React.Component {
           resolve();
         });
       }).catch(err => reject());
+    });
+
+  };
+
+  handleAddReply = (cmtID, subCmt) => {
+    return new Promise((resolve, reject) => {
+      client.mutate({
+        mutation: replyComment,
+        variables: {
+          pID: this.props.productID,
+          cmtID,
+          subCmt
+        }
+      }).then(({data}) => {
+        let newSubList = [...this.state.comments.find(each => each._id === cmtID).subComment];
+        newSubList.unshift(data.replyComment);
+        console.log(this.state.comments.map((each) => {
+          if (each._id === cmtID) {
+            return {...each, subComment: newSubList}
+          }
+          return {...each};
+        }))
+        this.setState({
+          comments: this.state.comments.map((each) => {
+            if (each._id === cmtID) {
+              return {...each, subComment: newSubList}
+            }
+            return {...each};
+          })
+        }, () => resolve());
+
+      });
     });
 
   };
@@ -85,7 +116,7 @@ export class CommentSection extends React.Component {
                         {
                           comments.length ? (
                             <CommentsList
-
+                              onReply={this.handleAddReply}
                               comments={comments}
                             />
                           ) : (
@@ -96,7 +127,6 @@ export class CommentSection extends React.Component {
 
                       </div>
                     );
-
 
 
                   }}

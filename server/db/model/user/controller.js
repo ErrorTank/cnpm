@@ -305,15 +305,14 @@ const getUserRecentVisited = ({userID}) => {
             "doc": {"$first": "$$ROOT"}
           }
         }
-      ])
-    }
-    return []
-  }).then(data => {
-      // console.log(data)
+      ]).then(data => {
+        // console.log(data)
 
-      return {...omit(data[0], "doc"), ...omit(data[0].doc, "recentVisit")}
-    })
-    .catch(err => Promise.reject(err))
+        return {...omit(data[0], "doc"), ...omit(data[0].doc, "recentVisit")}
+      })
+    }
+    return user;
+  }).catch(err => Promise.reject(err))
 };
 const addToCart = ({userID, productID, qty, option}) => {
   return User.findOne({_id: userID}).lean()

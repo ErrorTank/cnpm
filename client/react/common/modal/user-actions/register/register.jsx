@@ -129,6 +129,7 @@ export class Register extends KComponent {
               placeholder={"abc@xyz.com"}
               id={"email"}
               onKeyDown={onEnter}
+              disabled={confirmRegisterData}
               type={"text"}
               label={"Email"}
               onChange={e => {

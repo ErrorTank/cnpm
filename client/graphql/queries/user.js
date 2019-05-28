@@ -98,7 +98,15 @@ const registerSocial = gql`
 
 const checkEmailExisted = gql`
     query ($email: String!){
-        checkEmailExisted(email: $email)
+        checkEmailExisted(email: $email){
+          __typename
+          ... on BoolBox {
+            boolVal: value
+          }
+          ... on StringBox {
+            stringVal: value
+          }
+        }
     }
   
 `;

@@ -1,0 +1,2 @@
+
+union CheckEmailUnion = StringBox | BoolBox

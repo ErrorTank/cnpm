@@ -1,0 +1,7 @@
+type BoolBox {
+  value: Boolean
+}
+
+type StringBox {
+  value: String
+}

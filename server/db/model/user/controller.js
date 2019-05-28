@@ -108,7 +108,7 @@ const checkConfirmToken = token => {
     .catch(err => Promise.reject(err))
 };
 
-const getSocialUserInfo = socialID => {
+const getSocialUserInfo = ({socialID}) => {
   return User.findOne({"social.id": socialID}).lean()
     .then(user => user ? createAuthToken(pick(user, ["_id", "role", "email", "phone", "fullname", "isVerify"]), getPrivateKey(), {
       expiresIn: "30d",
@@ -122,7 +122,6 @@ const getSocialUserInfo = socialID => {
     .catch(err => Promise.reject(err))
 
 };
-
 
 
 const registerSocial = user => {
@@ -228,9 +227,22 @@ const regularLogin = payload => {
 };
 
 const checkEmailExisted = email => {
-  return User.findOne({email})
+  return User.findOne({email}).lean()
     .then(data => {
-        return !!data
+        if (!data) {
+          return {
+            value: "not_existed"
+          };
+        }
+        if (!data.hasOwnProperty("password")){
+          return {
+            value: "belong_social"
+          };
+        }
+
+        return {
+          value: true
+        };
       }
     )
     .catch(err => Promise.reject(err))
@@ -271,29 +283,32 @@ const changePassword = payload => {
 };
 
 const getUserRecentVisited = ({userID}) => {
-  return User.aggregate([
-    {$match: {"_id": mongoose.Types.ObjectId(userID)}},
-    {$unwind: "$recentVisit"},
-    {$lookup: {from: 'products', localField: 'recentVisit.product', foreignField: '_id', as: "recentVisit.product"}},
-    {
-      $addFields: {
-        'recentVisit.product': {
-          $arrayElemAt: ["$recentVisit.product", 0]
-        }
-      }
-    },
-    {
-      $group: {
-        "_id": "$_id",
-        "recentVisit": {
-          $push: "$recentVisit"
+  return User.findById(userID).then((user) => {
+    if(user.recentVisit.length){
+      return User.aggregate([
+        {$match: {"_id": mongoose.Types.ObjectId(userID)}},
+        {$unwind: "$recentVisit"},
+        {$lookup: {from: 'products', localField: 'recentVisit.product', foreignField: '_id', as: "recentVisit.product"}},
+        {
+          $addFields: {
+            'recentVisit.product': {
+              $arrayElemAt: ["$recentVisit.product", 0]
+            }
+          }
         },
-        "doc": {"$first": "$$ROOT"}
-      }
+        {
+          $group: {
+            "_id": "$_id",
+            "recentVisit": {
+              $push: "$recentVisit"
+            },
+            "doc": {"$first": "$$ROOT"}
+          }
+        }
+      ])
     }
-  ])
-
-    .then(data => {
+    return []
+  }).then(data => {
       // console.log(data)
 
       return {...omit(data[0], "doc"), ...omit(data[0].doc, "recentVisit")}
@@ -303,25 +318,36 @@ const getUserRecentVisited = ({userID}) => {
 const addToCart = ({userID, productID, qty, option}) => {
   return User.findOne({_id: userID}).lean()
     .then(data => {
-      if(!data){
+      if (!data) {
         return Promise.reject(new ApolloError("user_not_found"))
       }
       let isExisted = data.carts.map(each => each.option.toString()).includes(option);
-      if(!isExisted && data.carts.length === 10){
+      if (!isExisted && data.carts.length === 10) {
         return Promise.reject(new ApolloError("full_cart"))
       }
       return isExisted;
     })
     .then((isExisted) => {
-      let updateFunc = isExisted ? () => User.findOneAndUpdate({_id: userID, "carts.option": option}, {$inc: {"carts.$.quantity": Number(qty)}}, {
+      let updateFunc = isExisted ? () => User.findOneAndUpdate({
+        _id: userID,
+        "carts.option": option
+      }, {$inc: {"carts.$.quantity": Number(qty)}}, {
         new: true,
         fields: "-password"
-      }) : () => User.findOneAndUpdate({_id: userID}, {$push: {carts: {product: mongoose.Types.ObjectId(productID), quantity: qty, option: mongoose.Types.ObjectId(option)}}},  {
+      }) : () => User.findOneAndUpdate({_id: userID}, {
+        $push: {
+          carts: {
+            product: mongoose.Types.ObjectId(productID),
+            quantity: qty,
+            option: mongoose.Types.ObjectId(option)
+          }
+        }
+      }, {
         new: true,
         fields: "-password"
       });
 
-      return  updateFunc().lean();
+      return updateFunc().lean();
     })
 
 };
@@ -329,7 +355,7 @@ const addToCart = ({userID, productID, qty, option}) => {
 const addToFavorites = ({userID, productID}) => {
   return User.findOne({_id: userID}).lean()
     .then(data => {
-      if(!data){
+      if (!data) {
         return Promise.reject(new ApolloError("user_not_found"))
       }
 
@@ -338,8 +364,8 @@ const addToFavorites = ({userID, productID}) => {
     .then((isExisted) => {
 
       console.log(isExisted)
-      let updateExpr = isExisted ? {$pull: {favorites: mongoose.Types.ObjectId(productID)}} :{$push: {favorites: mongoose.Types.ObjectId(productID)}} ;
-      return  User.findOneAndUpdate({_id: userID},updateExpr , {
+      let updateExpr = isExisted ? {$pull: {favorites: mongoose.Types.ObjectId(productID)}} : {$push: {favorites: mongoose.Types.ObjectId(productID)}};
+      return User.findOneAndUpdate({_id: userID}, updateExpr, {
         new: true,
         fields: "-password"
       }).lean();

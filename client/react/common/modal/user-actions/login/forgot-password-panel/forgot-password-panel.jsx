@@ -41,14 +41,17 @@ export class ForgotPasswordPanel extends React.Component {
       query: checkEmailExisted,
       variables: {
         email
-      }
+      },
+      fetchPolicy: 'no-cache'
     }).then(({data}) => {
       let {checkEmailExisted} = data;
-      if(!checkEmailExisted)
-        this.setState({error: "Tài khoản không tồn tại", checking: false})
-      else{
+      if(checkEmailExisted.hasOwnProperty("stringVal"))
+        this.setState({error: checkEmailExisted.stringVal === "not_existed" ? "Tài khoản không tồn tại" : "Không thể đổi mật khẩu cho tài khoản liên kết", checking: false});
+      else if(checkEmailExisted.hasOwnProperty("boolVal")){
         this.setState({checking: false})
       }
+    }).catch(() => {
+      this.setState({checking: false, err: "Đã có lỗi xảy ra"})
     })
   };
 

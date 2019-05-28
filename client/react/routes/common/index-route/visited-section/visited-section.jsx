@@ -37,7 +37,7 @@ export class VisitedSection extends KComponent {
   render() {
     let {list} = this.state;
     let {filterList = (l) => l} = this.props;
-
+    let renderList = filterList(list);
     return (
         <div className={classnames("visited-section")}>
 
@@ -46,12 +46,12 @@ export class VisitedSection extends KComponent {
               {this.state.loading ? (
                 <LoadingInline/>
               ) :
-                list.length  ? (
+                renderList.length  ? (
                     <Fragment>
                       <StaticProductList
                         deal={false}
                         cols={5}
-                        list={filterList(list)}
+                        list={renderList}
                       />
                       <div className="vs-footer">
                         <button className="btn more-btn" onClick={() => customHistory.push("/recent-visited")}>Xem

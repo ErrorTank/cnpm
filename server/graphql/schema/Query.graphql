@@ -57,13 +57,12 @@ type BasicProduct{
 
 
 
-
 type Query {
     getAuthenUser: User
     checkConfirm(token: String!): loginOutputType
     getSocialUserInfo(socialID: String!): loginOutputType
     regularLogin(payload: RegularLoginInput!): loginOutputType
-    checkEmailExisted(email: String!): Boolean
+    checkEmailExisted(email: String!): CheckEmailUnion
     getIndexDealProducts(skip: Int, take: Int): [IndexDealProduct]
     getProduct(productID: String!): Product
     getBasicProduct(productID: String!): BasicProduct

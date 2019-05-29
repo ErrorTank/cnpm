@@ -413,7 +413,7 @@ const getCartItemByIdList = (rawList) => {
   ]).then(data => {
 
     let result = data.map(each => ({...each, quantity: rawList.find(item => item.option === each.product.provider[0].options[0]._id.toString()).quantity}));
-    console.log(result)
+
     return result;
   })
 };

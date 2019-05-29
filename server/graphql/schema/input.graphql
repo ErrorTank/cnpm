@@ -7,6 +7,12 @@ input SocialInput{
     type: SocialType!
 }
 
+input CartInput{
+    product: ID
+    quantity: Int
+    option: ID
+}
+
 input CreateUserInput{
     fullname: String!
     email: String!

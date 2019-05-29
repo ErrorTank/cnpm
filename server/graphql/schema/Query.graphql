@@ -55,7 +55,10 @@ type BasicProduct{
     timeLeft: String
 }
 
-
+type CartOutput{
+    product: Product
+    quantity: Int
+}
 
 type Query {
     getAuthenUser: User
@@ -69,5 +72,6 @@ type Query {
     getUser(userID: ID!): User
     getUserRecentVisited(userID: ID!): User
     getProductComments(productID: ID!, skip: Int!, take: Int!, sortByStar: SortEnum): Product
+    getCartItemByIdList(list: [CartInput]): [CartOutput]
 }
 

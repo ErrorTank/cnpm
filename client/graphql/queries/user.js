@@ -168,6 +168,46 @@ const addRecentVisit = gql`
   }
 `;
 
+const getCartItemByIdList = gql`
+  query ($list: [CartInput]){
+    getCartItemByIdList(list: $list){
+      product{
+        _id
+        name
+        brand{
+          _id
+          name
+          logo
+        }
+        regularDiscount
+        deal{
+          last
+        }
+        provider{
+          owner{
+            _id
+            fullname
+          }
+          options{
+            _id
+            price
+            description
+            total
+            sold
+            picture
+          }
+          discountWithCode{
+            _id
+            code
+            value
+          }
+        }
+        
+      }
+    }
+  }
+`;
+
 export {
   getBasicUserInfo,
   getAuthenUser,
@@ -183,5 +223,6 @@ export {
   getUserRecentVisited,
   addRecentVisit,
   addToFavorites,
-  addToCart
+  addToCart,
+  getCartItemByIdList
 }

@@ -314,6 +314,16 @@ const getUserRecentVisited = ({userID}) => {
     return user;
   }).catch(err => Promise.reject(err))
 };
+
+const getCartItemByIdList = ({rawList}) => {
+  let idList = rawList.map(each => mongoose.Types.ObjectId(each.product));
+  return Product.aggregate([
+    {$in: ["$_id", idList]}
+  ]).then(data => {
+    console.log(data);
+  })
+};
+
 const addToCart = ({userID, productID, qty, option}) => {
   return User.findOne({_id: userID}).lean()
     .then(data => {
@@ -431,5 +441,6 @@ module.exports = {
   addRecentVisit,
   getUserRecentVisited,
   addToFavorites,
-  addToCart
+  addToCart,
+  getCartItemByIdList
 };

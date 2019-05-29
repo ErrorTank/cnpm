@@ -22,7 +22,10 @@ module.exports = () => new Promise((resolve, reject) => {
         .then(() => {
             console.log('\x1b[36m%s\x1b[32m', "Connect to mongoDB successfully!");
             loadDbInstances();
-
+            // const {getCartItemByIdList} = require("../db/model/user/controller");
+            // getCartItemByIdList([{option: "5cdccc8c2f86a8115c01762a",
+            //   product: "5cc1bbb6eaa2491c50bcc16e",
+            //   quantity: 4}]).then(data => console.log(data));
             resolve()
         }).catch(err => {
             console.log("Cannot connect to mongoDB: \n", err);

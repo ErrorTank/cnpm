@@ -315,12 +315,106 @@ const getUserRecentVisited = ({userID}) => {
   }).catch(err => Promise.reject(err))
 };
 
-const getCartItemByIdList = ({rawList}) => {
+const getCartItemByIdList = (rawList) => {
   let idList = rawList.map(each => mongoose.Types.ObjectId(each.product));
+  let optionIdList = rawList.map(each => mongoose.Types.ObjectId(each.option));
   return Product.aggregate([
-    {$in: ["$_id", idList]}
+    {
+      $match: {
+       "_id": {
+         $in: idList
+       }
+      }
+    },
+    {$lookup: {from: 'brands', localField: 'brand', foreignField: '_id', as: 'brand'}},
+    {
+      $addFields: {
+        brand: {
+          "$arrayElemAt": ["$brand", 0],
+        },
+
+      }
+    },
+    {$unwind: "$provider"},
+    {$lookup: {from: 'users', localField: 'provider.owner', foreignField: '_id', as: "provider.owner"}},
+    {
+      $lookup: {
+        from: 'discountwithcodes',
+        localField: 'provider.discountWithCode',
+        foreignField: '_id',
+        as: 'provider.discountWithCode'
+      }
+    },
+    {
+      $addFields: {
+        'provider.owner': {
+          "$arrayElemAt": ['$provider.owner', 0],
+        },
+        "provider.discountWithCode": {
+
+          "$arrayElemAt": ["$provider.discountWithCode", 0],
+        }
+      }
+    },
+    {$unwind: "$provider.options"},
+    {
+      $match: {
+        "provider.options._id": {
+          $in: optionIdList
+        }
+      }
+    },
+    {
+      $group: {
+        "_id": "$provider.options._id",
+        name: {
+          $first: '$name'
+        },
+        regularDiscount: {
+          $first: '$regularDiscount'
+        },
+        productID: {
+          $first: '$_id'
+        },
+        brand: {
+          $first: '$brand'
+        },
+        deal: {
+          $first: '$deal'
+        },
+        provider: {$push: "$provider"},
+        optionArr: {$push: "$provider.options"}
+      }
+    },
+    {
+      $addFields: {
+        "provider.options": "$optionArr",
+        "_id": "$productID",
+      }
+    },
+    {
+      $addFields: {
+        product: "$$CURRENT"
+      }
+    },
+    {
+      $project: {
+        _id: 0,
+        product:1,
+
+      }
+    }, {
+      $project: {
+        "product.optionArr": 0,
+
+      }
+    }
+
   ]).then(data => {
-    console.log(data);
+
+    let result = data.map(each => ({...each, quantity: rawList.find(item => item.option === each.product.provider[0].options[0]._id.toString()).quantity}));
+    console.log(result)
+    return result;
   })
 };
 

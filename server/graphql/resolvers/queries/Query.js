@@ -16,7 +16,7 @@ const Query = {
       return getProductComments(args).then(data => data).catch(err => throw err);
     },
     getCartItemByIdList: async (parent, args, {request}, info) => {
-      return getCartItemByIdList(args).then(data => data).catch(err => throw err);
+      return getCartItemByIdList(args.list).then(data => data).catch(err => throw err);
     },
     checkConfirm: async (parent, args, {request}, info) => {
       return checkConfirmToken(args.token).then(data => data).catch(err => throw err);

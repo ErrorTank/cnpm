@@ -2,6 +2,8 @@ import React from 'react'
 import { createUserCartCacheFunction } from "../../../../../common/cache/cart-cache";
 import { userCart, userInfo } from "../../../../../common/states/common";
 import { KComponent } from '../../../../common/k-component';
+import {client} from "../../../../../graphql";
+import {getCartItemByIdList} from "../../../../../graphql/queries/user";
 
 class CheckoutCart extends KComponent {
     constructor(props) {
@@ -10,8 +12,9 @@ class CheckoutCart extends KComponent {
             if (!newState || !oldState) {
                 this.forceUpdate();
             }
-                
+
         }))
+        //Call api only list not empty
     };
     render(){
         let info = userInfo.getState();
@@ -27,7 +30,7 @@ class CheckoutCart extends KComponent {
                         <div className="col-xl-8 cart-col-1">
                             <form id="shopping-cart">
                                 <div className="row shopping-cart-item">
-                                    
+
                                 </div>
                             </form>
                         </div>

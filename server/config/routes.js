@@ -29,11 +29,13 @@ module.exports = () => {
   router.post("/api/comment/create/:productID",  restAuthMiddleware, upload.array("picture" ,5), (req,res, next) => {
     let data = req.body;
     let files = req.files;
-
     addNewComment({data: {...data}, files:[...files], productID: req.params.productID}).then((cmt) => {
       console.log(cmt);
       res.status(200).json({comment: cmt});
-    }).catch(err => next(err));
+    }).catch(err => {
+      console.log(err)
+      next(err)
+    });
   });
 
   return router;

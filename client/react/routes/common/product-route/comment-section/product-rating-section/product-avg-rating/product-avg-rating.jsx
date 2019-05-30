@@ -8,7 +8,7 @@ export const ProductAvgRating = ({comments}) => {
     <div className="product-avg-rating prs-panel">
       <p>Đánh Giá Trung Bình</p>
       <div className="avg-rating">
-        {avg}/5
+        {avg.toFixed(1)}/5
       </div>
       <div className="text-center">
         <StarRating

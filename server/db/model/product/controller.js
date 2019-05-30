@@ -1,4 +1,5 @@
 const Product = require("./product");
+const User = require("../user/user");
 const omit = require("lodash/omit");
 const pick = require("lodash/pick");
 const {getCategories} = require("../category/controller");
@@ -120,8 +121,12 @@ const getProductComments = ({productID, skip, take, sortByStar}) => {
             }
           },
           {
-            $unwind: "$comments.subComment"
+            "$unwind": {
+              "path": "$comments.subComment",
+              "preserveNullAndEmptyArrays": true
+            }
           },
+
 
           {
             $lookup: {
@@ -190,11 +195,16 @@ const getProductComments = ({productID, skip, take, sortByStar}) => {
           );
 
         }
-        // pipeline = pipeline.concat([{$skip: skip}, {$limit: take}]);
+        pipeline = pipeline.concat([{$skip: skip}, {$limit: take}]);
         return Product.aggregate(pipeline)
           .then((data) => {
 
-            return data[0];
+            return {
+              ...data[0], comments: data[0].comments.map(each => {
+
+                return !each.subComment[0]._id ? ({...each, subComment: []}) : each;
+              })
+            };
           })
       }
       return item;
@@ -388,18 +398,23 @@ const deleteComment = ({pID, cID}) => {
 };
 
 const addNewComment = ({data, files, productID}) => {
-  let saveData = {...data, picture: files.map(each => each.filename), _id: mongoose.Types.ObjectId()};
-  Product.findOneAndUpdate({_id: mongoose.Types.ObjectId(productID)}, {
+  let saveData = {...data, picture: files.map(each => process.env.APP_URI + "/uploads/img/" + each.filename)};
+  let newId = mongoose.Types.ObjectId();
+  return Product.findOneAndUpdate({_id: mongoose.Types.ObjectId(productID)}, {
     $push: {
-      "comments": saveData
+      "comments": {...saveData, _id: newId}
     }
   }, {new: true}).lean().then(newData => {
     let {comments} = newData;
-    return comments.find(each => each._id === productID)
-  }).catch(err => {
-    console.log(err)
-    return Promise.reject(err)
+    let result = comments.find(each => each._id.toString() === newId.toString());
+    return User.findById(result.author, "_id fullname picture role").lean().then((author) => {
+      console.log({...result, author})
+      return {...result, author}
+    })
   })
+    .catch(err => {
+      return Promise.reject(err)
+    })
 };
 
 

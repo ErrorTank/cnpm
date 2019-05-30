@@ -24,13 +24,14 @@ export class  Comment extends React.Component {
   render() {
     let {author, updatedAt, subComment, onReply, ...rest} = this.props;
     let {showSubForm} = this.state;
+    let updatedVal = Number(updatedAt) ? Number(updatedAt) : updatedAt;
     return (
       <div className="comment">
         <div className="user-info">
           <UserCmtAvatar
             {...author}
           />
-          <p className="updated-time">{moment(Number(updatedAt)).fromNow()}</p>
+          <p className="updated-time">{moment(updatedVal).fromNow()}</p>
         </div>
         <div className="user-cmt-info">
           <UserCmtInfo

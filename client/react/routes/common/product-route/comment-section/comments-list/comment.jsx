@@ -11,7 +11,7 @@ import {SubCommentInput} from "./sub-comment-input";
 import {userInfo} from "../../../../../../common/states/common";
 import {userActionModal} from "../../../../../common/modal/user-actions/user-actions";
 
-export class Comment extends React.Component {
+export class  Comment extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

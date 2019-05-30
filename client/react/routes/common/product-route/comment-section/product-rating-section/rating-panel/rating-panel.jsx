@@ -7,12 +7,14 @@ import * as yup from "yup";
 import {UploadBtn} from "../../../../../../common/upload-btn/upload-btn";
 import {UploadImagesDisplay} from "../../../../../../common/upload-btn/upload-images-display/upload-images-display";
 import {LoadingInline} from "../../../../../../common/loading-inline/loading-inline";
+import {productApi} from "../../../../../../../api/common/product-api";
+import {userInfo} from "../../../../../../../common/states/common";
 
 export class RatingPanel extends KComponent {
   constructor(props) {
     super(props);
     const schema = yup.object().shape({
-      star: yup.number().min(1, "Vui lòng chọn đánh giá của bạn về sản phẩm này."),
+      rating: yup.number().min(1, "Vui lòng chọn đánh giá của bạn về sản phẩm này."),
       title: yup.string().max(100, "Tiêu đề không được quá 100 kí tự."),
       content: yup.string().min(20, "Nội dung chứa ít nhất 20 ký tự").max(100, "Nội dung không được quá 500 kí tự."),
       picture: yup.array()
@@ -23,7 +25,7 @@ export class RatingPanel extends KComponent {
     };
     this.form = createSimpleForm(schema, {
       initData: {
-        star: 0,
+        rating: 0,
         title: "",
         content: "",
         picture: []
@@ -37,18 +39,25 @@ export class RatingPanel extends KComponent {
 
   handleComment = () => {
     this.setState({commenting: true});
-
+    let data = this.form.getData();
+    let files = data.picture.map(each => each.file);
+    console.log(files);
+    productApi.createComment(this.props.productID, {...data, picture: files, author: userInfo.getState()._id}).then(({comment}) => {
+      this.setState({commenting: false});
+      this.props.onCreate(comment);
+    });
   };
 
   render() {
     let canPost = this.form.getInvalidPaths().length === 0;
+
     return (
       <div className="rating-panel">
         <div className="cmt-form m-form m-form--state">
           <p className="rp-title">GỬI NHẬN XÉT CỦA BẠN</p>
           <div className=" rp-form-gr">
             <span className="label">1. Đánh giá của bạn về sản phẩm này:</span>
-            {this.form.enhanceComponent("star", ({onChange, value, error}) => (
+            {this.form.enhanceComponent("rating", ({onChange, value, error}) => (
               <Fragment>
                 <StarRating
                   className={"star-rating"}

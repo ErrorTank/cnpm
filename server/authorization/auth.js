@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const {getPrivateKey, getPublicKey} = require("../authorization/keys/keys");
 const {AuthenticationError} = require("apollo-server-express");
+const omit = require("lodash/omit");
 
 const decodeAuthRequest = (req, secret, config) => {
   return new Promise((resolve, reject) => {
@@ -11,6 +12,7 @@ const decodeAuthRequest = (req, secret, config) => {
     }else{
       let token = authHeader.replace(/^Bearer /, '');
       verifyToken(token, secret, config).then((user) => {
+
         resolve(user);
       }).catch(err => {
         reject(err);
@@ -24,7 +26,7 @@ const decodeAuthRequest = (req, secret, config) => {
 const createAuthToken = (userInfo, secret, config) =>{
   console.log(userInfo)
   return new Promise((resolve, reject) => {
-    jwt.sign(userInfo, secret, config, (err, token) => {
+    jwt.sign(omit(userInfo, ["comments", "password", "favorites", "carts", "recentVisit"]), secret, config, (err, token) => {
       if(err){
         console.log(err);
         reject(new Error("fail_generate_token"));
@@ -57,25 +59,33 @@ const authorization = (secret, config) => {
       decodeAuthRequest(req, secret, config)
         .then((user) => {
           if (!user) {
-            reject(new AuthenticationError('must_authenticate'));
+            reject(new Error('must_authenticate'));
           } else {
             req.user = user;
             resolve()
           }
         }).catch(err => {
           console.log(err);
-          reject(new AuthenticationError('must_authenticate'));
+          reject(new Error('must_authenticate'));
       })
     })
 
   }
 };
 
+
+
 const authorizationUser = authorization(getPublicKey(), {expiresIn: "30d", algorithm: ["RS256"]});
+
+const restAuthMiddleware = (req, res, next) => {
+
+  authorizationUser(req).then(() => next()).catch(err => next(err))
+};
 
 module.exports = {
   authorizationUser,
   decodeAuthRequest,
   verifyToken,
+  restAuthMiddleware,
   createAuthToken
 };

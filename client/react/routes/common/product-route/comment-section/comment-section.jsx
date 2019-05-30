@@ -71,6 +71,13 @@ export class CommentSection extends React.Component {
 
   };
 
+  handleAddComment = (newCmt) => {
+    let curCmtList = [...this.state.comments];
+    curCmtList.unshift(newCmt);
+    this.setState({comments: curCmtList});
+
+  };
+
   render() {
     let {loading, comments, filter} = this.state;
     return (
@@ -90,6 +97,8 @@ export class CommentSection extends React.Component {
               <Fragment>
                 <ProductRatingSection
                   comments={comments}
+                  productID={this.props.productID}
+                  onCreate={this.handleAddComment}
                 />
 
                 <Refetch

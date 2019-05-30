@@ -17,6 +17,7 @@ export class ProductRatingSection extends React.Component {
 
   render() {
     let {showRatingPanel} = this.state;
+
     let {comments} = this.state;
     return !!comments.length && (
       <div className="product-rating-section">
@@ -43,7 +44,9 @@ export class ProductRatingSection extends React.Component {
 
 
         {showRatingPanel && (
-          <RatingPanel/>
+          <RatingPanel
+            {...this.props}
+          />
         )}
       </div>
     );

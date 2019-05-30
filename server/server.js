@@ -16,7 +16,7 @@ initializeDb().then(() => {
 
     configExpressServer(app);
     app.use('/', routerConfig());
-
+    app.use(require('./utils/error-handlers'));
     let server = https.createServer(
         {
             key: fs.readFileSync(path.join(__dirname, `./ssl/${environment}/${process.env.SSL_KEY_PATH}`)),

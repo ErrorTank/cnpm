@@ -96,10 +96,7 @@ const getProductComments = ({productID, skip, take, sortByStar}) => {
       }
     },
     {
-      $unwind: {
-        "path": "$comments",
-        "preserveNullAndEmptyArrays": true
-      }
+      $unwind: "$comments",
 
     },
 
@@ -193,11 +190,10 @@ const getProductComments = ({productID, skip, take, sortByStar}) => {
           );
 
         }
-        pipeline = pipeline.concat([{$skip: skip}, {$limit: take}]);
+        // pipeline = pipeline.concat([{$skip: skip}, {$limit: take}]);
         return Product.aggregate(pipeline)
           .then((data) => {
 
-            console.log(data[0].comments.map(each => each.rating))
             return data[0];
           })
       }
@@ -391,6 +387,21 @@ const deleteComment = ({pID, cID}) => {
     })
 };
 
+const addNewComment = ({data, files, productID}) => {
+  let saveData = {...data, picture: files.map(each => each.filename), _id: mongoose.Types.ObjectId()};
+  Product.findOneAndUpdate({_id: mongoose.Types.ObjectId(productID)}, {
+    $push: {
+      "comments": saveData
+    }
+  }, {new: true}).lean().then(newData => {
+    let {comments} = newData;
+    return comments.find(each => each._id === productID)
+  }).catch(err => {
+    console.log(err)
+    return Promise.reject(err)
+  })
+};
+
 
 module.exports = {
   getIndexDealProducts,
@@ -400,5 +411,6 @@ module.exports = {
   deleteComment,
   getProductComments,
   getBasicProduct,
-  replyComment
+  replyComment,
+  addNewComment
 };

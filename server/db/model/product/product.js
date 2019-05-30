@@ -56,37 +56,40 @@ const productSchema = new Schema({
         type: ObjectId,
         ref: "Category"
     },
-    comments: [{
-        rating: {
-            type: Number,
-            enum: [0, 1, 2, 3, 4, 5],
-            default: 0
-        },
-        author: {
-            type: ObjectId,
-            ref: "User",
+    comments: {
+        type: [{
+            rating: {
+                type: Number,
+                enum: [0, 1, 2, 3, 4, 5],
+                default: 0
+            },
+            author: {
+                type: ObjectId,
+                ref: "User",
 
-        },
-        updatedAt: {
-            type: Date,
-            default: Date.now
-        },
-        title: String,
-        content: String,
-        picture: [String],
-        default: [],
-        subComment: {
-            type: [{
-                author: {
-                    type: ObjectId,
-                    ref: "User",
-                },
-                content: String,
+            },
+            updatedAt: {
+                type: Date,
+                default: Date.now
+            },
+            title: String,
+            content: String,
+            picture: [String],
 
-            }],
-            default: []
-        }
-    }],
+            subComment: {
+                type: [{
+                    author: {
+                        type: ObjectId,
+                        ref: "User",
+                    },
+                    content: String,
+
+                }],
+                default: []
+            }
+        }],
+        default: []
+    },
     description: String,
 
     regularDiscount: Number,

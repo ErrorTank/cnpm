@@ -44,7 +44,7 @@ export class UploadBtn extends React.Component {
 
   render() {
     let {renderBtn, onError} = this.props;
-    console.log(this.props.value)
+
     return (
       <Fragment>
         {renderBtn({

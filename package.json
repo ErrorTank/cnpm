@@ -63,6 +63,7 @@
     "lodash": "^4.17.10",
     "moment": "^2.22.1",
     "mongoose": "^5.1.2",
+    "multer": "^1.4.1",
     "nodemailer": "^6.1.0",
     "nodemailer-express-handlebars": "^3.0.0",
     "react": "^16.3.2",

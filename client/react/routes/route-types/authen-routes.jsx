@@ -40,7 +40,7 @@ export const AuthenRoute = ({component: Component, excludeRoles = null, ...rest}
     let info = userInfo.getState();
     if (!authenCache.getAuthen()) {
       return (
-        <Redirect to={{pathname: "/login"}}/>
+        <Redirect to={{pathname: "/"}}/>
       )
     }
     if (info && excludeRoles && excludeRoles.length) {

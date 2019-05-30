@@ -9,6 +9,12 @@ export class StarRating extends React.Component {
     };
   };
 
+  componentWillReceiveProps(nextProps, nextContext) {
+    if(nextProps.rating === 0){
+      this.setState({rating: 0})
+    }
+  }
+
   render() {
     let {className, editable, onChange} = this.props;
     let {rating = 0} = this.state;

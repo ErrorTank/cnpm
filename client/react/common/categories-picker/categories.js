@@ -1,4 +1,5 @@
 import React from "react";
+import {customHistory} from "../../routes/routes";
 
 export const categories = [
   {
@@ -216,6 +217,7 @@ export const categories = [
   },{
     icon: <i className="fas fa-camera"></i>,
     label: "Máy ảnh - Quay Phim",
+    onClick: () => customHistory.push("/products?category=5cc188c61d4db822d4b0be0b"),
     subCategories: [
       {
         label: "Thương hiệu",

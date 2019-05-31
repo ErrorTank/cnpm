@@ -132,10 +132,13 @@ const getBasicProductInfo = gql`
 
 `;
 
+
+
 export {
   fetchIndexDealProducts,
   getFullProductDetails,
   getBasicProductInfo,
   getProductComments,
-  replyComment
+  replyComment,
+
 }

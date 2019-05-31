@@ -60,8 +60,8 @@ export class MainRoute extends KComponent {
             <GuestRoute exact path="/confirm-reset-password" component={ResetPassword}/>
             <WithLocationRoute exact path="/product/:productID" render={props => (<ProductRoute {...props} />)}/>
             <WithLocationRoute exact path="/cart" render={props => (<CartRoute {...props} />)} />
-            <GuestRoute exact path="/products" render={props => (<ProductsRoute {...props} />)} />
-            <GuestRoute exact path="/shop/:shopID" render={props => (<ShopRoute {...props} />)} />
+            <WithLocationRoute exact path="/products" render={props => (<ProductsRoute {...props} />)} />
+            <WithLocationRoute exact path="/shop/:shopID" render={props => (<ShopRoute {...props} />)} />
             <AuthenRoute exact path="/customer/account" render={props => (<AccountRoute {...props} />)} />
           </Switch>
 

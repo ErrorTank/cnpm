@@ -16,9 +16,6 @@ class CartRoute extends Component {
                     <div className="container content-container">
                         <CheckoutCart />
                     </div>
-                    {/* <div className="container content-container">
-                        <TotalPayment/>
-                    </div> */}
 
 
 

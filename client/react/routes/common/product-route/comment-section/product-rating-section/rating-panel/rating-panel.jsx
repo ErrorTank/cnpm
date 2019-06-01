@@ -23,12 +23,15 @@ export class RatingPanel extends KComponent {
       uploadErr: null,
       commenting: false
     };
+    this.initData = {
+      rating: 0,
+      title: "",
+      content: "",
+      picture: []
+    };
     this.form = createSimpleForm(schema, {
       initData: {
-        rating: 0,
-        title: "",
-        content: "",
-        picture: []
+       ...this.initData
       }
     });
     this.onUnmount(this.form.on("change", () => {
@@ -44,6 +47,7 @@ export class RatingPanel extends KComponent {
     console.log(files);
     productApi.createComment(this.props.productID, {...data, picture: files, author: userInfo.getState()._id}).then(({comment}) => {
       this.setState({commenting: false});
+      this.form.resetData();
       this.props.onCreate(comment);
     });
   };

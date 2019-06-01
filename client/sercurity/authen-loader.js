@@ -1,6 +1,8 @@
 import initClient from "../graphql/index"
 import {authenCache} from "../common/cache/authen-cache";
 import {authenApi} from "../api/api";
+import {categoriesCache, initClientCache} from "../common/cache/api-cache/common-cache";
+import {asyncParallel} from "../common/async-utils";
 
 export const authenLoader = {
   init() {
@@ -9,9 +11,15 @@ export const authenLoader = {
       let token = authenCache.getAuthen();
       return token ? `Bearer ${token}` : null;
     });
-    return authenCache.loadAuthen()
-      .then(() => Promise.resolve())
-      .catch(() => Promise.resolve())
+
+    return asyncParallel([
+      () => authenCache.loadAuthen(),
+      () => initClientCache()
+    ]).then(result => {
+      console.log(result);
+      return Promise.resolve();
+    })
+
 
   }
 };

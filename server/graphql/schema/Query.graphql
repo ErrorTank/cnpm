@@ -58,6 +58,13 @@ type BasicProduct{
 type CartOutput{
     product: Product
     quantity: Int
+
+}
+
+type CategoryPlainInfo{
+    _id: ID
+    name: String
+    parent: ID
 }
 
 type Query {
@@ -73,5 +80,7 @@ type Query {
     getUserRecentVisited(userID: ID!): User
     getProductComments(productID: ID!, skip: Int!, take: Int!, sortByStar: SortEnum): Product
     getCartItemByIdList(list: [CartInput]): [CartOutput]
+    getCacheCategoriesInfo: [CategoryPlainInfo]
+    getCategoriesParents(categoryID: String): Category
 }
 

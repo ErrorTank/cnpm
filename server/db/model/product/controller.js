@@ -418,6 +418,8 @@ const addNewComment = ({data, files, productID}) => {
 };
 
 
+
+
 module.exports = {
   getIndexDealProducts,
   getProduct,
@@ -427,5 +429,6 @@ module.exports = {
   getProductComments,
   getBasicProduct,
   replyComment,
-  addNewComment
+  addNewComment,
+
 };

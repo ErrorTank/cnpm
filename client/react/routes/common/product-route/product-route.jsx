@@ -14,6 +14,7 @@ import {ProductDetailFields} from "./product-detail-fields/product-detail-fields
 import {ProductDescription,} from "./product-description/product-description";
 import {VisitedSection} from "../index-route/visited-section/visited-section";
 import {CommentSection} from "./comment-section/comment-section";
+import {transformCategoriesToFuckingArray} from "../../../../common/products-utils";
 
 export class ProductRoute extends React.Component {
   constructor(props) {
@@ -57,12 +58,6 @@ export class ProductRoute extends React.Component {
     }
   }
 
-  transformCategoriesToFuckingArray = (category, result = []) => {
-    let {_id, name, parent} = category;
-    if (!parent)
-      return [{_id, name}, ...result];
-    return this.transformCategoriesToFuckingArray(parent, [{_id, name}, ...result]);
-  };
 
 
   render() {
@@ -80,7 +75,7 @@ export class ProductRoute extends React.Component {
               <LoadingInline/>
             ) : (
               <Breadcrumb
-                items={[...this.transformCategoriesToFuckingArray(product.categories), {name: product.name}]}
+                items={[...transformCategoriesToFuckingArray(product.categories), {name: product.name}]}
               >
                 <div className="container content-container">
                   <ProductMainPanel

@@ -20,8 +20,16 @@ const formatMoney = (money, fix = 0) => {
   return paths.join(",")+ (fixed ? ("."+ fixed) : "");
 };
 
+const transformCategoriesToFuckingArray = (category, result = []) => {
+  let {_id, name, parent} = category;
+  if (!parent)
+    return [{_id, name}, ...result];
+  return transformCategoriesToFuckingArray(parent, [{_id, name}, ...result]);
+};
+
 export {
   calcSalePrice,
   formatMoney,
-  calcCommentsAvgRating
+  calcCommentsAvgRating,
+  transformCategoriesToFuckingArray
 }

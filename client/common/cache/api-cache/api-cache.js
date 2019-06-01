@@ -4,6 +4,7 @@ export const createApiCache = (apiFn) => {
     get: async () =>{
       if(!cacheData){
         cacheData = await apiFn();
+        console.log(cacheData)
         return cacheData;
       }else{
         return cacheData;
@@ -13,6 +14,7 @@ export const createApiCache = (apiFn) => {
       cacheData = newCache;
     },
     syncGet: () => {
+
       return cacheData;
     }
   }

@@ -18,6 +18,7 @@ class CheckoutCart extends KComponent {
 
         }))
         this.fetchItemList();
+       // this.createCartWithQuantity();
         this.state = {
             cartItemList: []
         }
@@ -37,13 +38,25 @@ class CheckoutCart extends KComponent {
             }).then(({ data }) => {
                     this.setState({ cartItemList: [...data.getCartItemByIdList], loading: false }, () => {
                         resolve();
-                        console.log(data.getCartItemByIdList);  // just to see the item form
+                        console.log(data);  // just to see the item form
                     });
             }).catch(err => reject());
             
         });
         
     };
+    // createCartWithQuantity = () => {
+    //     cartItemList.map(item => {
+    //         let quantity = rawCart.find(temp => {
+    //             if (temp.option === item.provider[0].options[0]._id)
+    //                 return temp.quantity;
+    //         })
+    //             this.setState({
+    //                 cartItemList: [...cartItemList, quantity]
+    //             })
+    //         }))
+    //         console.log(cartItemList)
+    // }
 
     handleDelete = (id) => {
         let newCartList = this.state.cartItemList.filter(item => {
@@ -69,7 +82,6 @@ class CheckoutCart extends KComponent {
     //         userCart.setState(newcart);
     //     } else{
     //         createUserCartCacheFunction("set")({...option, qty: newQty});
-          
     //     }
     // };
 
@@ -77,8 +89,12 @@ class CheckoutCart extends KComponent {
     render(){
         let info = userInfo.getState();
         let cartCount = info ? userCart.getState().length : createUserCartCacheFunction("get")({ async: false }).length;
+        let rawCart = info ? userCart.getState() : createUserCartCacheFunction("get")({ async: false });
         let { cartItemList, loading} = this.state;
-        
+        let { quantity, option } = rawCart;
+        let qty = quantity;
+       
+
         let checkOut = cartCount !== 0 ? (
             <div className="checkout ">
                 <div className="row">
@@ -93,6 +109,7 @@ class CheckoutCart extends KComponent {
                                             let {_id,provider } = product;
                                             let {options,owner} = provider[0];
                                             let discountedPrice = (options[0].price / 100) * (100 - product.regularDiscount);
+                                            
                                             return (
                                                 <div className="row shopping-cart-item" key={_id}>
                                                     <div className="col-3 img-item-thumnail">
@@ -110,16 +127,16 @@ class CheckoutCart extends KComponent {
                                                             <div className="col-4 box-price">
                                                                 <div className="price-1">{formatMoney(discountedPrice)}₫</div>
                                                                 <div className="price-2">
-                                                                    <span className="full-price">{formatMoney(options[0].price)}₫</span>
+                                                                    <span className="full-price">{formatMoney(options[0].price)}₫ x</span>
                                                                     <span className="sale">| -{product.regularDiscount}%</span>
                                                                 </div>
                                                             </div>
                                                             <div className="col-1 quantity">
-                                                            {/* <QuantityController
+                                                            <QuantityController
                                                                 value={qty}
                                                                 onChange={(qty) => this.handleQtyChange(qty, option)}
                                                                 label={"Số lượng:"}
-                                                            /> */}
+                                                            />
                                                             </div>
                                                         </div>
                                                     </div>

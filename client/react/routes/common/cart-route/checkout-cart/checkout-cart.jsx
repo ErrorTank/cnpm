@@ -46,15 +46,16 @@ class CheckoutCart extends KComponent {
         
     };
     // createCartWithQuantity = () => {
-    //     cartItemList.map(item => {
+    //    let cartWithQuantity = cartItemList.map(item => {
     //         let quantity = rawCart.find(temp => {
     //             if (temp.option === item.provider[0].options[0]._id)
     //                 return temp.quantity;
     //         })
-    //             this.setState({
-    //                 cartItemList: [...cartItemList, quantity]
-    //             })
+    //             item = [...item, quantity];
     //         }))
+    //         this.setState({
+    //             cartItemList: cartWithQuantity 
+    //         })
     //         console.log(cartItemList)
     // }
 

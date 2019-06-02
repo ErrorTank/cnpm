@@ -187,6 +187,13 @@ const getCartItemByIdList = gql`
           owner{
             _id
             fullname
+            provider{
+              name
+              address
+              phone
+              email
+              
+            }
           }
           options{
             _id

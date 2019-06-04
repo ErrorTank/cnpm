@@ -59,6 +59,11 @@ const ProductCacheFragment = gql`
             last
         }
         provider{
+            discountWithCode{
+                value
+                code
+                _id
+            }
             options{
                 _id
                 price

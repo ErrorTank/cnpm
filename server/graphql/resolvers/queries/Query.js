@@ -1,6 +1,6 @@
 const {authorizationUser,} = require("../../../authorization/auth");
 const {checkConfirmToken, getClientUserCache, getSocialUserInfo, regularLogin, checkEmailExisted, getUser, getUserRecentVisited, getCartItemByIdList} = require("../../../db/model/user/controller");
-const {getIndexDealProducts, getProduct, getBasicProduct, getProductComments, findByKeyword} = require("../../../db/model/product/controller");
+const {getIndexDealProducts, getProduct, getBasicProduct, getProductComments, findByKeyword, getProducts} = require("../../../db/model/product/controller");
 const {getCacheCategoriesInfo, getCategories} = require("../../../db/model/category/controller");
 
 const Query = {
@@ -71,6 +71,11 @@ const Query = {
     },
     getCategoriesParents: async (parent, args, {request}, info) => {
       return getCategories(args.categoryID).then(data => {
+        return data;
+      }).catch(err => throw err);
+    },
+    getProducts: async (parent, args, {request}, info) => {
+      return getProducts(args).then(data => {
         return data;
       }).catch(err => throw err);
     },

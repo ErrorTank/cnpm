@@ -13,6 +13,7 @@ import {createUserCartCacheFunction} from "../../../../common/cache/cart-cache";
 import {getCategoriesParents} from "../../../../graphql/queries/category";
 import {transformCategoriesToFuckingArray} from "../../../../common/products-utils";
 import {Breadcrumb} from "../../../common/breadcrumb/breadcrumb";
+import {getProducts} from "../../../../graphql/queries/product";
 
 export class ProductsRoute extends React.Component {
   constructor(props) {
@@ -20,13 +21,13 @@ export class ProductsRoute extends React.Component {
     this.state = {
       mainFilter: {
         keyword: "",
-        mostSale: false,
-        descPrice: false,
-        ascPrice: false,
-        mostDiscount: true
+        sort: null,
+
       },
       productFilter: null,
-      breadcrumb: null
+      breadcrumb: null,
+      total: 0,
+      loading: true
     };
 
     this.paramInfo = parseQueryString(this.props.location.search);
@@ -73,7 +74,21 @@ export class ProductsRoute extends React.Component {
   };
 
   render() {
-    let {breadcrumb} = this.state;
+    let {breadcrumb, mainFilter, productFilter, total} = this.state;
+    let api = () => {
+      this.setState({loading: true});
+      return client.query({
+        query: getProducts,
+        variables: {
+          mainFilter,
+          productFilter,
+          categoryID: this.paramInfo.category
+        }
+      }).then(({data}) => {
+        this.setState({loading: false, total: data.getProducts.total});
+        return data.getProducts.products;
+      });
+    };
     return (
       <PageTitle
         title={this.getPageTitle()}
@@ -86,11 +101,25 @@ export class ProductsRoute extends React.Component {
           >
             <div className="container content-container products-route">
               <div className="left-panel">
-                <ProductFilterBar/>
+                <ProductFilterBar
+                  filter={productFilter}
+                  onChange={productFilter => this.setState({productFilter})}
+                />
               </div>
               <div className="right-panel">
-                <MainProductFilter/>
-                <PaginationProductList/>
+                <div className="rp-header">
+                  {this.getPageTitle()}: <span className="result">{total} kết quả</span>
+                </div>
+                <MainProductFilter
+                  filter={mainFilter}
+                  onChange={mainFilter => this.setState({mainFilter})}
+                  title={this.getPageTitle()}
+                />
+                <PaginationProductList
+                  filter={mainFilter}
+                  onChange={mainFilter => this.setState({mainFilter})}
+                  api={api}
+                />
               </div>
             </div>
           </Breadcrumb>

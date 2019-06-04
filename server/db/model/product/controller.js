@@ -1,5 +1,6 @@
 const Product = require("./product");
 const User = require("../user/user");
+const Category = require("../category/category");
 const omit = require("lodash/omit");
 const pick = require("lodash/pick");
 const {getCategories} = require("../category/controller");
@@ -417,7 +418,30 @@ const addNewComment = ({data, files, productID}) => {
     })
 };
 
+const getProducts = ({mainFilter, productFilter, categoryID}) => {
+  // let {keyword, sort} = mainFilter;
 
+  let recursiveFind = async (cID) => {
+    let data = await Category.find({parent: mongoose.Types.ObjectId(cID)}).lean();
+    if(!data.length){
+      let bottomCategory = await Category.find({_id: mongoose.Types.ObjectId(cID)}).lean();
+      return [bottomCategory];
+    }
+    let result = [];
+    for(let each of data){
+      let eachResult = await recursiveFind(each._id.toString());
+      result = result.concat(eachResult);
+    }
+    return result;
+  };
+  return recursiveFind(categoryID, []).then(data => {
+    console.log(data);
+    return data;
+  });
+  // return Product.aggregate([
+  //
+  // ]);
+};
 
 
 module.exports = {
@@ -430,5 +454,6 @@ module.exports = {
   getBasicProduct,
   replyComment,
   addNewComment,
+  getProducts
 
 };

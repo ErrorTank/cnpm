@@ -1,6 +1,6 @@
 import {gql} from "apollo-boost"
 import {UserInfoFragment, UserProviderInfoFragment} from "../fragments/user";
-import {ProductInfoFragment} from "../fragments/product";
+import {ProductCacheFragment, ProductInfoFragment} from "../fragments/product";
 import {CategoryInfoFragment} from "../fragments/category";
 import {CommentInfoFragment} from "../fragments/comment";
 
@@ -66,6 +66,18 @@ const getFullProductDetails = gql`
     }
   }
   ${ProductInfoFragment}
+`;
+
+const getProducts = gql`
+  query($mainFilter: MainFilterInput, $productFilter: ProductFilterInput, $categoryID: ID){
+    getProducts(mainFilter: $mainFilter, productFilter: $productFilter, categoryID: $categoryID){
+      products{
+        ...ProductCacheInfo
+      }
+      total
+    }
+  }
+  ${ProductCacheFragment}
 `;
 
 const getProductComments = gql`
@@ -140,5 +152,5 @@ export {
   getBasicProductInfo,
   getProductComments,
   replyComment,
-
+  getProducts
 }

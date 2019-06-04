@@ -1,18 +1,32 @@
-.products-route{
-    white-space nowrap
-    font-size 14px
-    color #333
-  .left-panel{
+.products-route {
+  white-space nowrap
+  font-size 14px
+  min-height 300px
+  background-color white
+  position relative
+  color #333
+
+  .left-panel {
     width 240px
     vertical-align top
     display inline-block
     border-radius 4px 0 0 4px
-    background-color white
+
   }
-  .right-panel{
+
+  .right-panel {
     width calc(100% - 240px)
     vertical-align top
     display inline-block
-    border-radius 4px 0 0 4px
+    border-left 1px solid grey
+    border-radius 0 4px 4px 0
+    .rp-header{
+      padding 20px 15px 5px
+      font-size 24px
+      .result{
+        color #898989
+        font-size 23px
+      }
+    }
   }
 }

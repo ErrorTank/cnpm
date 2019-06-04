@@ -2,6 +2,14 @@ enum SocialType{
     FACEBOOK
     GOOGLE
 }
+
+enum ProductSortEnum{
+    mostSale
+    mostDiscount
+    descPrice
+    ascPrice
+}
+
 enum SortEnum{
     ALL
     ASC

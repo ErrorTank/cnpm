@@ -67,6 +67,11 @@ type CategoryPlainInfo{
     parent: ID
 }
 
+type ProductsListInfo{
+    products: [Product]
+    total: Int
+}
+
 type Query {
     getAuthenUser: User
     checkConfirm(token: String!): loginOutputType
@@ -83,5 +88,6 @@ type Query {
     getCacheCategoriesInfo: [CategoryPlainInfo]
     getCategoriesParents(categoryID: String): Category
     findByKeyword(keyword: String): [Product]
+    getProducts(mainFilter: MainFilterInput , productFilter: ProductFilterInput, categoryID: ID): Category
 }
 

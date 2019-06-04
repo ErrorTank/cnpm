@@ -34,8 +34,6 @@ export class ProductsRoute extends React.Component {
     this.getBreadcrumbData().then(categories => {
       this.setState({breadcrumb: transformCategoriesToFuckingArray(categories)});
     })
-
-
   };
 
   matcher = {

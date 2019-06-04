@@ -82,5 +82,6 @@ type Query {
     getCartItemByIdList(list: [CartInput]): [CartOutput]
     getCacheCategoriesInfo: [CategoryPlainInfo]
     getCategoriesParents(categoryID: String): Category
+    findByKeyword(keyword: String): [Product]
 }
 

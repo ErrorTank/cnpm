@@ -1,10 +1,106 @@
 //checkout
-.cart-col-1{
+.cart-1{
     padding: 0px 15px 0px 15px;
+    background-color: white;
+    border-radius: 10px;
+    width: 983px;
+    margin-right: 20px;
+    .shopping-cart-item{
+        padding: 20px;
+            .img-item-thumnail{
+                width: 130px;
+                height: 120px;
+                padding-right: 15px;
+                overflow hidden;
+                position: relative;
+
+                img{
+                    height: 100%;
+                    max-width: 100%;
+                    position: absolute;
+                    top:50%;
+                    left:50%;
+                    transform: translate(-50%,-50%);
+                }
+            }
+         
+
+        .product-full-info{
+            float: left;
+            width: 788px;
+            p{
+                font-size: 14px;
+                color: #333;
+                margin: 0 0 10px;
+            }
+            .name{
+                margin-bottom: 7px;
+                line-height: 20px;
+                padding-top: 0;
+                span{
+                    color: #242424;
+                    font-weight: 400;
+                }
+                span:hover{
+                    color:#007ff0;
+                    text-decoration: none;
+                    cursor: pointer;
+                }
+            }
+            .seller-by span{
+                font-size: 13px;
+                color: #007ff0;
+                cursor pointer;
+            
+            }
+            .box-price{
+                float: left;
+                width: 150px;
+                text-align: right;
+                padding-right: 25px;
+                .price-1{
+                        font-size: 14px;
+                        margin-bottom: 5px;
+                        font-weight: 700;
+                        padding-top: 0;
+                        color: #333;
+                        
+                    }
+                .price-2{
+                        margin-bottom: 8px;
+                        line-height: 20px;
+                        display: inline-block;
+                        .full-price{
+                            font-size:12px;
+                            color: #a2a2a2;
+                            text-decoration: line-through;
+                            float: left;
+                            margin: 0px;
+                            padding-top: 2px;
+                        }
+                        .sale{
+                            border-radius: 2px;
+                            margin: 0;
+                            text-transform: uppercase;
+                            background: 0 0;
+                            color: #242424;
+                            font-weight: 700;
+                            font-size: 12px;
+                            margin-left: 5px;
+                            padding-bottom: 10px;
+                            display: inline;
+                        }
+                    }
+                }
+            }
+        }
 }
 
-.cart-col-2{
-    background-color: blue;
+//
+.cart-2{
+    background-color: white;
+    width: 285px;
+    float left
 }
 
 //Cart Empty

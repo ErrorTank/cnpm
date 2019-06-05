@@ -89,6 +89,7 @@ export class ProductsRoute extends React.Component {
         return data.getProducts.products;
       });
     };
+    api()
     return (
       <PageTitle
         title={this.getPageTitle()}

@@ -436,11 +436,80 @@ const getProducts = ({mainFilter, productFilter, categoryID}) => {
   };
   return recursiveFind(categoryID, []).then(data => {
     console.log(data);
-    return data;
+    return Product.aggregate([
+      {categories: {$in: data.map(each => each._id)}},
+      {$lookup: {from: 'brands', localField: 'brand', foreignField: '_id', as: 'brand'}},
+
+      {
+        $addFields: {
+          brand: {
+            "$arrayElemAt": ["$brand", 0],
+          },
+
+        }
+      },
+      {$unwind: "$provider"},
+      {$lookup: {from: 'users', localField: 'provider.owner', foreignField: '_id', as: "provider.owner"}},
+      {
+        $lookup: {
+          from: 'discountwithcodes',
+          localField: 'provider.discountWithCode',
+          foreignField: '_id',
+          as: 'provider.discountWithCode'
+        }
+      },
+      {
+        $addFields: {
+          'provider.owner': {
+            "$arrayElemAt": ['$provider.owner', 0],
+          },
+          "provider.discountWithCode": {
+
+            "$arrayElemAt": ["$provider.discountWithCode", 0],
+          }
+        }
+      },
+      {
+        $group: {
+          _id: "$_id",
+          name: {
+            $first: '$name'
+          },
+          description: {
+            $first: '$description'
+          },
+          regularDiscount: {
+            $first: '$regularDiscount'
+          },
+          describeFields: {
+            $first: '$describeFields'
+          },
+          brand: {
+            $first: '$brand'
+          },
+          commentCount: {
+            $first: '$commentCount'
+          },
+          meanStar: {
+            $first: '$meanStar'
+          },
+          deal: {
+            $first: '$deal'
+          },
+          categories: {
+            $first: '$categories'
+          },
+          provider: {$push: "$provider"}
+        }
+      }
+    ]);
+  }).then(data => {
+    return {
+      products: data,
+      total: data.length
+    }
   });
-  // return Product.aggregate([
-  //
-  // ]);
+
 };
 
 

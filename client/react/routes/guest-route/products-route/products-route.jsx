@@ -14,6 +14,7 @@ import {getCategoriesParents} from "../../../../graphql/queries/category";
 import {transformCategoriesToFuckingArray} from "../../../../common/products-utils";
 import {Breadcrumb} from "../../../common/breadcrumb/breadcrumb";
 import {getProducts} from "../../../../graphql/queries/product";
+import {LoadingInline} from "../../../common/loading-inline/loading-inline";
 
 export class ProductsRoute extends React.Component {
   constructor(props) {
@@ -22,7 +23,6 @@ export class ProductsRoute extends React.Component {
       mainFilter: {
         keyword: "",
         sort: null,
-
       },
       productFilter: null,
       breadcrumb: null,
@@ -74,22 +74,26 @@ export class ProductsRoute extends React.Component {
   };
 
   render() {
-    let {breadcrumb, mainFilter, productFilter, total} = this.state;
-    let api = () => {
+    let {breadcrumb, mainFilter, productFilter, total, loading} = this.state;
+    let api = ({skip, take}) => {
+      let { mainFilter, productFilter} = this.state;
       this.setState({loading: true});
       return client.query({
         query: getProducts,
         variables: {
           mainFilter,
           productFilter,
-          categoryID: this.paramInfo.category
-        }
+          categoryID: this.paramInfo.category,
+          skip,
+          take
+        },
+        fetchPolicy: "no-cache"
       }).then(({data}) => {
         this.setState({loading: false, total: data.getProducts.total});
         return data.getProducts.products;
       });
     };
-    api()
+
     return (
       <PageTitle
         title={this.getPageTitle()}
@@ -108,6 +112,9 @@ export class ProductsRoute extends React.Component {
                 />
               </div>
               <div className="right-panel">
+                {loading && (
+                  <LoadingInline/>
+                )}
                 <div className="rp-header">
                   {this.getPageTitle()}: <span className="result">{total} kết quả</span>
                 </div>
@@ -120,6 +127,7 @@ export class ProductsRoute extends React.Component {
                   filter={mainFilter}
                   onChange={mainFilter => this.setState({mainFilter})}
                   api={api}
+                  maxItem={9}
                 />
               </div>
             </div>

@@ -418,26 +418,55 @@ const addNewComment = ({data, files, productID}) => {
     })
 };
 
-const getProducts = ({mainFilter, productFilter, categoryID}) => {
+const getProducts = ({mainFilter, productFilter, categoryID, skip, take}) => {
   // let {keyword, sort} = mainFilter;
-
+  let sorter = {
+    mostDiscount: {
+      "regularDiscount": -1,
+    },
+    descPrice: {
+      "minPrice": -1
+    },
+    ascPrice: {
+      "minPrice": 1
+    },
+    mostSale: {
+      "mostSale": -1
+    }
+  };
   let recursiveFind = async (cID) => {
     let data = await Category.find({parent: mongoose.Types.ObjectId(cID)}).lean();
-    if(!data.length){
-      let bottomCategory = await Category.find({_id: mongoose.Types.ObjectId(cID)}).lean();
+    if (!data.length) {
+      let bottomCategory = await Category.findById(mongoose.Types.ObjectId(cID)).lean();
       return [bottomCategory];
     }
     let result = [];
-    for(let each of data){
+    for (let each of data) {
       let eachResult = await recursiveFind(each._id.toString());
       result = result.concat(eachResult);
     }
     return result;
   };
+
   return recursiveFind(categoryID, []).then(data => {
     console.log(data);
-    return Product.aggregate([
-      {categories: {$in: data.map(each => each._id)}},
+    let pipelines = [];
+    if (mainFilter.keyword) {
+      pipelines.push({
+        $match: {
+          "name": {$regex: mainFilter.keyword, $options: "i"}
+        }
+      });
+    }
+    pipelines = pipelines.concat([
+      {
+        $match: {
+          "categories": {
+            $in: data.map(each => each._id)
+          },
+        }
+      },
+
       {$lookup: {from: 'brands', localField: 'brand', foreignField: '_id', as: 'brand'}},
 
       {
@@ -449,6 +478,8 @@ const getProducts = ({mainFilter, productFilter, categoryID}) => {
         }
       },
       {$unwind: "$provider"},
+
+
       {$lookup: {from: 'users', localField: 'provider.owner', foreignField: '_id', as: "provider.owner"}},
       {
         $lookup: {
@@ -469,7 +500,109 @@ const getProducts = ({mainFilter, productFilter, categoryID}) => {
           }
         }
       },
-      {
+
+    ]);
+    if (mainFilter.sort && sorter.hasOwnProperty(mainFilter.sort)) {
+      pipelines = pipelines.concat([
+        {$unwind: "$provider.options"},
+        {
+          $group: {
+            _id: {
+              productID: "$_id",
+              providerID: "$provider._id"
+            },
+            name: {
+              $first: '$name'
+            },
+            description: {
+              $first: '$description'
+            },
+            regularDiscount: {
+              $first: '$regularDiscount'
+            },
+            describeFields: {
+              $first: '$describeFields'
+            },
+            brand: {
+              $first: '$brand'
+            },
+            deal: {
+              $first: '$deal'
+            },
+            categories: {
+              $first: '$categories'
+            },
+            provider: {
+              $first: '$provider',
+
+            },
+            "minPrice": {
+              $min: "$provider.options.price"
+            },
+            "mostSale": {
+              $max: "$provider.options.sold"
+            },
+            options: {$push: "$provider.options"}
+
+          }
+        },
+        {
+          $addFields: {
+            "provider": {
+              _id: "$provider._id",
+              owner: "$provider.owner",
+              discountWithCode: "$provider.discountWithCode",
+              options: "$options"
+            }
+          }
+        },
+        {
+          $group: {
+            _id: "$_id.productID",
+            name: {
+              $first: '$name'
+            },
+            description: {
+              $first: '$description'
+            },
+            regularDiscount: {
+              $first: '$regularDiscount'
+            },
+            describeFields: {
+              $first: '$describeFields'
+            },
+            brand: {
+              $first: '$brand'
+            },
+            deal: {
+              $first: '$deal'
+            },
+            categories: {
+              $first: '$categories'
+            },
+            minPrice: {
+              $min: "$minPrice"
+            },
+            mostSale: {
+              $max: "$mostSale"
+            },
+
+            "provider": {$push: "$provider"}
+          },
+
+        },
+
+        {
+          $addFields: {
+            minPrice: {
+              $multiply: ["$minPrice", {$divide: ["$regularDiscount", 100]}]
+            }
+          }
+        }
+      ]);
+      pipelines.push({$sort: sorter[mainFilter.sort]});
+    }else{
+      pipelines.push({
         $group: {
           _id: "$_id",
           name: {
@@ -487,23 +620,36 @@ const getProducts = ({mainFilter, productFilter, categoryID}) => {
           brand: {
             $first: '$brand'
           },
-          commentCount: {
-            $first: '$commentCount'
-          },
-          meanStar: {
-            $first: '$meanStar'
-          },
           deal: {
             $first: '$deal'
           },
           categories: {
             $first: '$categories'
           },
-          provider: {$push: "$provider"}
-        }
+
+          "provider": {$push: "$provider"}
+        },
+
+      },);
+    }
+    pipelines.push({
+      $project: {
+        _id: "1",
+        name: 1,
+        description: 1,
+        regularDiscount: 1,
+        describeFields: 1,
+        brand: 1,
+        deal: 1,
+        categories: 1,
+        provider: 1
       }
-    ]);
+    });
+    pipelines.push({$skip: skip});
+    pipelines.push({$limit: take});
+    return Product.aggregate(pipelines);
   }).then(data => {
+    console.log(data);
     return {
       products: data,
       total: data.length

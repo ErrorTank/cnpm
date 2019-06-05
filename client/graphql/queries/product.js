@@ -69,8 +69,8 @@ const getFullProductDetails = gql`
 `;
 
 const getProducts = gql`
-  query($mainFilter: MainFilterInput, $productFilter: ProductFilterInput, $categoryID: ID){
-    getProducts(mainFilter: $mainFilter, productFilter: $productFilter, categoryID: $categoryID){
+  query($mainFilter: MainFilterInput, $productFilter: ProductFilterInput, $categoryID: ID, $skip: Int, $take: Int){
+    getProducts(mainFilter: $mainFilter, productFilter: $productFilter, categoryID: $categoryID, skip:$skip, take: $take){
       products{
         ...ProductCacheInfo
       }

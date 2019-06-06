@@ -1,7 +1,5 @@
 import React from "react";
 import classnames from "classnames";
-import "./pagination.styl"
-
 
 export class Pagination extends React.Component {
   constructor(props) {
@@ -62,7 +60,8 @@ export class Pagination extends React.Component {
 
   render() {
     let shownPages = this.getShownPages();
-    let {className} = this.props;
+    let {className, total, value} = this.props;
+
     return (
       <div className={`pagination ${className ? className : ""}`}>
         <div className={`link link-prev ${this.props.value <= 1 ? "isDisabled" : ""} `}

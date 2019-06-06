@@ -72,7 +72,12 @@ const getProducts = gql`
   query($mainFilter: MainFilterInput, $productFilter: ProductFilterInput, $categoryID: ID, $skip: Int, $take: Int){
     getProducts(mainFilter: $mainFilter, productFilter: $productFilter, categoryID: $categoryID, skip:$skip, take: $take){
       products{
-        ...ProductCacheInfo
+        info{
+          ...ProductCacheInfo   
+        }
+       
+        meanStar
+        commentCount
       }
       total
     }

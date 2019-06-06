@@ -448,7 +448,7 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take}) => {
     return result;
   };
 
-  return recursiveFind(categoryID, []).then(data => {
+  return recursiveFind(categoryID).then(data => {
     console.log(data);
     let pipelines = [];
     if (mainFilter.keyword) {
@@ -466,7 +466,44 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take}) => {
           },
         }
       },
-
+      {
+        "$addFields": {
+          "meanStar": {
+            "$divide": [
+              {
+                "$reduce": {
+                  "input": "$comments",
+                  "initialValue": 0,
+                  "in": {"$add": ["$$value", "$$this.rating"]}
+                }
+              },
+              {
+                "$cond": [
+                  {"$ne": [{"$size": "$comments"}, 0]},
+                  {"$size": "$comments"},
+                  1
+                ]
+              }
+            ]
+          },
+          "commentCount": {
+            $size: "$comments"
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          regularDiscount: 1,
+          brand: 1,
+          deal: 1,
+          categories: 1,
+          provider: 1,
+          commentCount: 1,
+          meanStar: 1
+        }
+      },
       {$lookup: {from: 'brands', localField: 'brand', foreignField: '_id', as: 'brand'}},
 
       {
@@ -514,14 +551,14 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take}) => {
             name: {
               $first: '$name'
             },
-            description: {
-              $first: '$description'
+            commentCount: {
+              $first: '$commentCount'
+            },
+            meanStar: {
+              $first: '$meanStar'
             },
             regularDiscount: {
               $first: '$regularDiscount'
-            },
-            describeFields: {
-              $first: '$describeFields'
             },
             brand: {
               $first: '$brand'
@@ -562,14 +599,14 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take}) => {
             name: {
               $first: '$name'
             },
-            description: {
-              $first: '$description'
-            },
             regularDiscount: {
               $first: '$regularDiscount'
             },
-            describeFields: {
-              $first: '$describeFields'
+            commentCount: {
+              $first: '$commentCount'
+            },
+            meanStar: {
+              $first: '$meanStar'
             },
             brand: {
               $first: '$brand'
@@ -608,17 +645,17 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take}) => {
           name: {
             $first: '$name'
           },
-          description: {
-            $first: '$description'
-          },
           regularDiscount: {
             $first: '$regularDiscount'
           },
-          describeFields: {
-            $first: '$describeFields'
-          },
           brand: {
             $first: '$brand'
+          },
+          commentCount: {
+            $first: '$commentCount'
+          },
+          meanStar: {
+            $first: '$meanStar'
           },
           deal: {
             $first: '$deal'
@@ -627,31 +664,36 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take}) => {
             $first: '$categories'
           },
 
-          "provider": {$push: "$provider"}
+          "provider": {$push: "$provider"},
         },
 
       },);
     }
     pipelines.push({
       $project: {
-        _id: "1",
+        _id: 1,
+        meanStar: 1,
+        commentCount: 1,
         name: 1,
-        description: 1,
         regularDiscount: 1,
-        describeFields: 1,
         brand: 1,
         deal: 1,
         categories: 1,
         provider: 1
       }
     });
-    pipelines.push({$skip: skip});
-    pipelines.push({$limit: take});
     return Product.aggregate(pipelines);
   }).then(data => {
     console.log(data);
     return {
-      products: data,
+      products: data.slice(skip, skip + take).map(each => {
+        let {meanStar, commentCount, ...rest} = each;
+        return {
+          info: rest,
+          meanStar,
+          commentCount
+        }
+      }),
       total: data.length
     }
   });

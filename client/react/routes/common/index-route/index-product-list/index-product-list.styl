@@ -1,3 +1,4 @@
+
 .index-product-list {
   background-color white
 
@@ -12,6 +13,39 @@
     }
   }
 
+
+
+
+}
+
+.products-row {
+  white-space nowrap
+
+
+
+  .faded-appear {
+    opacity 0
+    &.delay-0{
+      transition: opacity 400ms;
+    }
+    &.delay-1{
+      transition: opacity 650ms;
+    }
+    &.delay-2{
+      transition: opacity 900ms;
+    }
+    &.delay-3{
+      transition: opacity 1150ms;
+    }
+    &.delay-4{
+      transition: opacity 1400ms;
+    }
+
+  }
+
+  .faded-appear.faded-appear-active {
+    opacity 1
+  }
   .product {
     .discount-display{
       margin-left 5px
@@ -51,7 +85,17 @@
       box-shadow 0 0 20px rgba(0, 0, 0, .1)
       z-index 1
     }
+    .additional{
 
+      margin-top 10px
+      .stars-outer{
+        font-size 13px !important
+      }
+      & > span{
+        margin-left 8px
+        font-size 13px
+      }
+    }
     .p-details {
       margin-top 12px
 
@@ -133,49 +177,27 @@
 
     }
   }
-
-  .products-row {
-    white-space nowrap
-
-
-
-    .faded-appear {
-      opacity 0
-      &.delay-0{
-        transition: opacity 400ms;
-      }
-      &.delay-1{
-        transition: opacity 650ms;
-      }
-      &.delay-2{
-        transition: opacity 900ms;
-      }
-      &.delay-3{
-        transition: opacity 1150ms;
-      }
-      &.delay-4{
-        transition: opacity 1400ms;
-      }
-
+  &.search-list{
+    .product{
+      height 440px
     }
-
-    .faded-appear.faded-appear-active {
-      opacity 1
-    }
-
-
-    &.index-deal {
-      .product {
-        height 350px
-      }
-    }
-
-    &.c5 {
-      .product {
-        width 20%
-      }
-    }
-
-
   }
+  &.index-deal {
+    .product {
+      height 350px
+    }
+  }
+
+  &.c5 {
+    .product {
+      width 20%
+    }
+  }
+  &.c4{
+    .product{
+      width 25%
+    }
+  }
+
+
 }

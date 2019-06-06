@@ -68,7 +68,7 @@ type CategoryPlainInfo{
 }
 
 type ProductsListInfo{
-    products: [Product]
+    products: [BasicProduct]
     total: Int
 }
 

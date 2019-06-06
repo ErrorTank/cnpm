@@ -19,12 +19,16 @@ import {LoadingInline} from "../../../common/loading-inline/loading-inline";
 export class ProductsRoute extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.defaultState = {
       mainFilter: {
         keyword: "",
         sort: null,
       },
       productFilter: null,
+
+    };
+    this.state = {
+      ...this.defaultState,
       breadcrumb: null,
       total: 0,
       loading: true
@@ -50,13 +54,26 @@ export class ProductsRoute extends React.Component {
           query: getCategoriesParents,
           variables: {
             cID: this.paramInfo.category
-          }
+          },
+          fetchPolicy: "no-cache"
         }).then(({data}) => {
           return data.getCategoriesParents;
         });
       }
     }
   };
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    let nextParams = parseQueryString(nextProps.location.search);
+    if(nextParams.category !== this.paramInfo.category){
+      this.paramInfo = {...nextParams};
+      this.setState({loading: true, ...this.defaultState});
+      this.getBreadcrumbData().then(categories => {
+        this.setState({breadcrumb: transformCategoriesToFuckingArray(categories)});
+      })
+
+    }
+  }
 
   getPageIdValue = () => {
     const queryObj = this.paramInfo;
@@ -127,7 +144,12 @@ export class ProductsRoute extends React.Component {
                   filter={mainFilter}
                   onChange={mainFilter => this.setState({mainFilter})}
                   api={api}
-                  maxItem={9}
+                  category={this.paramInfo.category}
+                  showDeal={false}
+                  showDetails={true}
+                  maxItem={1}
+                  cols={4}
+                  total={total}
                 />
               </div>
             </div>

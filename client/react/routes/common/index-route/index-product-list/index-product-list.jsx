@@ -8,12 +8,15 @@ import {CSSTransition, TransitionGroup} from "react-transition-group";
 import isNil from "lodash/isNil"
 import {CountDown} from "../../../../common/countdown/countdown";
 import {Process} from "../../../../common/process/process";
+import {Badge} from "../../../../common/badge/badge";
+import {StarRating} from "../../../../common/star-rating/star-rating";
 
 //Todo fix regular dícount =0 render 0
-export const ProductPanel = ({data, isDeal}) => {
-  let {regularDiscount, name, _id, deal, options, timeLeft} = data;
+export const ProductPanel = ({data, isDeal, showDetails}) => {
+  let {regularDiscount, name, _id, deal, options, timeLeft, discountWithCode, meanStar, commentCount} = data;
 
   let {picture, price} = options[0];
+
   let totalSold = options.reduce((t, c) => t + Number(c.sold),0);
   let totalAmount = options.reduce((t, c) => t + Number(c.total),0);
   return (
@@ -37,7 +40,7 @@ export const ProductPanel = ({data, isDeal}) => {
       <div className="p-details">
         <p className="p-name">{name}</p>
         <div className="p-price">
-          {isDeal ? (
+          {(isDeal && !showDetails) ? (
               <Fragment>
                 <span className="main-price">{formatMoney(calcSalePrice(Number(price), Number(regularDiscount)))} ₫</span><span className="sale-price">{formatMoney(Number(price))} ₫</span>
               </Fragment>
@@ -80,17 +83,38 @@ export const ProductPanel = ({data, isDeal}) => {
           </div>
         </div>
       )}
+      {(discountWithCode && showDetails) && (
+        <div className="promotion-notify">
+          <div className="left-info">
+            <div>Nhập mã</div>
+            <div><Badge className={"promotion-badge"} content={discountWithCode.code}/></div>
+          </div>
+          <div className="right-info">
+            <div>Chỉ còn</div>
+            <div className="value">{formatMoney(calcSalePrice(Number(calcSalePrice(Number(price), Number(regularDiscount))), Number(discountWithCode.value)))} ₫</div>
+          </div>
+        </div>
+      )}
+      {showDetails && (
+        <div className="additional">
+          <StarRating
+            rating={meanStar}
+          />
+          <span>({commentCount} nhận xét)</span>
+        </div>
+      )
 
+      }
     </div>
   );
 };
 
 export const ProductsRow = (props) => {
-  let {rowList, cols, deal, className} = props;
+  let {rowList, cols, deal, className, showDetails} = props;
 
   return (
     <TransitionGroup
-      className={classnames("products-row m-0 p-0", {"c5": cols === 5}, className)}
+      className={classnames("products-row m-0 p-0", {"c5": cols === 5, "c4": cols === 4}, className)}
       appear={true}
     >
       {rowList.map((each, i) => (
@@ -105,6 +129,7 @@ export const ProductsRow = (props) => {
 
               <ProductPanel
                 data={each}
+                showDetails={showDetails}
                 isDeal={deal}
               />
 

@@ -134,7 +134,7 @@ export class ProductsRoute extends React.Component {
                   <LoadingInline/>
                 )}
                 <div className="rp-header">
-                  {this.getPageTitle()}: <span className="result">{total} kết quả <span style={{"fontSize": "15px"}}>(Trong {(execTime % 60000) / 1000} giây)</span></span>
+                  {this.getPageTitle()}: <span className="result">{total} kết quả {execTime && <span style={{"fontSize": "13px"}}>(Trong {(execTime % 60000) / 1000} giây)</span>}</span>
                 </div>
                 <MainProductFilter
                   filter={mainFilter}

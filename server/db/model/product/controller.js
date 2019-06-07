@@ -423,7 +423,7 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take}, reques
       return result.reduce((arr, cur) => arr.concat(cur),[])
     };
     return recursiveFind(categoryID).then(data => {
-
+      console.log(data)
       let pipelines = [];
       if (mainFilter.keyword) {
         pipelines.push({
@@ -513,6 +513,7 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take}, reques
         },
 
       ]);
+      //Thiet bi deo thong minh bug
       if (mainFilter.sort && sorter.hasOwnProperty(mainFilter.sort)) {
         pipelines = pipelines.concat([
           {$unwind: "$provider.options"},

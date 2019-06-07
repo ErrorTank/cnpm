@@ -75,7 +75,7 @@ export class ProductRoute extends React.Component {
               <LoadingInline/>
             ) : (
               <Breadcrumb
-                items={[...transformCategoriesToFuckingArray(product.categories), {name: product.name}]}
+                items={[...transformCategoriesToFuckingArray(product.categories), {name: product.name, onClick:() => null}]}
               >
                 <div className="container content-container">
                   <ProductMainPanel

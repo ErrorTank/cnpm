@@ -75,7 +75,7 @@ const Query = {
       }).catch(err => throw err);
     },
     getProducts: async (parent, args, {request}, info) => {
-      return getProducts(args).then(data => {
+      return getProducts(args, request).then(data => {
         return data;
       }).catch(err => throw err);
     },

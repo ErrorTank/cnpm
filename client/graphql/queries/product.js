@@ -80,6 +80,7 @@ const getProducts = gql`
         commentCount
       }
       total
+      execTime
     }
   }
   ${ProductCacheFragment}

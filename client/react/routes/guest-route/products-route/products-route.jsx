@@ -24,6 +24,7 @@ export class ProductsRoute extends React.Component {
         keyword: "",
         sort: null,
       },
+      execTime: null,
       productFilter: null,
 
     };
@@ -91,7 +92,7 @@ export class ProductsRoute extends React.Component {
   };
 
   render() {
-    let {breadcrumb, mainFilter, productFilter, total, loading} = this.state;
+    let {breadcrumb, mainFilter, productFilter, total, loading, execTime} = this.state;
     let api = ({skip, take}) => {
       let { mainFilter, productFilter} = this.state;
       this.setState({loading: true});
@@ -106,7 +107,7 @@ export class ProductsRoute extends React.Component {
         },
         fetchPolicy: "no-cache"
       }).then(({data}) => {
-        this.setState({loading: false, total: data.getProducts.total});
+        this.setState({loading: false, total: data.getProducts.total, execTime: data.getProducts.execTime});
         return data.getProducts.products;
       });
     };
@@ -133,7 +134,7 @@ export class ProductsRoute extends React.Component {
                   <LoadingInline/>
                 )}
                 <div className="rp-header">
-                  {this.getPageTitle()}: <span className="result">{total} kết quả</span>
+                  {this.getPageTitle()}: <span className="result">{total} kết quả <span style={{"fontSize": "15px"}}>(Trong {(execTime % 60000) / 1000} giây)</span></span>
                 </div>
                 <MainProductFilter
                   filter={mainFilter}
@@ -147,7 +148,7 @@ export class ProductsRoute extends React.Component {
                   category={this.paramInfo.category}
                   showDeal={false}
                   showDetails={true}
-                  maxItem={1}
+                  maxItem={4}
                   cols={4}
                   total={total}
                 />

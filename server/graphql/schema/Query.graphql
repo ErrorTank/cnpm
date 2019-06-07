@@ -70,6 +70,7 @@ type CategoryPlainInfo{
 type ProductsListInfo{
     products: [BasicProduct]
     total: Int
+    execTime: String
 }
 
 type Query {

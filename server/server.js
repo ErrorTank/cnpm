@@ -9,8 +9,9 @@ const https = require('https');
 const fs = require("fs");
 const path = require("path");
 const DiscountWithCode = require("./db/model/discount-with-code/discount-with-code");
+const {loadAllCache} = require("./cache/common");
 
-initializeDb().then(() => {
+initializeDb().then(() => loadAllCache()).then(() => {
     let environment = process.env.NODE_ENV;
 
 

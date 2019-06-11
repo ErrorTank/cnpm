@@ -15,6 +15,7 @@ import {transformCategoriesToFuckingArray} from "../../../../common/products-uti
 import {Breadcrumb} from "../../../common/breadcrumb/breadcrumb";
 import {getProducts} from "../../../../graphql/queries/product";
 import {LoadingInline} from "../../../common/loading-inline/loading-inline";
+import {VisitedSection} from "../../common/index-route/visited-section/visited-section";
 
 export class ProductsRoute extends React.Component {
   constructor(props) {
@@ -39,7 +40,14 @@ export class ProductsRoute extends React.Component {
 
     this.getBreadcrumbData().then(categories => {
       this.setState({breadcrumb: transformCategoriesToFuckingArray(categories)});
-    })
+    });
+    // this.getProductFilter(this.paramInfo.category).then(filters => {
+    //
+    // });
+  };
+
+  getProductFilter = (categoryID) => {
+
   };
 
   matcher = {
@@ -130,28 +138,36 @@ export class ProductsRoute extends React.Component {
                 />
               </div>
               <div className="right-panel">
-                {loading && (
-                  <LoadingInline/>
-                )}
-                <div className="rp-header">
-                  {this.getPageTitle()}: <span className="result">{total} kết quả {execTime && <span style={{"fontSize": "13px"}}>(Trong {(execTime % 60000) / 1000} giây)</span>}</span>
+
+                <div className="main-section">
+                  {loading && (
+                    <LoadingInline/>
+                  )}
+                  <div className="rp-header">
+                    {this.getPageTitle()}: <span className="result">{total} kết quả {execTime && <span style={{"fontSize": "13px"}}>(Trong {(execTime % 60000) / 1000} giây)</span>}</span>
+                  </div>
+                  <MainProductFilter
+                    filter={mainFilter}
+                    onChange={mainFilter => this.setState({mainFilter})}
+                    title={this.getPageTitle()}
+                  />
+                  <PaginationProductList
+                    filter={mainFilter}
+                    onChange={mainFilter => this.setState({mainFilter})}
+                    api={api}
+                    category={this.paramInfo.category}
+                    showDeal={false}
+                    showDetails={true}
+                    maxItem={4}
+                    cols={4}
+                    total={total}
+                  />
                 </div>
-                <MainProductFilter
-                  filter={mainFilter}
-                  onChange={mainFilter => this.setState({mainFilter})}
-                  title={this.getPageTitle()}
-                />
-                <PaginationProductList
-                  filter={mainFilter}
-                  onChange={mainFilter => this.setState({mainFilter})}
-                  api={api}
-                  category={this.paramInfo.category}
-                  showDeal={false}
-                  showDetails={true}
-                  maxItem={4}
-                  cols={4}
-                  total={total}
-                />
+
+                <div className="visited">
+                  <VisitedSection/>
+                </div>
+
               </div>
             </div>
           </Breadcrumb>

@@ -8,10 +8,10 @@ export class StaticProductList extends React.Component {
   };
 
   getRenderList = (list) => {
-    let {cols} = this.props;
+    let {cols, rows = 1} = this.props;
     if(!list.length) return [];
     let rowsCount = Math.ceil(list.length / cols);
-    return Array.from(new Array(rowsCount)).map((each, i) => list.slice(i * 5, i * 5 + 5));
+    return Array.from(new Array(rowsCount)).map((each, i) => list.slice(i * 5, i * 5 + 5)).slice(0, rows);
   };
 
   render() {

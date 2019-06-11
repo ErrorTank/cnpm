@@ -5,7 +5,6 @@ import classnames from "classnames"
 import {customHistory} from "../../../routes";
 import {calcSalePrice, formatMoney} from "../../../../../common/products-utils";
 import {CSSTransition, TransitionGroup} from "react-transition-group";
-import isNil from "lodash/isNil"
 import {CountDown} from "../../../../common/countdown/countdown";
 import {Process} from "../../../../common/process/process";
 import {Badge} from "../../../../common/badge/badge";
@@ -110,9 +109,8 @@ export const ProductPanel = ({data, isDeal, showDetails}) => {
 };
 
 export const ProductsRow = (props) => {
-  let {rowList, cols, deal, className, showDetails} = props;
-
-  return (
+  let {rowList, cols, deal, className, showDetails, animate = true} = props;
+  return animate ? (
     <TransitionGroup
       className={classnames("products-row m-0 p-0", {"c5": cols === 5, "c4": cols === 4}, className)}
       appear={true}
@@ -139,6 +137,22 @@ export const ProductsRow = (props) => {
 
       ))}
     </TransitionGroup>
+  ) : (
+    <div
+      className={classnames("products-row m-0 p-0", {"c5": cols === 5, "c4": cols === 4}, className)}
+    >
+      {rowList.map((each, i) => (
+
+        <ProductPanel
+          key={i}
+          data={each}
+          showDetails={showDetails}
+          isDeal={deal}
+        />
+
+
+      ))}
+    </div>
   );
 
 

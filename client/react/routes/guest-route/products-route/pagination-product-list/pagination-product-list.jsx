@@ -24,7 +24,8 @@ export class PaginationProductList extends React.Component {
     const {filter, maxItem, category} = this.props;
 
     if (!isEqual(nextProps.filter, filter) || maxItem !== nextProps.maxItem || nextProps.category !== category) {
-      this.loadData({skip: maxItem * this.state.page, take: nextProps.maxItem})
+      this.setState({page: 0});
+      this.loadData({skip: 0, take: nextProps.maxItem})
     }
   }
 
@@ -57,6 +58,7 @@ export class PaginationProductList extends React.Component {
               rowList={each}
               key={i}
               cols={cols}
+              animate={false}
               deal={showDeal}
               showDetails={showDetails}
             />
@@ -65,7 +67,7 @@ export class PaginationProductList extends React.Component {
         <Pagination
           className="list-pagination"
           value={page + 1}
-          total={total / this.pageSize()}
+          total={Math.ceil(total / this.pageSize())}
           onChange={(newPage) => {
             this.setState({page: newPage - 1});
             this.loadData({skip: this.pageSize() * (newPage - 1), take: this.pageSize()})

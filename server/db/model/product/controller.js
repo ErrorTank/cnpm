@@ -6,7 +6,7 @@ const pick = require("lodash/pick");
 const {getCategories} = require("../category/controller");
 const mongoose = require("mongoose");
 const {briefCategoriesCache} = require("../../../cache/async-cache");
-const {asynchronize} = require("../../../utils/common");
+const {createFindCategories} = require("../../../utils/categories");
 
 const getIndexDealProducts = ({skip = 0, take = 20}) => {
   // return Product.find({"deal.last": {$gt: new Date()}}, {
@@ -413,16 +413,8 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take}, reques
 
   let startTime = Date.now();
   return briefCategoriesCache.get().then(categories => {
-    let recursiveFind = async (cID) => {
-      let data = await asynchronize(() => categories.filter(each => each.parent === cID));
-
-      if (!data.length) {
-        return [cID];
-      }
-      let result = await Promise.all(data.map(each => recursiveFind(each._id.toString())));
-      return result.reduce((arr, cur) => arr.concat(cur),[])
-    };
-    return recursiveFind(categoryID).then(data => {
+    let findFunc = createFindCategories(categories);
+    return findFunc(categoryID).then(data => {
       console.log(data)
       let pipelines = [];
       if (mainFilter.keyword) {

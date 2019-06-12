@@ -17,7 +17,7 @@ import {getProducts} from "../../../../graphql/queries/product";
 import {LoadingInline} from "../../../common/loading-inline/loading-inline";
 import {VisitedSection} from "../../common/index-route/visited-section/visited-section";
 
-export class ProductsRoute extends React.Component {
+export default class ProductsRoute extends React.Component {
   constructor(props) {
     super(props);
     this.defaultState = {

@@ -26,7 +26,7 @@ export class StaticProductList extends React.Component {
               <ProductsRow
                 className="index-deal"
                 rowList={each}
-                key={i}
+                key   ={i}
                 cols={this.props.cols}
                 deal={deal}
                 showDetails={false}

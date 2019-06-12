@@ -10,7 +10,7 @@ import {wait} from "../../../../common/common-utils";
 import {getErrorObject} from "../../../../graphql/utils/errors";
 import {mutateAppStores} from "../../../../common/system/system";
 
-export class RedirectEmailConfirm extends React.Component {
+export default class RedirectEmailConfirm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

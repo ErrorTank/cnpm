@@ -14,7 +14,7 @@ import {parseQueryString} from "../../../../string-utils";
 import {customHistory} from "../../routes";
 import {userInfo} from "../../../../common/states/common";
 
-export class ResetPassword extends KComponent {
+export default class ResetPassword extends KComponent {
   constructor(props) {
     super(props);
     this.state = {

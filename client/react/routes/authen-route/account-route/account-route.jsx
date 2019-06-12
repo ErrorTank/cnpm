@@ -1,6 +1,6 @@
 import React from "react";
 
-export class AccountRoute extends React.Component{
+export default class AccountRoute extends React.Component{
     constructor(props){
         super(props);
         this.state={

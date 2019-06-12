@@ -16,7 +16,7 @@ import {VisitedSection} from "../index-route/visited-section/visited-section";
 import {CommentSection} from "./comment-section/comment-section";
 import {transformCategoriesToFuckingArray} from "../../../../common/products-utils";
 
-export class ProductRoute extends React.Component {
+export default class ProductRoute extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

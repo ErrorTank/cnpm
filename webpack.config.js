@@ -2,7 +2,6 @@ const path = require("path");
 const dotenv = require("dotenv");
 const webpack = require("webpack");
 const AsyncChunkNames = require('webpack-async-chunk-names-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const env = dotenv.config({path: "./env/dev.env"}).parsed;
 
 const envKeys = Object.keys(env).reduce((prev, next) => {
@@ -17,7 +16,7 @@ module.exports = {
   },
   output: {
     filename: 'bundle.js',
-    chunkFilename: '[name].bundle.js',
+    chunkFilename: '../bundle/[name].bundle.js',
     publicPath: "/",
     path: path.resolve(__dirname, 'public/bundle'),
 
@@ -28,19 +27,12 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin(envKeys),
     new AsyncChunkNames(),
-    new HtmlWebpackPlugin({
-      filename: "index.html",
-      template: "public/index.html",
-      inject: true
-    })
-    // new webpack.HashedModuleIdsPlugin()
   ],
   optimization: {
     splitChunks: {
       cacheGroups: {
         default: false,
         vendors: false,
-        // vendor chunk
         common: {
           name: 'common',
           minChunks: 2,
@@ -50,10 +42,8 @@ module.exports = {
           enforce: true
         },
         vendor: {
-          // sync + async chunks
           chunks: 'all',
           name: "vendor",
-          // import file path containing node_modules
           test: /node_modules/
         }
       }

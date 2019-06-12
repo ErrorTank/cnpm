@@ -10,7 +10,7 @@ import {AuthenRoute, GuestRoute} from "./route-types/authen-routes";
 const RedirectEmailConfirm =  lazy(() => import("./guest-route/redirect-email-confirm/redirect-email-confirm"));
 const ResetPassword =  lazy(() => import("./guest-route/reset-password/reset-password"));
 const ProductRoute =  lazy(() => import("./common/product-route/product-route"));
-import  CartRoute  from "./common/cart-route/cart-route";
+const CartRoute =  lazy(() => import("./common/cart-route/cart-route"));
 const ProductsRoute =  lazy(() => import("./guest-route/products-route/products-route"));
 const ShopRoute =  lazy(() => import("./guest-route/shop-route/shop-route"));
 const AccountRoute =  lazy(() => import("./authen-route/account-route/account-route"));

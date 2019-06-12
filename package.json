@@ -63,6 +63,7 @@
     "js-cookie": "^2.2.0",
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.10",
+    "mini-css-extract-plugin": "^0.7.0",
     "moment": "^2.22.1",
     "mongoose": "^5.1.2",
     "multer": "^1.4.1",

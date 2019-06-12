@@ -54,7 +54,7 @@ export class MainRoute extends KComponent {
         <Router
           history={customHistory}
         >
-          <Suspense fallback={(<div>Hi</div>)}>
+          <Suspense fallback={null}>
             <Switch>
               <WithLocationRoute exact path="/" render={props => (<IndexRoute {...props}/>)}/>
               <GuestRoute exact path="/email-confirmation" component={RedirectEmailConfirm}/>

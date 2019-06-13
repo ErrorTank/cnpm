@@ -41,14 +41,10 @@ export default class ProductsRoute extends React.Component {
     this.getBreadcrumbData().then(categories => {
       this.setState({breadcrumb: transformCategoriesToFuckingArray(categories)});
     });
-    this.getProductFilter({type: "CATEGORY", value: this.paramInfo.category}).then(filters => {
-
-    });
-  };
-
-  getProductFilter = () => {
 
   };
+
+
 
   matcher = {
     "category": {

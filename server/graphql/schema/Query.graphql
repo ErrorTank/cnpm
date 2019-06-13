@@ -67,10 +67,30 @@ type CategoryPlainInfo{
     parent: ID
 }
 
+type FilterChild{
+    _id: ID
+    name: String
+    count: Int
+}
+
+type ProductFiltersCategory{
+    _id:ID
+    name: String
+    childs: [FilterChild]
+}
+
+type ProductFilters{
+    categories: ProductFiltersCategory
+    providers: [FilterChild]
+    brands: [FilterChild]
+
+}
+
 type ProductsListInfo{
     products: [BasicProduct]
     total: Int
     execTime: String
+    productFilters: ProductFilters
 }
 
 type Query {

@@ -419,9 +419,7 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take}, reques
       let pipelines = [];
       if (mainFilter.keyword) {
         pipelines.push({
-          $match: {
-            "name": {$regex: mainFilter.keyword, $options: "i"}
-          }
+          $match: { $text: { $search: `\"${mainFilter.keyword}\"`} }
         });
       }
       pipelines = pipelines.concat([

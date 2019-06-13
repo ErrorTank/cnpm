@@ -41,12 +41,12 @@ export default class ProductsRoute extends React.Component {
     this.getBreadcrumbData().then(categories => {
       this.setState({breadcrumb: transformCategoriesToFuckingArray(categories)});
     });
-    // this.getProductFilter(this.paramInfo.category).then(filters => {
-    //
-    // });
+    this.getProductFilter({type: "CATEGORY", value: this.paramInfo.category}).then(filters => {
+
+    });
   };
 
-  getProductFilter = (categoryID) => {
+  getProductFilter = () => {
 
   };
 
@@ -107,7 +107,7 @@ export default class ProductsRoute extends React.Component {
       return client.query({
         query: getProducts,
         variables: {
-          mainFilter,
+          mainFilter: {...mainFilter, keyword: mainFilter.keyword.trim()},
           productFilter,
           categoryID: this.paramInfo.category,
           skip,

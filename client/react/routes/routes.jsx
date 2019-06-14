@@ -5,15 +5,20 @@ import {Route, Switch, Router, Redirect} from "react-router-dom"
 import {KComponent} from "../common/k-component";
 import {ModalsRegistry} from "../common/modal/modals";
 import {WithLocationRoute} from "./route-types/with-location-route";
-const IndexRoute =  lazy(() => import("./common/index-route/index-route"));
+const delayLoad = fn => () => new Promise(resolve => {
+  setTimeout(() => resolve(fn()), 300)
+});
+const IndexRoute =  lazy(delayLoad(() => import("./common/index-route/index-route")));
 import {AuthenRoute, GuestRoute} from "./route-types/authen-routes";
-const RedirectEmailConfirm =  lazy(() => import("./guest-route/redirect-email-confirm/redirect-email-confirm"));
-const ResetPassword =  lazy(() => import("./guest-route/reset-password/reset-password"));
-const ProductRoute =  lazy(() => import("./common/product-route/product-route"));
-const CartRoute =  lazy(() => import("./common/cart-route/cart-route"));
-const ProductsRoute =  lazy(() => import("./guest-route/products-route/products-route"));
-const ShopRoute =  lazy(() => import("./guest-route/shop-route/shop-route"));
-const AccountRoute =  lazy(() => import("./authen-route/account-route/account-route"));
+import {OverlayLoading} from "./guest-route/redirect-email-confirm/redirect-email-confirm";
+const RedirectEmailConfirm =  lazy(delayLoad(() => import("./guest-route/redirect-email-confirm/redirect-email-confirm")));
+const ResetPassword =  lazy(delayLoad(() => import("./guest-route/reset-password/reset-password")));
+const ProductRoute =  lazy(delayLoad(() => import("./common/product-route/product-route")));
+const CartRoute =  lazy(delayLoad(() => import("./common/cart-route/cart-route")));
+const ProductsRoute =  lazy(delayLoad(() => import("./guest-route/products-route/products-route")));
+const ShopRoute =  lazy(delayLoad(() => import("./guest-route/shop-route/shop-route")));
+const AccountRoute =  lazy(delayLoad(() => import("./authen-route/account-route/account-route")));
+
 
 
 // const NotFoundRoute = () => {
@@ -54,7 +59,7 @@ export class MainRoute extends KComponent {
         <Router
           history={customHistory}
         >
-          <Suspense fallback={null}>
+          <Suspense fallback={<OverlayLoading/>}>
             <Switch>
               <WithLocationRoute exact path="/" render={props => (<IndexRoute {...props}/>)}/>
               <GuestRoute exact path="/email-confirmation" component={RedirectEmailConfirm}/>

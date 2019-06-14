@@ -101,7 +101,7 @@ const productSchema = new Schema({
 });
 
 
-productSchema.index({ name: 'text'});
+// productSchema.index({ name: 'text'});
 
 
 

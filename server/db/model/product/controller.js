@@ -1,3 +1,5 @@
+
+
 const Product = require("./product");
 const User = require("../user/user");
 const Category = require("../category/category");
@@ -7,6 +9,8 @@ const {getCategories} = require("../category/controller");
 const mongoose = require("mongoose");
 const {briefCategoriesCache} = require("../../../cache/async-cache");
 const {createFindCategories} = require("../../../utils/categories");
+const uniq = require("lodash/uniq");
+const uniqBy = require("lodash/uniqBy")
 
 const getIndexDealProducts = ({skip = 0, take = 20}) => {
   // return Product.find({"deal.last": {$gt: new Date()}}, {
@@ -415,12 +419,14 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take}, reques
   return briefCategoriesCache.get().then(categories => {
     let findFunc = createFindCategories(categories);
     return findFunc(categoryID).then(data => {
-      console.log(data)
+
       let pipelines = [];
       if (mainFilter.keyword) {
         pipelines.push({
-          $match: { $text: { $search: `\"${mainFilter.keyword}\"`} }
+          // $match: { $text: { $search:  "\"" + mainFilter.keyword + "\""} }
+          $match: { name: {$regex: mainFilter.keyword, $options: "i"}}
         });
+
       }
       pipelines = pipelines.concat([
         {
@@ -650,6 +656,13 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take}, reques
       return Product.aggregate(pipelines);
     }).then(data => {
 
+      let allCates = briefCategoriesCache.syncGet();
+      let currentCateIsParent = !!allCates.find(each => each.parent === categoryID);
+      let currentCate = allCates.find(each => each._id.toString() === categoryID);
+      let providers = uniqBy(data.reduce((result, each) => {
+        return [...result, ...each.provider.map(item => ({_id: item.owner._id.toString(), name: item.owner.provider.name}))]
+      }, []), "_id").map(each => ({...each, count: data.filter(prod => prod.provider.find(item => item.owner._id.toString() === each._id)).length}));
+      let brands = uniqBy(data.map(each => ({...each.brand, _id: each.brand._id.toString()})), "_id").map(each => ({...each, count: data.filter(prod => prod.brand._id.toString() === each._id).length}));
 
       return {
         products: data.slice(skip, skip + take).map(each => {
@@ -661,7 +674,16 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take}, reques
           }
         }),
         total: data.length,
-        execTime: (Date.now() - startTime).toString()
+        execTime: (Date.now() - startTime).toString(),
+        productFilters: {
+          categories: {
+            _id: categoryID,
+            name:  currentCateIsParent ? currentCate.name :  allCates.find(each => each._id.toString() === currentCate.parent).name,
+            childs: allCates.filter(each => uniq(data.map(prod => prod.categories.toString())).includes(each._id.toString())).map(each => ({...each, count: data.filter(item => item.categories.toString() === each._id.toString()).length}))
+          },
+          providers,
+          brands
+        }
       }
     });
   })

@@ -59,6 +59,9 @@ const ProductCacheFragment = gql`
             last
         }
         provider{
+            owner{
+                ...UserProviderInfo
+            }
             discountWithCode{
                 value
                 code
@@ -74,6 +77,7 @@ const ProductCacheFragment = gql`
             }
         }
     }
+    ${UserProviderInfoFragment}
 `;
 
 

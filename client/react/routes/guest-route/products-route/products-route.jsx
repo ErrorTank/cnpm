@@ -26,7 +26,7 @@ export default class ProductsRoute extends React.Component {
         sort: null,
       },
       execTime: null,
-      productFilter: null,
+      productFilters: null,
 
     };
     this.state = {
@@ -96,22 +96,21 @@ export default class ProductsRoute extends React.Component {
   };
 
   render() {
-    let {breadcrumb, mainFilter, productFilter, total, loading, execTime} = this.state;
+    let {breadcrumb, mainFilter, productFilters, total, loading, execTime} = this.state;
     let api = ({skip, take}) => {
-      let { mainFilter, productFilter} = this.state;
+      let { mainFilter} = this.state;
       this.setState({loading: true});
       return client.query({
         query: getProducts,
         variables: {
           mainFilter: {...mainFilter, keyword: mainFilter.keyword.trim()},
-          productFilter,
           categoryID: this.paramInfo.category,
           skip,
           take
         },
         fetchPolicy: "no-cache"
       }).then(({data}) => {
-        this.setState({loading: false, total: data.getProducts.total, execTime: data.getProducts.execTime});
+        this.setState({loading: false, total: data.getProducts.total, execTime: data.getProducts.execTime, productFilters: data.getProducts.productFilters});
         return data.getProducts.products;
       });
     };
@@ -129,8 +128,8 @@ export default class ProductsRoute extends React.Component {
             <div className="container content-container products-route">
               <div className="left-panel">
                 <ProductFilterBar
-                  filter={productFilter}
-                  onChange={productFilter => this.setState({productFilter})}
+                  filters={productFilters}
+                  params={this.paramInfo}
                 />
               </div>
               <div className="right-panel">

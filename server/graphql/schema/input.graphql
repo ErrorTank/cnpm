@@ -2,6 +2,16 @@ input SubCommentInput{
     author: ID
     content: String
 }
+
+input ProductFilterInput{
+    test: String
+}
+
+input MainFilterInput{
+    keyword: String
+    sort: ProductSortEnum
+}
+
 input SocialInput{
     id: String!
     type: SocialType!

@@ -1,0 +1,44 @@
+.main-product-filter{
+  margin 12px 15px
+  border-bottom 1px solid #e1e1e1
+  white-space nowrap
+  .filter-group-box{
+    width 580px
+
+    display inline-block
+    vertical-align top
+    span{
+      font-size 14px
+    }
+    .filter-group{
+      display inline-block
+      margin-left 20px
+      .filter-item{
+        display inline-block
+        margin-left 5px
+        color #898989
+        padding 10px 10px 12px
+        margin-bottom -2px
+        border-bottom 2px solid transparent
+        cursor pointer
+        font-size 14px
+        &:hover{
+          color tikiblue
+          border-color tikiblue
+        }
+        &.active{
+          color tikiblue
+          border-color: tikiblue
+        }
+      }
+    }
+  }
+  .search-box{
+    .search-product{
+      vertical-align bottom
+    }
+    display inline-block
+    vertical-align top
+    width calc(100% - 580px)
+  }
+}

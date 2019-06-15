@@ -11,7 +11,7 @@ import {userInfo} from "../../../../common/states/common";
 import {KComponent} from "../../../common/k-component";
 import {customHistory} from "../../routes";
 
-export class IndexRoute extends KComponent {
+export default class IndexRoute extends KComponent {
   constructor(props) {
     super(props);
 

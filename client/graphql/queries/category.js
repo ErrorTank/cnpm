@@ -22,5 +22,5 @@ const getCategoriesParents = gql`
 
 export {
   getCacheCategoriesInfo,
-  getCategoriesParents
+  getCategoriesParents,
 }

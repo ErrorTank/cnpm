@@ -10,7 +10,7 @@ import {wait} from "../../../../common/common-utils";
 import {getErrorObject} from "../../../../graphql/utils/errors";
 import {mutateAppStores} from "../../../../common/system/system";
 
-export class RedirectEmailConfirm extends React.Component {
+export default class RedirectEmailConfirm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -55,19 +55,25 @@ export class RedirectEmailConfirm extends React.Component {
       <PageTitle
         title={"Chuẩn bị chuyển hướng..."}
       >
-        <div id="initial-loading" className="redirect-email-confirm">
-          <div className="lds-css ng-scope">
-            <div id="il-wrapper">
-              <div style={{width: "100%", height: "100%"}} className="lds-eclipse">
-                <div>
-                </div>
-              </div>
-              <p id="il-text">{this.renderText()}</p>
-            </div>
-          </div>
-        </div>
+        <OverlayLoading
+          renderText={this.renderText}
+        />
       </PageTitle>
 
     );
   }
 }
+
+export const OverlayLoading = ({renderText = () => "Đang tải..."}) => (
+  <div id="initial-loading">
+    <div className="lds-css ng-scope">
+      <div id="il-wrapper">
+        <div style={{width: "100%", height: "100%"}} className="lds-eclipse">
+          <div>
+          </div>
+        </div>
+        <p id="il-text">{renderText()}</p>
+      </div>
+    </div>
+  </div>
+)

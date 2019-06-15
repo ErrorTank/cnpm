@@ -19,7 +19,7 @@ const autoPopulateParent = function(next){
   this.populate("parent");
   next();
 };
-categorySchema.pre("find", autoPopulateParent).pre("findOne", autoPopulateParent).pre("findMany", autoPopulateParent);
+categorySchema.pre("find", autoPopulateParent).pre("findOne", autoPopulateParent);
 
 
 const Category = mongoose.model("Category", categorySchema);

@@ -16,7 +16,7 @@ import {VisitedSection} from "../index-route/visited-section/visited-section";
 import {CommentSection} from "./comment-section/comment-section";
 import {transformCategoriesToFuckingArray} from "../../../../common/products-utils";
 
-export class ProductRoute extends React.Component {
+export default class ProductRoute extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -75,7 +75,7 @@ export class ProductRoute extends React.Component {
               <LoadingInline/>
             ) : (
               <Breadcrumb
-                items={[...transformCategoriesToFuckingArray(product.categories), {name: product.name}]}
+                items={[...transformCategoriesToFuckingArray(product.categories), {name: product.name, onClick:() => null}]}
               >
                 <div className="container content-container">
                   <ProductMainPanel

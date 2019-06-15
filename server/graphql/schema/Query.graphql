@@ -67,6 +67,32 @@ type CategoryPlainInfo{
     parent: ID
 }
 
+type FilterChild{
+    _id: ID
+    name: String
+    count: Int
+}
+
+type ProductFiltersCategory{
+    _id:ID
+    name: String
+    childs: [FilterChild]
+}
+
+type ProductFilters{
+    categories: ProductFiltersCategory
+    providers: [FilterChild]
+    brands: [FilterChild]
+
+}
+
+type ProductsListInfo{
+    products: [BasicProduct]
+    total: Int
+    execTime: String
+    productFilters: ProductFilters
+}
+
 type Query {
     getAuthenUser: User
     checkConfirm(token: String!): loginOutputType
@@ -82,5 +108,7 @@ type Query {
     getCartItemByIdList(list: [CartInput]): [CartOutput]
     getCacheCategoriesInfo: [CategoryPlainInfo]
     getCategoriesParents(categoryID: String): Category
+    findByKeyword(keyword: String): [Product]
+    getProducts(mainFilter: MainFilterInput , productFilter: ProductFilterInput, categoryID: ID, skip: Int, take: Int): ProductsListInfo
 }
 

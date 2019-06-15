@@ -1,6 +1,6 @@
 const {authorizationUser,} = require("../../../authorization/auth");
 const {checkConfirmToken, getClientUserCache, getSocialUserInfo, regularLogin, checkEmailExisted, getUser, getUserRecentVisited, getCartItemByIdList} = require("../../../db/model/user/controller");
-const {getIndexDealProducts, getProduct, getBasicProduct, getProductComments} = require("../../../db/model/product/controller");
+const {getIndexDealProducts, getProduct, getBasicProduct, getProductComments, findByKeyword, getProducts} = require("../../../db/model/product/controller");
 const {getCacheCategoriesInfo, getCategories} = require("../../../db/model/category/controller");
 
 const Query = {
@@ -24,6 +24,9 @@ const Query = {
     },
     getSocialUserInfo: async (parent, args, {request}, info) => {
       return getSocialUserInfo(args).then(data => data).catch(err => throw err);
+    },
+    findByKeyword:  async (parent, args, {request}, info) => {
+      return findByKeyword(args).then(data => data).catch(err => throw err);
     },
     regularLogin: async (parent, args, {request}, info) => {
       return regularLogin(args.payload).then(data => data).catch(err => throw err);
@@ -68,6 +71,11 @@ const Query = {
     },
     getCategoriesParents: async (parent, args, {request}, info) => {
       return getCategories(args.categoryID).then(data => {
+        return data;
+      }).catch(err => throw err);
+    },
+    getProducts: async (parent, args, {request}, info) => {
+      return getProducts(args, request).then(data => {
         return data;
       }).catch(err => throw err);
     },

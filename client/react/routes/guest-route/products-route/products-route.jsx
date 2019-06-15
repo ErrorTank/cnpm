@@ -13,30 +13,38 @@ import {createUserCartCacheFunction} from "../../../../common/cache/cart-cache";
 import {getCategoriesParents} from "../../../../graphql/queries/category";
 import {transformCategoriesToFuckingArray} from "../../../../common/products-utils";
 import {Breadcrumb} from "../../../common/breadcrumb/breadcrumb";
+import {getProducts} from "../../../../graphql/queries/product";
+import {LoadingInline} from "../../../common/loading-inline/loading-inline";
+import {VisitedSection} from "../../common/index-route/visited-section/visited-section";
 
-export class ProductsRoute extends React.Component {
+export default class ProductsRoute extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.defaultState = {
       mainFilter: {
         keyword: "",
-        mostSale: false,
-        descPrice: false,
-        ascPrice: false,
-        mostDiscount: true
+        sort: null,
       },
-      productFilter: null,
-      breadcrumb: null
+      execTime: null,
+      productFilters: null,
+
+    };
+    this.state = {
+      ...this.defaultState,
+      breadcrumb: null,
+      total: 0,
+      loading: true
     };
 
     this.paramInfo = parseQueryString(this.props.location.search);
 
     this.getBreadcrumbData().then(categories => {
       this.setState({breadcrumb: transformCategoriesToFuckingArray(categories)});
-    })
-
+    });
 
   };
+
+
 
   matcher = {
     "category": {
@@ -51,13 +59,26 @@ export class ProductsRoute extends React.Component {
           query: getCategoriesParents,
           variables: {
             cID: this.paramInfo.category
-          }
+          },
+          fetchPolicy: "no-cache"
         }).then(({data}) => {
           return data.getCategoriesParents;
         });
       }
     }
   };
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    let nextParams = parseQueryString(nextProps.location.search);
+    if(nextParams.category !== this.paramInfo.category){
+      this.paramInfo = {...nextParams};
+      this.setState({loading: true, ...this.defaultState});
+      this.getBreadcrumbData().then(categories => {
+        this.setState({breadcrumb: transformCategoriesToFuckingArray(categories)});
+      })
+
+    }
+  }
 
   getPageIdValue = () => {
     const queryObj = this.paramInfo;
@@ -75,7 +96,25 @@ export class ProductsRoute extends React.Component {
   };
 
   render() {
-    let {breadcrumb} = this.state;
+    let {breadcrumb, mainFilter, productFilters, total, loading, execTime} = this.state;
+    let api = ({skip, take}) => {
+      let { mainFilter} = this.state;
+      this.setState({loading: true});
+      return client.query({
+        query: getProducts,
+        variables: {
+          mainFilter: {...mainFilter, keyword: mainFilter.keyword.trim()},
+          categoryID: this.paramInfo.category,
+          skip,
+          take
+        },
+        fetchPolicy: "no-cache"
+      }).then(({data}) => {
+        this.setState({loading: false, total: data.getProducts.total, execTime: data.getProducts.execTime, productFilters: data.getProducts.productFilters});
+        return data.getProducts.products;
+      });
+    };
+
     return (
       <PageTitle
         title={this.getPageTitle()}
@@ -88,11 +127,42 @@ export class ProductsRoute extends React.Component {
           >
             <div className="container content-container products-route">
               <div className="left-panel">
-                <ProductFilterBar/>
+                <ProductFilterBar
+                  filters={productFilters}
+                  params={this.paramInfo}
+                />
               </div>
               <div className="right-panel">
-                <MainProductFilter/>
-                <PaginationProductList/>
+
+                <div className="main-section">
+                  {loading && (
+                    <LoadingInline/>
+                  )}
+                  <div className="rp-header">
+                    {this.getPageTitle()}: <span className="result">{total} kết quả {execTime && <span style={{"fontSize": "13px"}}>(Trong {(execTime % 60000) / 1000} giây)</span>}</span>
+                  </div>
+                  <MainProductFilter
+                    filter={mainFilter}
+                    onChange={mainFilter => this.setState({mainFilter})}
+                    title={this.getPageTitle()}
+                  />
+                  <PaginationProductList
+                    filter={mainFilter}
+                    onChange={mainFilter => this.setState({mainFilter})}
+                    api={api}
+                    category={this.paramInfo.category}
+                    showDeal={false}
+                    showDetails={true}
+                    maxItem={4}
+                    cols={4}
+                    total={total}
+                  />
+                </div>
+
+                <div className="visited">
+                  <VisitedSection/>
+                </div>
+
               </div>
             </div>
           </Breadcrumb>

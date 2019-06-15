@@ -398,7 +398,7 @@ const addNewComment = ({data, files, productID}) => {
     })
 };
 
-const getProducts = ({mainFilter, productFilter, categoryID, skip, take, rating}, request) => {
+const getProducts = ({mainFilter, productFilter, categoryID, skip, take, rating, brand, provider}, request) => {
   // let {keyword, sort} = mainFilter;
   let sorter = {
     mostDiscount: {
@@ -643,9 +643,18 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take, rating}
         },);
       }
       if(rating){
-        console.log(rating)
         pipelines.push({
           $match: { meanStar: {$gte: rating}}
+        });
+      }
+      if(brand){
+        pipelines.push({
+          $match: { "brand._id": mongoose.Types.ObjectId(brand)}
+        });
+      }
+      if(provider){
+        pipelines.push({
+          $match: { "provider.owner._id": mongoose.Types.ObjectId(provider)}
         });
       }
       pipelines.push({
@@ -685,7 +694,7 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take, rating}
         execTime: (Date.now() - startTime).toString(),
         productFilters: {
           categories: {
-            _id: categoryID,
+            _id: currentCateIsParent ? categoryID :  allCates.find(each => each._id.toString() === currentCate.parent)._id,
             name:  currentCateIsParent ? currentCate.name :  allCates.find(each => each._id.toString() === currentCate.parent).name,
             childs: allCates.filter(each => uniq(data.map(prod => prod.categories.toString())).includes(each._id.toString())).map(each => ({...each, count: data.filter(item => item.categories.toString() === each._id.toString()).length}))
           },

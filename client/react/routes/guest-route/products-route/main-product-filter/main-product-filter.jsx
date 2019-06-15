@@ -51,6 +51,7 @@ export class MainProductFilter extends React.Component {
             className={"search-product"}
             placeholder={`Tìm trong ${title}`}
             onSearch={(keyword) => onChange({...filter, keyword})}
+            value={filter.keyword}
           />
         </div>
       </div>

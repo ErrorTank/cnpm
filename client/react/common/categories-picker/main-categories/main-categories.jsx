@@ -5,12 +5,16 @@ export const MainCategories = (props) => {
   let {categories, onOpenSubCategories, current} = props;
   return (
     <div className="main-categories">
-      {categories.map((each, i) => (
+      {categories.map(({onClick, ...rest}, i) => (
         <MainCategory
           key={i}
-          {...each}
-          onOpenSubCategories={() => onOpenSubCategories(each.label)}
-          active={current === each.label}
+          onClick={(e) => {
+            e.stopPropagation();
+            onClick();
+          }}
+          {...rest}
+          onOpenSubCategories={() => onOpenSubCategories(rest.label)}
+          active={current === rest.label}
         />
       ))
 

@@ -5,7 +5,10 @@ const MainCategory = (props) => {
   let {label, onClick = () => null, icon, onOpenSubCategories, active} = props;
   return (
     <div className={classnames("main-category", {"active": active})}
-         onClick={onClick}
+         onClick={(e) => {
+           e.stopPropagation();
+           onClick();
+         }}
          onMouseEnter={onOpenSubCategories}
     >
       {icon}

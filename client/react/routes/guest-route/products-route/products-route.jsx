@@ -40,7 +40,10 @@ export default class ProductsRoute extends React.Component {
     };
 
     this.paramInfo = parseQueryString(this.props.location.search);
-
+    let possibleType = ["brand", "category", "provider"];
+    if(!this.paramInfo.type || !possibleType.includes(this.paramInfo.type)){
+      customHistory.push("/")
+    }
     this.getBreadcrumbData().then(categories => {
       this.setState({breadcrumb: transformCategoriesToFuckingArray(categories)});
     });
@@ -69,25 +72,25 @@ export default class ProductsRoute extends React.Component {
         });
       }
     },
-    "rating": {
-      title: () => {
-        return categoriesCache.syncGet().find(each => each._id === this.paramInfo.category).name;
-      },
-      idValue: () => {
-        return this.paramInfo.category;
-      },
-      fetchBreadcrumbData: () => {
-        return client.query({
-          query: getCategoriesParents,
-          variables: {
-            cID: this.paramInfo.category
-          },
-          fetchPolicy: "no-cache"
-        }).then(({data}) => {
-          return data.getCategoriesParents;
-        });
-      }
-    }
+    // "rating": {
+    //   title: () => {
+    //     return categoriesCache.syncGet().find(each => each._id === this.paramInfo.category).name;
+    //   },
+    //   idValue: () => {
+    //     return this.paramInfo.category;
+    //   },
+    //   fetchBreadcrumbData: () => {
+    //     return client.query({
+    //       query: getCategoriesParents,
+    //       variables: {
+    //         cID: this.paramInfo.category
+    //       },
+    //       fetchPolicy: "no-cache"
+    //     }).then(({data}) => {
+    //       return data.getCategoriesParents;
+    //     });
+    //   }
+    // }
   };
 
   componentWillReceiveProps(nextProps, nextContext) {
@@ -104,20 +107,18 @@ export default class ProductsRoute extends React.Component {
 
 
   getBreadcrumbData = () => {
-    const queryObj = this.paramInfo;
-    return this.matcher[Object.keys(queryObj)[0]].fetchBreadcrumbData();
+    return this.matcher[this.paramInfo.type].fetchBreadcrumbData();
   };
 
   getPageTitle = () => {
-    const queryObj = this.paramInfo;
-    return this.matcher[Object.keys(queryObj)[0]].title();
+    return this.matcher[this.paramInfo.type].title();
   };
 
   handleClickFilter = (filters) => {
     // let {location} = this.props;
     let newParams = {...this.paramInfo, ...filters};
 
-    let paramUrl = "/products/" + buildParams(newParams);
+    let paramUrl = `/products` + buildParams(newParams);
     customHistory.push(paramUrl);
   };
 
@@ -132,6 +133,8 @@ export default class ProductsRoute extends React.Component {
           mainFilter: {...mainFilter, keyword: mainFilter.keyword.trim()},
           categoryID: this.paramInfo.category,
           rating: Number(this.paramInfo.rating),
+          brand: this.paramInfo.brand,
+          provider: this.paramInfo.provider,
           skip,
           take
         },

@@ -14,10 +14,11 @@ export class ProductFilterBar extends React.Component {
       title: "Danh mục sản phẩm",
       render: ({categories}) => {
         let {_id, name, childs} = categories;
+        console.log(_id)
         let {params, onChange} = this.props;
         return (
           <div className="categories-filter">
-            <div className={classnames("parent-cate")}>{name}</div>
+            <div className={classnames("parent-cate")} onClick={() => onChange({category: _id})}>{name}</div>
             <div className="filter-items sub-cates">
               {childs.map(each => (
                 <div key={each._id}
@@ -71,7 +72,7 @@ export class ProductFilterBar extends React.Component {
         return (
           <div className="brands-filter filter-items">
             {brands.map(each => (
-              <div key={each._id} className={classnames("item", {active: each._id === params.brand})}>
+              <div key={each._id} className={classnames("item", {active: each._id === params.brand})} onClick={() => onChange({brand: each._id})}>
                 {each.name} <span className="count">({each.count})</span>
               </div>
             ))}
@@ -86,7 +87,7 @@ export class ProductFilterBar extends React.Component {
         return (
           <div className="providers-filter filter-items">
             {providers.map(each => (
-              <div key={each._id} className={classnames("item", {active: each._id === params.provider})}>
+              <div key={each._id} className={classnames("item", {active: each._id === params.provider})} onClick={() => onChange({provider: each._id})}>
                 {each.name} <span className="count">({each.count})</span>
               </div>
             ))}

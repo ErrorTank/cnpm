@@ -16,7 +16,7 @@ export class StarRating extends React.Component {
   }
 
   render() {
-    let {className, editable, onChange} = this.props;
+    let {className, editable, onChange, showReset} = this.props;
     let {rating = 0} = this.state;
 
     return (
@@ -37,6 +37,11 @@ export class StarRating extends React.Component {
             />
             ))}
         </div>
+        {showReset && (
+          <i className="fas fa-times-circle" onClick={() => onChange(null)}></i>
+        )
+
+        }
       </div>
     );
   }

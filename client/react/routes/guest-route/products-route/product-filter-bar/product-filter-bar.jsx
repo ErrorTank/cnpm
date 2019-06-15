@@ -1,6 +1,5 @@
 import React from "react";
 import {StarRating} from "../../../../common/star-rating/star-rating";
-import {customHistory} from "../../../routes";
 import classnames from "classnames"
 
 export class ProductFilterBar extends React.Component {
@@ -21,7 +20,12 @@ export class ProductFilterBar extends React.Component {
             <div className={classnames("parent-cate")}>{name}</div>
             <div className="filter-items sub-cates">
               {childs.map(each => (
-                <div key={each._id} className={classnames("item", {active: each._id === params.category})}>
+                <div key={each._id}
+                     className={classnames("item", {active: each._id === params.category})}
+                     onClick={() => {
+                       onChange({category: each._id})
+                     }}
+                >
                   {each.name} <span className="count">({each.count})</span>
                 </div>
               ))}
@@ -31,7 +35,9 @@ export class ProductFilterBar extends React.Component {
       }
     }, {
       name: "rating",
-      title: "Đánh giá",
+      title: () => (
+        <span>Đánh giá{this.props.params.rating ? <p style={{"color": "#787878", "fontWeight": "400", fontSize: "12px", textTransform: "none"}}>(Ít nhất {this.props.params.rating} sao)</p> : null}</span>
+      ),
       render: () => {
         let {params, onChange} = this.props;
         return (
@@ -41,6 +47,7 @@ export class ProductFilterBar extends React.Component {
               editable
               rating={params.rating ? params.rating : 0}
               onChange={value => onChange({rating: value})}
+              showReset={params.rating}
             />
           </div>
         )
@@ -97,7 +104,7 @@ export class ProductFilterBar extends React.Component {
         {filters && this.filters.map((filter, i) => {
           return  (
             <div key={filter.name} className="panel">
-              <div className="panel-title">{filter.title}</div>
+              <div className="panel-title">{typeof filter.title === "string" ? filter.title : filter.title()}</div>
               <div className="panel-content">
                 {filter.render(filters)}
               </div>

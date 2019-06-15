@@ -16,6 +16,9 @@ import {Breadcrumb} from "../../../common/breadcrumb/breadcrumb";
 import {getProducts} from "../../../../graphql/queries/product";
 import {LoadingInline} from "../../../common/loading-inline/loading-inline";
 import {VisitedSection} from "../../common/index-route/visited-section/visited-section";
+import {buildParams} from "../../../../common/common-utils";
+import {customHistory} from "../../routes";
+import isEqual from "lodash/isEqual"
 
 export default class ProductsRoute extends React.Component {
   constructor(props) {
@@ -65,12 +68,31 @@ export default class ProductsRoute extends React.Component {
           return data.getCategoriesParents;
         });
       }
+    },
+    "rating": {
+      title: () => {
+        return categoriesCache.syncGet().find(each => each._id === this.paramInfo.category).name;
+      },
+      idValue: () => {
+        return this.paramInfo.category;
+      },
+      fetchBreadcrumbData: () => {
+        return client.query({
+          query: getCategoriesParents,
+          variables: {
+            cID: this.paramInfo.category
+          },
+          fetchPolicy: "no-cache"
+        }).then(({data}) => {
+          return data.getCategoriesParents;
+        });
+      }
     }
   };
 
   componentWillReceiveProps(nextProps, nextContext) {
     let nextParams = parseQueryString(nextProps.location.search);
-    if(nextParams.category !== this.paramInfo.category){
+    if(!isEqual(nextParams, this.paramInfo)){
       this.paramInfo = {...nextParams};
       this.setState({loading: true, ...this.defaultState});
       this.getBreadcrumbData().then(categories => {
@@ -80,10 +102,6 @@ export default class ProductsRoute extends React.Component {
     }
   }
 
-  getPageIdValue = () => {
-    const queryObj = this.paramInfo;
-    return this.matcher[Object.keys(queryObj)[0]].idValue();
-  };
 
   getBreadcrumbData = () => {
     const queryObj = this.paramInfo;
@@ -93,6 +111,14 @@ export default class ProductsRoute extends React.Component {
   getPageTitle = () => {
     const queryObj = this.paramInfo;
     return this.matcher[Object.keys(queryObj)[0]].title();
+  };
+
+  handleClickFilter = (filters) => {
+    // let {location} = this.props;
+    let newParams = {...this.paramInfo, ...filters};
+
+    let paramUrl = "/products/" + buildParams(newParams);
+    customHistory.push(paramUrl);
   };
 
   render() {
@@ -105,6 +131,7 @@ export default class ProductsRoute extends React.Component {
         variables: {
           mainFilter: {...mainFilter, keyword: mainFilter.keyword.trim()},
           categoryID: this.paramInfo.category,
+          rating: Number(this.paramInfo.rating),
           skip,
           take
         },
@@ -114,6 +141,7 @@ export default class ProductsRoute extends React.Component {
         return data.getProducts.products;
       });
     };
+
 
     return (
       <PageTitle
@@ -130,6 +158,7 @@ export default class ProductsRoute extends React.Component {
                 <ProductFilterBar
                   filters={productFilters}
                   params={this.paramInfo}
+                  onChange={this.handleClickFilter}
                 />
               </div>
               <div className="right-panel">
@@ -150,12 +179,13 @@ export default class ProductsRoute extends React.Component {
                     filter={mainFilter}
                     onChange={mainFilter => this.setState({mainFilter})}
                     api={api}
-                    category={this.paramInfo.category}
+                    {...this.paramInfo}
                     showDeal={false}
                     showDetails={true}
                     maxItem={4}
                     cols={4}
                     total={total}
+
                   />
                 </div>
 

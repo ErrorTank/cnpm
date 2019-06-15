@@ -17,47 +17,54 @@ class CheckoutCart extends KComponent {
             }
 
         }))
-        this.fetchItemList();
-       // this.createCartWithQuantity();
         this.state = {
             cartItemList: []
         }
+        this.fetchItemList();
+        
         //Call api only list not empty
     };
 
     fetchItemList = () => {
         return new Promise((resolve, reject) => {
             let info = userInfo.getState();
-            
+            let rawCart = info ? userCart.getState() : createUserCartCacheFunction("get")({ async: false });
+            //console.log(rawCart);
             client.query({
                 query: getCartItemByIdList,
                 variables: {
-                    list: info ? userCart.getState(): createUserCartCacheFunction("get")({ async: false })
+                    list: rawCart
                 },
                 fetchPolicy: "no-cache"
             }).then(({ data }) => {
-                    this.setState({ cartItemList: [...data.getCartItemByIdList], loading: false }, () => {
-                        resolve();
-                        console.log(data);  // just to see the item form
+
+                    
+                    // console.log(this.state.cartItemList);
+                    let cartItemList = [...data.getCartItemByIdList];
+                    //console.log('keke', cartItemList);
+                    let cartWithQuantity = cartItemList.map(e => {
+                        let founded = rawCart.find(prod => {
+                            if (prod.option === e.product.provider[0].options[0]._id.toString()) {
+                                return true;
+                            }
+                        })
+                       // console.log(founded);
+                        e = {...e, quantity: founded.quantity};
+                        return e;
                     });
-            }).catch(err => reject());
+                    console.log(cartWithQuantity);
+                    this.setState({ cartItemList: cartWithQuantity, loading: false }, () => {
+                        resolve();
+                        console.log(cartItemList);
+                    });
+            }).catch(err =>{ 
+                // console.log(err);
+                reject();
+            });
             
         });
         
     };
-    // createCartWithQuantity = () => {
-    //    let cartWithQuantity = cartItemList.map(item => {
-    //         let quantity = rawCart.find(temp => {
-    //             if (temp.option === item.provider[0].options[0]._id)
-    //                 return temp.quantity;
-    //         })
-    //             item = [...item, quantity];
-    //         }))
-    //         this.setState({
-    //             cartItemList: cartWithQuantity 
-    //         })
-    //         console.log(cartItemList)
-    // }
 
     handleDelete = (id) => {
         let newCartList = this.state.cartItemList.filter(item => {
@@ -67,24 +74,25 @@ class CheckoutCart extends KComponent {
            cartItemList: item
        })
     }
-    // handleQtyChange = (newQty, option) => {
-    //     // Set qty moi vao du lieu cua dung san pham dang thay doi
-    //     // userCart.setState();
-    //     //
-    //     let {_id: optionID} = option;
-    //     if(info){
-    //         let cart = userCart.getState()
-    //         newcart = cart.map((item) => {
-    //             if (item.option === optionID) {
-    //                 return { ...item, qty: newQty }
-    //             }
-    //             return item;
-    //         })
-    //         userCart.setState(newcart);
-    //     } else{
-    //         createUserCartCacheFunction("set")({...option, qty: newQty});
-    //     }
-    // };
+    handleQtyChange = (newQty, option) => {
+        // Set qty moi vao du lieu cua dung san pham dang thay doi
+        // userCart.setState();
+        let info = userInfo.getState();
+        let {_id: optionID} = option;
+        if(info){
+            let cart = userCart.getState()
+            newcart = cart.map((item) => {
+                if (item.option === optionID) {
+                    return { ...item, qty: newQty }
+                }
+                return item;
+            })
+            userCart.setState(newcart);
+        } else{
+            
+           // createUserCartCacheFunction("set")({...option, qty: newQty});
+        }
+    };
 
 
     render(){
@@ -92,50 +100,47 @@ class CheckoutCart extends KComponent {
         let cartCount = info ? userCart.getState().length : createUserCartCacheFunction("get")({ async: false }).length;
         let rawCart = info ? userCart.getState() : createUserCartCacheFunction("get")({ async: false });
         let { cartItemList, loading} = this.state;
-        let { quantity, option } = rawCart;
-        let qty = quantity;
-       
 
         let checkOut = cartCount !== 0 ? (
             <div className="checkout ">
                 <div className="row">
                     <div className="col-12">
                         <h5 className="cart-counting">Giỏ hàng <span>({cartCount} sản phấm)</span></h5>
-                        <div className="row">
-                            <div className="col-8 cart-1">
+                            <div className="cart-1">
                                 <form id="shopping-cart">
                                     {
                                         cartItemList.map(item => {
-                                            let { product } = item;
+                                            let { product,quantity } = item;
                                             let {_id,provider } = product;
                                             let {options,owner} = provider[0];
                                             let discountedPrice = (options[0].price / 100) * (100 - product.regularDiscount);
                                             
+            
                                             return (
                                                 <div className="row shopping-cart-item" key={_id}>
                                                     <div className="col-3 img-item-thumnail">
                                                         <img src={options[0].picture[0]} alt="item-logo"/>
                                                     </div>
-                                                    <div className="col-9 product-full-info">
+                                                    <div className="col-9 product-full-info pr-0" >
                                                         <div className="row">
-                                                            <div className="col-7 product-info">
+                                                            <div className="col-6 product-info">
                                                                 <p className="name"><span onClick={() => customHistory.push("/product/" + product._id)}>{product.name} ({options[0].description })</span></p>
                                                                 <p className="seller-by">Cung cấp bởi <span onClick={() => customHistory.push("/shop/" + product._id)}>{owner.provider.name}</span></p>      {/* seller-by who, did't found yet  */}                                                               
                                                                 <p className="action">
-                                                                    <a href="" onClick={() => {this.handleDelete(options[0]._id)}}>Xóa</a>
+                                                                    <span onClick={() => {this.handleDelete(options[0]._id)}}>Xóa</span>
                                                                 </p>
                                                             </div>
-                                                            <div className="col-4 box-price">
+                                                            <div className="col-3 box-price">
                                                                 <div className="price-1">{formatMoney(discountedPrice)}₫</div>
                                                                 <div className="price-2">
-                                                                    <span className="full-price">{formatMoney(options[0].price)}₫ x</span>
+                                                                    <span className="full-price">{formatMoney(options[0].price)}₫</span>
                                                                     <span className="sale">| -{product.regularDiscount}%</span>
                                                                 </div>
                                                             </div>
-                                                            <div className="col-1 quantity">
+                                                            <div className="col-3 quantity text-right">
                                                             <QuantityController
-                                                                value={qty}
-                                                                onChange={(qty) => this.handleQtyChange(qty, option)}
+                                                                value={quantity}
+                                                                onChange={(qty) => this.handleQtyChange(qty, options[0])}
                                                                 label={"Số lượng:"}
                                                             />
                                                             </div>
@@ -148,10 +153,9 @@ class CheckoutCart extends KComponent {
                                     }
                                 </form>
                             </div>
-                            <div className="col-3 cart-2">
+                            <div className="cart-2">
                                 
                             </div>
-                        </div>
                     </div>
                 </div>
             </div>

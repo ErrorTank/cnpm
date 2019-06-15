@@ -398,7 +398,7 @@ const addNewComment = ({data, files, productID}) => {
     })
 };
 
-const getProducts = ({mainFilter, productFilter, categoryID, skip, take}, request) => {
+const getProducts = ({mainFilter, productFilter, categoryID, skip, take, rating}, request) => {
   // let {keyword, sort} = mainFilter;
   let sorter = {
     mostDiscount: {
@@ -428,6 +428,7 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take}, reques
         });
 
       }
+
       pipelines = pipelines.concat([
         {
           $match: {
@@ -510,6 +511,7 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take}, reques
 
       ]);
       //Thiet bi deo thong minh bug
+
       if (mainFilter.sort && sorter.hasOwnProperty(mainFilter.sort)) {
         pipelines = pipelines.concat([
           {$unwind: "$provider.options"},
@@ -639,6 +641,12 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take}, reques
           },
 
         },);
+      }
+      if(rating){
+        console.log(rating)
+        pipelines.push({
+          $match: { meanStar: {$gte: rating}}
+        });
       }
       pipelines.push({
         $project: {

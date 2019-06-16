@@ -1,6 +1,7 @@
 import React from "react";
 import {StarRating} from "../../../../common/star-rating/star-rating";
 import classnames from "classnames"
+import {PriceRange} from "../../../../common/price-range/price-range";
 
 export class ProductFilterBar extends React.Component {
   constructor(props) {
@@ -58,9 +59,14 @@ export class ProductFilterBar extends React.Component {
       title: "Khoảng giá",
       render: () => {
         let {params, onChange} = this.props;
+        let [from, to] = typeof params.priceRange === "string" ? params.priceRange.split("_") : [0 ,0];
         return (
           <div className="price-range-filter">
-
+            <PriceRange
+              from={(isNaN(Number(from)) || isNaN(Number(to))) ? 0 : Number(from)}
+              to={(isNaN(Number(from)) || isNaN(Number(to))) ? 0 : Number(to)}
+              onChange={value => onChange({priceRange: value})}
+            />
           </div>
         )
       }

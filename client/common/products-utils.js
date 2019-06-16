@@ -8,7 +8,10 @@ const calcSalePrice = (price, sale) => {
 };
 
 const formatMoney = (money, fix = 0) => {
-  let str = Number(money).toFixed(fix).toString();
+  let fixPath = money.toString().split(".")[1];
+  let tempFix = fix ? fix : fixPath !== undefined ? fixPath.length : 0;
+  let str = Number(money).toFixed(tempFix).toString();
+
   let [relative, fixed] = str.includes('.') ? str.split(".") : [str, null];
   let spliceStrPaths = (total, str) => {
     if(str.length>3){

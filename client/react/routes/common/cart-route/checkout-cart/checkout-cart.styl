@@ -1,7 +1,15 @@
+//prepare
+.span-button{
+    font-size: 14px;
+    color: #007ff0;
+    cursor pointer;
+}
+
+
 //checkout
 .cart-1{
     background-color: white;
-    border-radius: 10px;
+    border-radius: 5px;
     width: 78%;
     display inline-block
 
@@ -46,19 +54,13 @@
                     cursor: pointer;
                 }
             }
-            .seller-by span{
-                font-size: 13px;
-                color: #007ff0;
-                cursor pointer;
-            
-            }
             .box-price{
                 width: 150px;
                 text-align: right;
                 .price-1{
-                        font-size: 14px;
+                        font-size: 16px;
                         margin-bottom: 5px;
-                        font-weight: 700;
+                        font-weight: 600;
                         padding-top: 0;
                         color: #333;
                         
@@ -90,7 +92,7 @@
                     }
                 }
             .quantity{
-                padding-top: 10px;
+                padding: 10px 10px 0px 0px;
             }
             }
         }
@@ -98,10 +100,49 @@
 
 //
 .cart-2{
-    background-color: white;
-    width: 20%;
+    width: 21%;
     display inline-block
     float: right;
+    color: #333;
+    font-size: 14px;
+    border-radius: 5px;
+    .show-price{
+        padding: 20px;
+        background-color: white;
+        span{
+            display:inline-block;
+        }
+        .price{
+            float: right;
+        }
+    }
+    .total-price{
+        margin-top: 1px;
+        padding: 20px 20px 40px 20px;
+        background-color: white;
+        span{
+            margin-top: 5px;
+            display: inline-block;
+        }
+        .amount{
+            float: right;
+            text-align: right;
+            .VAT-price{
+                color: red;
+                font-size: 22px;
+                font-weight: 400;
+            }
+            .VAT{
+                font-size: 13px;
+            }
+        }
+    }
+    .checkout{
+        margin-top: 10px;
+        padding: 10px;
+        width: 100%;
+        font-size: 14px;
+    }
 }
 
 //Cart Empty

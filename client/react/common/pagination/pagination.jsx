@@ -10,8 +10,7 @@ export class Pagination extends React.Component {
   getShownPages() {
 
     let total = this.props.total;
-    console.log(total)
-    console.log(this.props.value)
+
     let r = {
       from: Math.floor((this.props.value - 1) / 10) * 10 + 1,
       to: Math.min(total, Math.floor((this.props.value - 1) / 10) * 10 + 10)
@@ -24,7 +23,7 @@ export class Pagination extends React.Component {
       r.from++;
       r.to++;
     }
-    console.log(r)
+
     let shownPages = [];
 
     if (r.from > 1) {
@@ -33,21 +32,21 @@ export class Pagination extends React.Component {
         label: "1"
       });
     }
-    console.log(shownPages)
+
     for (var p = r.from; p <= r.to; p++) {
       shownPages.push({
         page: p,
         label: (p == r.from && r.from > 2) || (p == r.to && r.to < total - 1) ? "..." : p
       });
     }
-    console.log(shownPages)
+
     if (r.to < total) {
       shownPages.push({
         page: total,
         label: total
       });
     }
-    console.log(shownPages)
+
     return shownPages;
   }
 

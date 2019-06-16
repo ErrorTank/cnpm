@@ -10,7 +10,7 @@ const SubCategories = ({categories}) => {
                 {categories.map((each, i) => {
                     return (
                       <SubCategory
-                        key={i}
+                        key={each.label}
                         {...each}
                       />
                     )

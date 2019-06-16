@@ -93,6 +93,14 @@ type ProductsListInfo{
     productFilters: ProductFilters
 }
 
+type PlainProviderInfo{
+    _id: ID
+    name: String
+    address: String
+    phone: String
+    email: String
+}
+
 type Query {
     getAuthenUser: User
     checkConfirm(token: String!): loginOutputType
@@ -109,6 +117,8 @@ type Query {
     getCacheCategoriesInfo: [CategoryPlainInfo]
     getCategoriesParents(categoryID: String): Category
     findByKeyword(keyword: String): [Product]
-    getProducts(mainFilter: MainFilterInput , productFilter: ProductFilterInput, categoryID: ID, skip: Int, take: Int, rating: Int): ProductsListInfo
+    getCacheBrandsInfo: [Brand]
+    getCacheProvidersInfo: [PlainProviderInfo]
+    getProducts(mainFilter: MainFilterInput , productFilter: ProductFilterInput, categoryID: ID, skip: Int, take: Int, rating: Int, brand: ID, provider: ID, priceRange: String): ProductsListInfo
 }
 

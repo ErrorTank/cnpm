@@ -1,0 +1,45 @@
+.price-range{
+  .pr-title{
+    margin-bottom: 5px;
+    font-size: 13px;
+    text-align: left;
+    color: #858585;
+  }
+  .range-input{
+    width 95px
+    height 30px
+    padding 0 8px
+    border-radius 4px
+    border 1px solid #b8b8b8
+    font-size 13px
+    outline 0
+  }
+  span{
+    width 7px
+    height 1px
+    background-color #9a9a9a
+    margin 0 6px
+    display inline-block
+    vertical-align middle
+  }
+  .filter-btn{
+    background-color white
+    border 1px solid #189eff
+    font-size 12px
+    color #189eff
+    padding 5px 15px
+    width 98px
+    margin-top 8px
+    &:disabled{
+      pointer-events none
+      opacity 0.6
+    }
+    border-radius 4px
+    cursor pointer
+    transition all 0.1s ease
+    &:hover{
+      background-color #189eff
+      color white
+    }
+  }
+}

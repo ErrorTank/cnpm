@@ -19,7 +19,7 @@ export const ProductHeaderInfo = ({commonInfo, optionInfo}) => {
       <span className="scroll-to-comment" onClick={onScrollToCmtSection}>(Xem {commentCount} đánh giá)</span>
       <br/>
       <span className="brand-name"
-            onClick={() => customHistory.push("/products?brand=" + brand._id)}>Thương hiệu: <span>{brand.name}</span></span>
+            onClick={() => customHistory.push("/products?brand=" + brand._id + "&type=brand")}>Thương hiệu: <span>{brand.name}</span></span>
     </div>
   );
 };

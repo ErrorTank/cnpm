@@ -1,6 +1,7 @@
 import React from "react";
 import {StarRating} from "../../../../common/star-rating/star-rating";
 import classnames from "classnames"
+import {PriceRange} from "../../../../common/price-range/price-range";
 
 export class ProductFilterBar extends React.Component {
   constructor(props) {
@@ -14,10 +15,11 @@ export class ProductFilterBar extends React.Component {
       title: "Danh mục sản phẩm",
       render: ({categories}) => {
         let {_id, name, childs} = categories;
+        console.log(_id)
         let {params, onChange} = this.props;
         return (
           <div className="categories-filter">
-            <div className={classnames("parent-cate")}>{name}</div>
+            <div className={classnames("parent-cate")} onClick={() => onChange({category: _id})}>{name}</div>
             <div className="filter-items sub-cates">
               {childs.map(each => (
                 <div key={each._id}
@@ -47,8 +49,13 @@ export class ProductFilterBar extends React.Component {
               editable
               rating={params.rating ? params.rating : 0}
               onChange={value => onChange({rating: value})}
-              showReset={params.rating}
             />
+            {params.rating && (
+              <i className="fas fa-times-circle reset" onClick={() => onChange({rating: null})}></i>
+            )
+
+            }
+
           </div>
         )
       }
@@ -57,8 +64,18 @@ export class ProductFilterBar extends React.Component {
       title: "Khoảng giá",
       render: () => {
         let {params, onChange} = this.props;
+        let [from, to] = typeof params.priceRange === "string" ? params.priceRange.split("_") : [0 ,0];
         return (
           <div className="price-range-filter">
+
+            <PriceRange
+              from={(isNaN(Number(from)) || isNaN(Number(to))) ? 0 : Number(from)}
+              to={(isNaN(Number(from)) || isNaN(Number(to))) ? 0 : Number(to)}
+              onChange={value => onChange({priceRange: value})}
+              renderReset={() =>  (isNaN(Number(from)) || isNaN(Number(to)) || params.priceRange) && (
+                <i className="fas fa-times-circle reset" onClick={() => onChange({priceRange: null})}></i>
+              )}
+            />
 
           </div>
         )
@@ -71,7 +88,7 @@ export class ProductFilterBar extends React.Component {
         return (
           <div className="brands-filter filter-items">
             {brands.map(each => (
-              <div key={each._id} className={classnames("item", {active: each._id === params.brand})}>
+              <div key={each._id} className={classnames("item", {active: each._id === params.brand})} onClick={() => onChange({brand: each._id})}>
                 {each.name} <span className="count">({each.count})</span>
               </div>
             ))}
@@ -86,7 +103,7 @@ export class ProductFilterBar extends React.Component {
         return (
           <div className="providers-filter filter-items">
             {providers.map(each => (
-              <div key={each._id} className={classnames("item", {active: each._id === params.provider})}>
+              <div key={each._id} className={classnames("item", {active: each._id === params.provider})} onClick={() => onChange({provider: each._id})}>
                 {each.name} <span className="count">({each.count})</span>
               </div>
             ))}

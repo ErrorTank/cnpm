@@ -7,7 +7,7 @@ const BreadcrumbItem = (props) => {
   let {name, active = false, _id, onClick, showArrow = true} = props;
   return (
     <div className={classnames("k-breadcrumb-item", {active, "pl-0": !showArrow})}
-         onClick={onClick ? onClick : () => customHistory.push(`/products?category=${_id}`)}
+         onClick={onClick ? onClick : () => customHistory.push(`/products?type=category&category=${_id}`)}
     >
           <span className="item-text">
               {name}
@@ -30,7 +30,7 @@ export class Breadcrumb extends React.Component {
 
   render() {
     let {children, items = []} = this.props;
-
+    console.log(items)
     return (
       <Fragment>
         <div className="k-breadcrumb">

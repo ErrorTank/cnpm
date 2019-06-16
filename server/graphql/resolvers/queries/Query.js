@@ -1,7 +1,8 @@
 const {authorizationUser,} = require("../../../authorization/auth");
-const {checkConfirmToken, getClientUserCache, getSocialUserInfo, regularLogin, checkEmailExisted, getUser, getUserRecentVisited, getCartItemByIdList} = require("../../../db/model/user/controller");
+const {checkConfirmToken, getClientUserCache, getSocialUserInfo, regularLogin, checkEmailExisted, getUser, getUserRecentVisited, getCartItemByIdList, getCacheProvidersInfo} = require("../../../db/model/user/controller");
 const {getIndexDealProducts, getProduct, getBasicProduct, getProductComments, findByKeyword, getProducts} = require("../../../db/model/product/controller");
 const {getCacheCategoriesInfo, getCategories} = require("../../../db/model/category/controller");
+const {getCacheBrandsInfo} = require("../../../db/model/brand/controller");
 
 const Query = {
     getAuthenUser: (parent, args, {request}, info) => {
@@ -12,6 +13,9 @@ const Query = {
           return getClientUserCache(creds)
         })
         .catch(err => throw err);
+    },
+    getCacheProvidersInfo: async (parent, args, {request}, info) => {
+      return getCacheProvidersInfo(args).then(data => data).catch(err => throw err);
     },
     getProductComments: async (parent, args, {request}, info) => {
       return getProductComments(args).then(data => data).catch(err => throw err);
@@ -25,7 +29,7 @@ const Query = {
     getSocialUserInfo: async (parent, args, {request}, info) => {
       return getSocialUserInfo(args).then(data => data).catch(err => throw err);
     },
-    findByKeyword:  async (parent, args, {request}, info) => {
+    findByKeyword: async (parent, args, {request}, info) => {
       return findByKeyword(args).then(data => data).catch(err => throw err);
     },
     regularLogin: async (parent, args, {request}, info) => {
@@ -61,6 +65,12 @@ const Query = {
     },
     getUserRecentVisited: async (parent, args, {request}, info) => {
       return getUserRecentVisited(args).then(data => {
+        return data;
+      }).catch(err => throw err);
+
+    },
+    getCacheBrandsInfo: async (parent, args, {request}, info) => {
+      return getCacheBrandsInfo(args).then(data => {
         return data;
       }).catch(err => throw err);
     },

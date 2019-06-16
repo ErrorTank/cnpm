@@ -6,9 +6,14 @@ export class SearchInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: ""
+      value: props.value
     };
   };
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    if(nextProps.value !== this.props.value)
+      this.setState({value: nextProps.value});
+  }
 
   render() {
     let {value, className, } = this.state;

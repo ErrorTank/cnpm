@@ -117,7 +117,7 @@ export default class ProductsRoute extends React.Component {
   handleClickFilter = (filters) => {
     // let {location} = this.props;
     let newParams = {...this.paramInfo, ...filters};
-    if(filters.hasOwnProperty("priceRange")){
+    if(filters.hasOwnProperty("priceRange") && filters.priceRange){
       let {from, to} = filters.priceRange;
       newParams = {...newParams, priceRange: `${from}_${to}`};
     }

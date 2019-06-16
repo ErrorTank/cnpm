@@ -49,8 +49,13 @@ export class ProductFilterBar extends React.Component {
               editable
               rating={params.rating ? params.rating : 0}
               onChange={value => onChange({rating: value})}
-              showReset={params.rating}
             />
+            {params.rating && (
+              <i className="fas fa-times-circle reset" onClick={() => onChange({rating: null})}></i>
+            )
+
+            }
+
           </div>
         )
       }
@@ -62,11 +67,16 @@ export class ProductFilterBar extends React.Component {
         let [from, to] = typeof params.priceRange === "string" ? params.priceRange.split("_") : [0 ,0];
         return (
           <div className="price-range-filter">
+
             <PriceRange
               from={(isNaN(Number(from)) || isNaN(Number(to))) ? 0 : Number(from)}
               to={(isNaN(Number(from)) || isNaN(Number(to))) ? 0 : Number(to)}
               onChange={value => onChange({priceRange: value})}
+              renderReset={() =>  (isNaN(Number(from)) || isNaN(Number(to)) || params.priceRange) && (
+                <i className="fas fa-times-circle reset" onClick={() => onChange({priceRange: null})}></i>
+              )}
             />
+
           </div>
         )
       }

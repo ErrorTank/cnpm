@@ -659,7 +659,7 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take, rating,
           $match: { "provider.owner._id": mongoose.Types.ObjectId(provider)}
         });
       }
-      console.log(priceRange)
+
       if(priceRange && priceRange.split("_").length){
 
         let [from, to] = priceRange.split("_");

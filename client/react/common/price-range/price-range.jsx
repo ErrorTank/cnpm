@@ -38,7 +38,7 @@ export class PriceRange extends React.Component {
     let submit = () => this.props.onChange(range1Value < range2Value ? {from: range1Value, to: range2Value} : {from: range2Value, to: range1Value});
     return (
       <div className="price-range">
-        <p className="pr-title">Chọn khoảng giá</p>
+        <p className="pr-title">Chọn khoảng giá {this.props.renderReset()}</p>
         <div className="range-inputs">
           <input
             className="range-input"

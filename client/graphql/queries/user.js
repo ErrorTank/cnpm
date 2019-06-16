@@ -12,6 +12,17 @@ const getBasicUserInfo = gql`
   ${UserInfoFragment}
 `;
 
+const getCacheProvidersInfo = gql`
+    query{
+        getCacheProvidersInfo{
+            _id
+            name
+            address
+            phone
+            email
+        }
+    }
+`;
 const addToFavorites = gql`
     mutation ($uID: ID!, $pID: ID!){
         addToFavorites(userID: $uID, productID: $pID){
@@ -231,5 +242,6 @@ export {
   addRecentVisit,
   addToFavorites,
   addToCart,
-  getCartItemByIdList
+  getCartItemByIdList,
+  getCacheProvidersInfo
 }

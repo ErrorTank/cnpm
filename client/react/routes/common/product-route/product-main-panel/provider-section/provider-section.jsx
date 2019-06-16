@@ -22,7 +22,7 @@ export class ProviderSection extends React.Component {
               <span className="name">{name}</span>
               <p className="shop-sub">Cam kết chính hiệu 100%</p>
             </div>
-            <a href={`/shop/${providerInfo.owner._id}`}  target="_blank" ><button className="btn btn-block to-shop" >Xem shop</button></a>
+            <a href={`/products?provider=${providerInfo.owner._id}&type=provider`}  target="_blank" ><button className="btn btn-block to-shop" >Xem shop</button></a>
           </div>
           <div className="provider-list">
             <p className="pl-title">NHÀ CUNG CẤP KHÁC</p>

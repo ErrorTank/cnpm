@@ -520,6 +520,36 @@ const addRecentVisit = ({uID, pID}) => {
     .catch(() => false)
 };
 
+const getCacheProvidersInfo = () => {
+  return User.aggregate([
+    {
+      $match: {"provider.name": {$exists: true}},
+
+    }, {
+      $project: {
+        "provider.name": 1,
+        "provider.email": 1,
+        "provider.address": 1,
+        "provider.phone": 1,
+      }
+    }, {
+      $addFields: {
+        name: "$provider.name",
+        email: "$provider.email",
+        address: "$provider.address",
+        phone: "$provider.phone",
+      }
+    }, {
+      $project: {
+        name: 1,
+        email: 1,
+        address: 1,
+        phone: 1,
+      }
+    }
+  ]);
+};
+
 module.exports = {
   register,
   getClientUserCache,
@@ -536,5 +566,6 @@ module.exports = {
   getUserRecentVisited,
   addToFavorites,
   addToCart,
-  getCartItemByIdList
+  getCartItemByIdList,
+  getCacheProvidersInfo
 };

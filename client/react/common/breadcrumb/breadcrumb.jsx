@@ -30,7 +30,7 @@ export class Breadcrumb extends React.Component {
 
   render() {
     let {children, items = []} = this.props;
-
+    console.log(items)
     return (
       <Fragment>
         <div className="k-breadcrumb">

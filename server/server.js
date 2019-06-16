@@ -11,6 +11,8 @@ const path = require("path");
 const DiscountWithCode = require("./db/model/discount-with-code/discount-with-code");
 const { loadAllCache } = require("./cache/common");
 
+const ProductController = require("./db/model/product/controller");
+
 initializeDb()
   .then(() => loadAllCache())
   .then(() => {
@@ -39,6 +41,7 @@ initializeDb()
     initializeApolloServer(app, server);
     server.listen(process.env.PORT, () => {
       console.log(`Server running on port: ${process.env.PORT}`);
+      ProductController.findByKeyword("Apple");
     });
   })
   .catch(err => {

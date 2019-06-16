@@ -817,7 +817,115 @@ const findByKeyword = keywords => {
     $text: { $search: keywords }
   })
     .then(products => {
-      return products;
+      let prodsId = [];
+      products.map(product => {
+        prodsId.push(product._id);
+        return product;
+      });
+      let pipeline = [];
+      pipeline.push(
+        { $match: { _id: { $in: prodsId } } },
+        {
+          $addFields: {
+            meanStar: {
+              $divide: [
+                {
+                  $reduce: {
+                    input: "$comments",
+                    initialValue: 0,
+                    in: { $add: ["$$value", "$$this.rating"] }
+                  }
+                },
+                {
+                  $cond: [
+                    { $ne: [{ $size: "$comments" }, 0] },
+                    { $size: "$comments" },
+                    1
+                  ]
+                }
+              ]
+            },
+            commentCount: {
+              $size: "$comments"
+            }
+          }
+        },
+        {
+          $lookup: {
+            from: "categories",
+            localField: "categories",
+            foreignField: "_id",
+            as: "categories"
+          }
+        },
+        { $unwind: "$provider" },
+        { $unwind: "$provider.options" },
+        {
+          $lookup: {
+            from: "users",
+            localField: "provider.owner",
+            foreignField: "_id",
+            as: "provider.owner"
+          }
+        },
+        {
+          $project: {
+            _id: 1,
+            provider: 1,
+            deal: 1,
+            categories: 1,
+            regularDiscount: 1,
+            meanStar: 1,
+            commentCount: 1,
+            price: "$provider.options.price",
+            name: 1
+          }
+        },
+        {
+          $sort: {
+            price: 1
+          }
+        },
+        {
+          $group: {
+            _id: "$_id",
+            name: { $first: "$name" },
+            categories: { $first: "$categories" },
+            deal: { $first: "$deal" },
+            regularDiscount: { $first: "$regularDiscount" },
+            provider: { $first: "$provider" },
+            meanStar: { $first: "$meanStar" },
+            commentCount: { $first: "$commentCount" }
+          }
+        },
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            categories: { $arrayElemAt: ["$categories", 0] },
+            provider: {
+              owner: { $arrayElemAt: ["$provider.owner", 0] },
+              options: "$provider.options",
+              discountWithCode: "$provider.discountWithCode",
+              _id: "$provider._id"
+            },
+            deal: 1,
+            regularDiscount: 1,
+            price: "$provider.options.price",
+            meanStar: 1,
+            commentCount: 1
+          }
+        }
+      );
+      return Product.aggregate(pipeline)
+        .exec()
+        .then(data => {
+          console.log(data);
+          // data.forEach(p => {
+          //   console.log(p.name, "/////", p.provider.options);
+          // });
+          // console.log(data[0].provider.options);
+        });
     })
     .catch(err => console.log(err));
 };

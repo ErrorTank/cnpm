@@ -7,6 +7,7 @@ const MainCategory = (props) => {
     <div className={classnames("main-category", {"active": active})}
          onClick={(e) => {
            e.stopPropagation();
+           console.log(e)
            onClick();
          }}
          onMouseEnter={onOpenSubCategories}

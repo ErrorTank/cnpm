@@ -109,6 +109,6 @@ type Query {
     getCacheCategoriesInfo: [CategoryPlainInfo]
     getCategoriesParents(categoryID: String): Category
     findByKeyword(keyword: String): [Product]
-    getProducts(mainFilter: MainFilterInput , productFilter: ProductFilterInput, categoryID: ID, skip: Int, take: Int, rating: Int, brand: ID, provider: ID): ProductsListInfo
+    getProducts(mainFilter: MainFilterInput , productFilter: ProductFilterInput, categoryID: ID, skip: Int, take: Int, rating: Int, brand: ID, provider: ID, priceRange: String): ProductsListInfo
 }
 

@@ -21,9 +21,9 @@ export class PaginationProductList extends React.Component {
   };
 
   componentWillReceiveProps(nextProps, nextContext) {
-    const {filter, maxItem, category, rating, brand, provider} = this.props;
+    const {filter, maxItem, category, rating, brand, provider, priceRange} = this.props;
 
-    if (!isEqual(nextProps.filter, filter) || maxItem !== nextProps.maxItem || nextProps.category !== category || nextProps.rating !== rating || nextProps.brand !== brand|| nextProps.provider !== provider) {
+    if (!isEqual(nextProps.filter, filter) || maxItem !== nextProps.maxItem || nextProps.category !== category || nextProps.rating !== rating || nextProps.brand !== brand || nextProps.provider !== provider || nextProps.priceRange !== priceRange) {
       this.setState({page: 0});
       this.loadData({skip: 0, take: nextProps.maxItem})
     }

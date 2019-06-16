@@ -40,7 +40,7 @@ export default class ProductsRoute extends React.Component {
     };
 
     this.paramInfo = parseQueryString(this.props.location.search);
-    let possibleType = ["brand", "category", "provider"];
+    let possibleType = ["brand", "category", "provider", "priceRange"];
     if(!this.paramInfo.type || !possibleType.includes(this.paramInfo.type)){
       customHistory.push("/")
     }
@@ -117,7 +117,10 @@ export default class ProductsRoute extends React.Component {
   handleClickFilter = (filters) => {
     // let {location} = this.props;
     let newParams = {...this.paramInfo, ...filters};
-
+    if(filters.hasOwnProperty("priceRange")){
+      let {from, to} = filters.priceRange;
+      newParams = {...newParams, priceRange: `${from}_${to}`};
+    }
     let paramUrl = `/products` + buildParams(newParams);
     customHistory.push(paramUrl);
   };
@@ -135,6 +138,7 @@ export default class ProductsRoute extends React.Component {
           rating: Number(this.paramInfo.rating),
           brand: this.paramInfo.brand,
           provider: this.paramInfo.provider,
+          priceRange: this.paramInfo.priceRange,
           skip,
           take
         },

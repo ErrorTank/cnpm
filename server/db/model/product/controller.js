@@ -398,8 +398,9 @@ const addNewComment = ({data, files, productID}) => {
     })
 };
 
-const getProducts = ({mainFilter, productFilter, categoryID, skip, take, rating, brand, provider}, request) => {
+const getProducts = ({mainFilter, productFilter, categoryID, skip, take, rating, brand, provider, priceRange}, request) => {
   // let {keyword, sort} = mainFilter;
+
   let sorter = {
     mostDiscount: {
       "regularDiscount": -1,
@@ -511,118 +512,16 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take, rating,
 
       ]);
       //Thiet bi deo thong minh bug
-
-      if (mainFilter.sort && sorter.hasOwnProperty(mainFilter.sort)) {
-        pipelines = pipelines.concat([
-          {$unwind: "$provider.options"},
-          {
-            $group: {
-              _id: {
-                productID: "$_id",
-                providerID: "$provider._id"
-              },
-              name: {
-                $first: '$name'
-              },
-              commentCount: {
-                $first: '$commentCount'
-              },
-              meanStar: {
-                $first: '$meanStar'
-              },
-              regularDiscount: {
-                $first: '$regularDiscount'
-              },
-              brand: {
-                $first: '$brand'
-              },
-              deal: {
-                $first: '$deal'
-              },
-              categories: {
-                $first: '$categories'
-              },
-              provider: {
-                $first: '$provider',
-
-              },
-              "minPrice": {
-                $min: "$provider.options.price"
-              },
-              "mostSale": {
-                $max: "$provider.options.sold"
-              },
-              options: {$push: "$provider.options"}
-
-            }
-          },
-          {
-            $addFields: {
-              "provider": {
-                _id: "$provider._id",
-                owner: "$provider.owner",
-                discountWithCode: "$provider.discountWithCode",
-                options: "$options"
-              }
-            }
-          },
-          {
-            $group: {
-              _id: "$_id.productID",
-              name: {
-                $first: '$name'
-              },
-              regularDiscount: {
-                $first: '$regularDiscount'
-              },
-              commentCount: {
-                $first: '$commentCount'
-              },
-              meanStar: {
-                $first: '$meanStar'
-              },
-              brand: {
-                $first: '$brand'
-              },
-              deal: {
-                $first: '$deal'
-              },
-              categories: {
-                $first: '$categories'
-              },
-              minPrice: {
-                $min: "$minPrice"
-              },
-              mostSale: {
-                $max: "$mostSale"
-              },
-
-              "provider": {$push: "$provider"}
-            },
-
-          },
-
-          {
-            $addFields: {
-              minPrice: {
-                $multiply: ["$minPrice", {$subtract: [1, {$divide: ["$regularDiscount", 100]}]}]
-              }
-            }
-          }
-        ]);
-        pipelines.push({$sort: sorter[mainFilter.sort]});
-      }else{
-        pipelines.push({
+      pipelines = pipelines.concat([
+        {$unwind: "$provider.options"},
+        {
           $group: {
-            _id: "$_id",
+            _id: {
+              productID: "$_id",
+              providerID: "$provider._id"
+            },
             name: {
               $first: '$name'
-            },
-            regularDiscount: {
-              $first: '$regularDiscount'
-            },
-            brand: {
-              $first: '$brand'
             },
             commentCount: {
               $first: '$commentCount'
@@ -630,18 +529,121 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take, rating,
             meanStar: {
               $first: '$meanStar'
             },
+            regularDiscount: {
+              $first: '$regularDiscount'
+            },
+            brand: {
+              $first: '$brand'
+            },
             deal: {
               $first: '$deal'
             },
             categories: {
               $first: '$categories'
             },
+            provider: {
+              $first: '$provider',
 
-            "provider": {$push: "$provider"},
+            },
+            "minPrice": {
+              $min: "$provider.options.price"
+            },
+            "mostSale": {
+              $max: "$provider.options.sold"
+            },
+            options: {$push: "$provider.options"}
+
+          }
+        },
+        {
+          $addFields: {
+            "provider": {
+              _id: "$provider._id",
+              owner: "$provider.owner",
+              discountWithCode: "$provider.discountWithCode",
+              options: "$options"
+            }
+          }
+        },
+        {
+          $group: {
+            _id: "$_id.productID",
+            name: {
+              $first: '$name'
+            },
+            regularDiscount: {
+              $first: '$regularDiscount'
+            },
+            commentCount: {
+              $first: '$commentCount'
+            },
+            meanStar: {
+              $first: '$meanStar'
+            },
+            brand: {
+              $first: '$brand'
+            },
+            deal: {
+              $first: '$deal'
+            },
+            categories: {
+              $first: '$categories'
+            },
+            minPrice: {
+              $min: "$minPrice"
+            },
+            mostSale: {
+              $max: "$mostSale"
+            },
+
+            "provider": {$push: "$provider"}
           },
 
-        },);
+        },
+
+        {
+          $addFields: {
+            minPrice: {
+              $multiply: ["$minPrice", {$subtract: [1, {$divide: ["$regularDiscount", 100]}]}]
+            }
+          }
+        }
+      ]);
+      if (mainFilter.sort && sorter.hasOwnProperty(mainFilter.sort)) {
+
+        pipelines.push({$sort: sorter[mainFilter.sort]});
       }
+      // else{
+      //   pipelines.push({
+      //     $group: {
+      //       _id: "$_id",
+      //       name: {
+      //         $first: '$name'
+      //       },
+      //       regularDiscount: {
+      //         $first: '$regularDiscount'
+      //       },
+      //       brand: {
+      //         $first: '$brand'
+      //       },
+      //       commentCount: {
+      //         $first: '$commentCount'
+      //       },
+      //       meanStar: {
+      //         $first: '$meanStar'
+      //       },
+      //       deal: {
+      //         $first: '$deal'
+      //       },
+      //       categories: {
+      //         $first: '$categories'
+      //       },
+      //
+      //       "provider": {$push: "$provider"},
+      //     },
+      //
+      //   },);
+      // }
       if(rating){
         pipelines.push({
           $match: { meanStar: {$gte: rating}}
@@ -657,6 +659,17 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take, rating,
           $match: { "provider.owner._id": mongoose.Types.ObjectId(provider)}
         });
       }
+      console.log(priceRange)
+      if(priceRange && priceRange.split("_").length){
+
+        let [from, to] = priceRange.split("_");
+        console.log(from)
+        console.log(to)
+        if(!isNaN(Number(from)) && !isNaN(Number(to)) && (Number(from) !== 0 || Number(to) !== 0))
+          pipelines.push({
+            $match: {minPrice: {$gte: Number(from), $lte: Number(to)}}
+          });
+      }
       pipelines.push({
         $project: {
           _id: 1,
@@ -668,6 +681,7 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take, rating,
           deal: 1,
           categories: 1,
           provider: 1,
+          minPrice: 1
         }
       });
       return Product.aggregate(pipelines);

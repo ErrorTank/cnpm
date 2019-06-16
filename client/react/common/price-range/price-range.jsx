@@ -4,12 +4,11 @@ import {formatMoney} from "../../../common/products-utils";
 export class PriceRange extends React.Component {
   constructor(props) {
     super(props);
-    let [from, to] = [formatMoney(props.from), formatMoney(props.to)];
-    console.log(from)
-    console.log(to)
+
+    let {from, to} = props;
     this.state = {
-      range1: Number(from) ? from : "",
-      range2: Number(to) ? to : ""
+      range1: Number(from) ? formatMoney(props.from) : "",
+      range2: Number(to) ? formatMoney(props.to) : ""
     };
   };
 
@@ -32,10 +31,11 @@ export class PriceRange extends React.Component {
 
   render() {
     let {range1, range2} = this.state;
-    let range1Value = Number(range1.replace(",", "")).toFixed(0);
-    let range2Value = Number(range2.replace(",", "")).toFixed(0);
+    let range1Value = Number(range1.replace(/,/g, "")).toFixed(0);
+    let range2Value = Number(range2.replace(/,/g, "")).toFixed(0);
     console.log(range1Value)
     console.log(range2Value)
+    let submit = () => this.props.onChange(range1Value < range2Value ? {from: range1Value, to: range2Value} : {from: range2Value, to: range1Value});
     return (
       <div className="price-range">
         <p className="pr-title">Chọn khoảng giá</p>
@@ -45,6 +45,12 @@ export class PriceRange extends React.Component {
             type="text"
             value={range1}
             onChange={this.handleChange("range1")}
+            onKeyDown={e => {
+              if (e.keyCode === 13) {
+                submit();
+
+              }
+            }}
           />
           <span></span>
           <input
@@ -52,9 +58,14 @@ export class PriceRange extends React.Component {
             type="text"
             value={range2}
             onChange={this.handleChange("range2")}
+            onKeyDown={e => {
+              if (e.keyCode === 13) {
+                submit();
+              }
+            }}
           />
         </div>
-        <button className={`btn filter-btn`} disabled={range1Value === range2Value} onClick={() => this.props.onChange(range1Value < range2Value ? {from: range1Value, to: range2Value} : {from: range2Value, to: range1Value})}>OK</button>
+        <button className={`btn filter-btn`} onClick={submit}>OK</button>
       </div>
     );
   }

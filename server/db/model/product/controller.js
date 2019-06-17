@@ -1,5 +1,3 @@
-
-
 const Product = require("./product");
 const User = require("../user/user");
 const Category = require("../category/category");
@@ -377,7 +375,6 @@ const editComment = ({pID, cId, comment}) => {
 };
 
 
-
 const addNewComment = ({data, files, productID}) => {
   let saveData = {...data, picture: files.map(each => process.env.APP_URI + "/uploads/img/" + each.filename)};
   let newId = mongoose.Types.ObjectId();
@@ -420,294 +417,304 @@ const getProducts = ({mainFilter, productFilter, categoryID, skip, take, rating,
   let startTime = Date.now();
   return Promise.resolve()
     .then(() => {
-      if(categoryID){
+      if (categoryID) {
         return briefCategoriesCache.get()
       }
       return true;
     })
     .then(categories => {
 
-        let findFunc = categoryID ? createFindCategories(categories) : () => Promise.resolve();
-        return findFunc(categoryID).then(data => {
+      let findFunc = categoryID ? createFindCategories(categories) : () => Promise.resolve();
+      return findFunc(categoryID).then(data => {
 
-          let pipelines = [];
-          if (mainFilter.keyword) {
-            pipelines.push({
-              // $match: { $text: { $search:  "\"" + mainFilter.keyword + "\""} }
-              $match: { name: {$regex: mainFilter.keyword, $options: "i"}}
-            });
+        let pipelines = [];
+        if (mainFilter.keyword) {
+          pipelines.push({
+            // $match: { $text: { $search:  "\"" + mainFilter.keyword + "\""} }
+            $match: {name: {$regex: mainFilter.keyword, $options: "i"}}
+          });
 
-          }
-          if(categoryID){
-            pipelines.push({
-              $match: {
-                "categories": {
-                  $in: data.map(each => mongoose.Types.ObjectId(each))
-                },
-              }
-            })
-          }
-          pipelines = pipelines.concat([
-
-            {
-              "$addFields": {
-                "meanStar": {
-                  "$divide": [
-                    {
-                      "$reduce": {
-                        "input": "$comments",
-                        "initialValue": 0,
-                        "in": {"$add": ["$$value", "$$this.rating"]}
-                      }
-                    },
-                    {
-                      "$cond": [
-                        {"$ne": [{"$size": "$comments"}, 0]},
-                        {"$size": "$comments"},
-                        1
-                      ]
-                    }
-                  ]
-                },
-                "commentCount": {
-                  $size: "$comments"
-                }
-              }
-            },
-            {
-              $project: {
-                _id: 1,
-                name: 1,
-                regularDiscount: 1,
-                brand: 1,
-                deal: 1,
-                categories: 1,
-                provider: 1,
-                commentCount: 1,
-                meanStar: 1
-              }
-            },
-            {$lookup: {from: 'brands', localField: 'brand', foreignField: '_id', as: 'brand'}},
-
-            {
-              $addFields: {
-                brand: {
-                  "$arrayElemAt": ["$brand", 0],
-                },
-
-              }
-            },
-            {$unwind: "$provider"},
-
-
-            {$lookup: {from: 'users', localField: 'provider.owner', foreignField: '_id', as: "provider.owner"}},
-            {
-              $lookup: {
-                from: 'discountwithcodes',
-                localField: 'provider.discountWithCode',
-                foreignField: '_id',
-                as: 'provider.discountWithCode'
-              }
-            },
-            {
-              $addFields: {
-                'provider.owner': {
-                  "$arrayElemAt": ['$provider.owner', 0],
-                },
-                "provider.discountWithCode": {
-
-                  "$arrayElemAt": ["$provider.discountWithCode", 0],
-                }
-              }
-            },
-
-          ]);
-          //Thiet bi deo thong minh bug
-          pipelines = pipelines.concat([
-            {$unwind: "$provider.options"},
-            {
-              $group: {
-                _id: {
-                  productID: "$_id",
-                  providerID: "$provider._id"
-                },
-                name: {
-                  $first: '$name'
-                },
-                commentCount: {
-                  $first: '$commentCount'
-                },
-                meanStar: {
-                  $first: '$meanStar'
-                },
-                regularDiscount: {
-                  $first: '$regularDiscount'
-                },
-                brand: {
-                  $first: '$brand'
-                },
-                deal: {
-                  $first: '$deal'
-                },
-                categories: {
-                  $first: '$categories'
-                },
-                provider: {
-                  $first: '$provider',
-
-                },
-                "minPrice": {
-                  $min: "$provider.options.price"
-                },
-                "mostSale": {
-                  $max: "$provider.options.sold"
-                },
-                options: {$push: "$provider.options"}
-
-              }
-            },
-            {
-              $addFields: {
-                "provider": {
-                  _id: "$provider._id",
-                  owner: "$provider.owner",
-                  discountWithCode: "$provider.discountWithCode",
-                  options: "$options"
-                }
-              }
-            },
-            {
-              $group: {
-                _id: "$_id.productID",
-                name: {
-                  $first: '$name'
-                },
-                regularDiscount: {
-                  $first: '$regularDiscount'
-                },
-                commentCount: {
-                  $first: '$commentCount'
-                },
-                meanStar: {
-                  $first: '$meanStar'
-                },
-                brand: {
-                  $first: '$brand'
-                },
-                deal: {
-                  $first: '$deal'
-                },
-                categories: {
-                  $first: '$categories'
-                },
-                minPrice: {
-                  $min: "$minPrice"
-                },
-                mostSale: {
-                  $max: "$mostSale"
-                },
-
-                "provider": {$push: "$provider"}
+        }
+        if (categoryID) {
+          pipelines.push({
+            $match: {
+              "categories": {
+                $in: data.map(each => mongoose.Types.ObjectId(each))
               },
+            }
+          })
+        }
+        pipelines = pipelines.concat([
 
-            },
-
-            {
-              $addFields: {
-                minPrice: {
-                  $multiply: ["$minPrice", {$subtract: [1, {$divide: ["$regularDiscount", 100]}]}]
-                }
+          {
+            "$addFields": {
+              "meanStar": {
+                "$divide": [
+                  {
+                    "$reduce": {
+                      "input": "$comments",
+                      "initialValue": 0,
+                      "in": {"$add": ["$$value", "$$this.rating"]}
+                    }
+                  },
+                  {
+                    "$cond": [
+                      {"$ne": [{"$size": "$comments"}, 0]},
+                      {"$size": "$comments"},
+                      1
+                    ]
+                  }
+                ]
+              },
+              "commentCount": {
+                $size: "$comments"
               }
             }
-          ]);
-          if (mainFilter.sort && sorter.hasOwnProperty(mainFilter.sort)) {
-
-            pipelines.push({$sort: sorter[mainFilter.sort]});
-          }
-
-          if(rating){
-            pipelines.push({
-              $match: { meanStar: {$gte: rating}}
-            });
-          }
-          if(brand){
-            pipelines.push({
-              $match: { "brand._id": mongoose.Types.ObjectId(brand)}
-            });
-          }
-          if(provider){
-            pipelines.push({
-              $match: { "provider.owner._id": mongoose.Types.ObjectId(provider)}
-            });
-          }
-
-          if(priceRange && priceRange.split("_").length){
-
-            let [from, to] = priceRange.split("_");
-            console.log(from)
-            console.log(to)
-            if(!isNaN(Number(from)) && !isNaN(Number(to)) && (Number(from) !== 0 || Number(to) !== 0))
-              pipelines.push({
-                $match: {minPrice: {$gte: Number(from), $lte: Number(to)}}
-              });
-          }
-          pipelines.push({
+          },
+          {
             $project: {
               _id: 1,
-              meanStar: 1,
-              commentCount: 1,
               name: 1,
               regularDiscount: 1,
               brand: 1,
               deal: 1,
               categories: 1,
               provider: 1,
-              minPrice: 1
+              commentCount: 1,
+              meanStar: 1
             }
-          });
-          return Product.aggregate(pipelines);
-        }).then(data => {
+          },
+          {$lookup: {from: 'brands', localField: 'brand', foreignField: '_id', as: 'brand'}},
 
-          let allCates = briefCategoriesCache.syncGet();
-          let currentCateIsParent = categoryID ? !!allCates.find(each => each.parent === categoryID) : null;
-          let currentCate = categoryID ? allCates.find(each => each._id.toString() === categoryID) : null;
-          let providers = uniqBy(data.reduce((result, each) => {
-            return [...result, ...each.provider.map(item => ({_id: item.owner._id.toString(), name: item.owner.provider.name}))]
-          }, []), "_id").map(each => ({...each, count: data.filter(prod => prod.provider.find(item => item.owner._id.toString() === each._id)).length}));
-          let brands = uniqBy(data.map(each => ({...each.brand, _id: each.brand._id.toString()})), "_id").map(each => ({...each, count: data.filter(prod => prod.brand._id.toString() === each._id).length}));
-
-          return {
-            products: data.slice(skip, skip + take).map(each => {
-              let {meanStar, commentCount, ...rest} = each;
-              return {
-                info: rest,
-                meanStar,
-                commentCount
-              }
-            }),
-            total: data.length,
-            execTime: (Date.now() - startTime).toString(),
-            productFilters: {
-              categories: {
-                _id: currentCateIsParent !== null ? currentCateIsParent ? categoryID :  allCates.find(each => each._id.toString() === currentCate.parent)._id : null,
-                name: currentCateIsParent !== null ? currentCateIsParent ? currentCate.name :  allCates.find(each => each._id.toString() === currentCate.parent).name: null,
-                childs: allCates.filter(each => uniq(data.map(prod => prod.categories.toString())).includes(each._id.toString())).map(each => ({...each, count: data.filter(item => item.categories.toString() === each._id.toString()).length}))
+          {
+            $addFields: {
+              brand: {
+                "$arrayElemAt": ["$brand", 0],
               },
-              providers,
-              brands
+
+            }
+          },
+          {$unwind: "$provider"},
+
+
+          {$lookup: {from: 'users', localField: 'provider.owner', foreignField: '_id', as: "provider.owner"}},
+          {
+            $lookup: {
+              from: 'discountwithcodes',
+              localField: 'provider.discountWithCode',
+              foreignField: '_id',
+              as: 'provider.discountWithCode'
+            }
+          },
+          {
+            $addFields: {
+              'provider.owner': {
+                "$arrayElemAt": ['$provider.owner', 0],
+              },
+              "provider.discountWithCode": {
+
+                "$arrayElemAt": ["$provider.discountWithCode", 0],
+              }
+            }
+          },
+
+        ]);
+        //Thiet bi deo thong minh bug
+        pipelines = pipelines.concat([
+          {$unwind: "$provider.options"},
+          {
+            $group: {
+              _id: {
+                productID: "$_id",
+                providerID: "$provider._id"
+              },
+              name: {
+                $first: '$name'
+              },
+              commentCount: {
+                $first: '$commentCount'
+              },
+              meanStar: {
+                $first: '$meanStar'
+              },
+              regularDiscount: {
+                $first: '$regularDiscount'
+              },
+              brand: {
+                $first: '$brand'
+              },
+              deal: {
+                $first: '$deal'
+              },
+              categories: {
+                $first: '$categories'
+              },
+              provider: {
+                $first: '$provider',
+
+              },
+              "minPrice": {
+                $min: "$provider.options.price"
+              },
+              "mostSale": {
+                $max: "$provider.options.sold"
+              },
+              options: {$push: "$provider.options"}
+
+            }
+          },
+          {
+            $addFields: {
+              "provider": {
+                _id: "$provider._id",
+                owner: "$provider.owner",
+                discountWithCode: "$provider.discountWithCode",
+                options: "$options"
+              }
+            }
+          },
+          {
+            $group: {
+              _id: "$_id.productID",
+              name: {
+                $first: '$name'
+              },
+              regularDiscount: {
+                $first: '$regularDiscount'
+              },
+              commentCount: {
+                $first: '$commentCount'
+              },
+              meanStar: {
+                $first: '$meanStar'
+              },
+              brand: {
+                $first: '$brand'
+              },
+              deal: {
+                $first: '$deal'
+              },
+              categories: {
+                $first: '$categories'
+              },
+              minPrice: {
+                $min: "$minPrice"
+              },
+              mostSale: {
+                $max: "$mostSale"
+              },
+
+              "provider": {$push: "$provider"}
+            },
+
+          },
+
+          {
+            $addFields: {
+              minPrice: {
+                $multiply: ["$minPrice", {$subtract: [1, {$divide: ["$regularDiscount", 100]}]}]
+              }
             }
           }
+        ]);
+        if (mainFilter.sort && sorter.hasOwnProperty(mainFilter.sort)) {
+
+          pipelines.push({$sort: sorter[mainFilter.sort]});
+        }
+
+        if (rating) {
+          pipelines.push({
+            $match: {meanStar: {$gte: rating}}
+          });
+        }
+        if (brand) {
+          pipelines.push({
+            $match: {"brand._id": mongoose.Types.ObjectId(brand)}
+          });
+        }
+        if (provider) {
+          pipelines.push({
+            $match: {"provider.owner._id": mongoose.Types.ObjectId(provider)}
+          });
+        }
+
+        if (priceRange && priceRange.split("_").length) {
+
+          let [from, to] = priceRange.split("_");
+          console.log(from)
+          console.log(to)
+          if (!isNaN(Number(from)) && !isNaN(Number(to)) && (Number(from) !== 0 || Number(to) !== 0))
+            pipelines.push({
+              $match: {minPrice: {$gte: Number(from), $lte: Number(to)}}
+            });
+        }
+        pipelines.push({
+          $project: {
+            _id: 1,
+            meanStar: 1,
+            commentCount: 1,
+            name: 1,
+            regularDiscount: 1,
+            brand: 1,
+            deal: 1,
+            categories: 1,
+            provider: 1,
+            minPrice: 1
+          }
         });
+        return Product.aggregate(pipelines);
+      }).then(data => {
+
+        let allCates = briefCategoriesCache.syncGet();
+        let currentCateIsParent = categoryID ? !!allCates.find(each => each.parent === categoryID) : null;
+        let currentCate = categoryID ? allCates.find(each => each._id.toString() === categoryID) : null;
+        let providers = uniqBy(data.reduce((result, each) => {
+          return [...result, ...each.provider.map(item => ({
+            _id: item.owner._id.toString(),
+            name: item.owner.provider.name
+          }))]
+        }, []), "_id").map(each => ({
+          ...each,
+          count: data.filter(prod => prod.provider.find(item => item.owner._id.toString() === each._id)).length
+        }));
+        let brands = uniqBy(data.map(each => ({
+          ...each.brand,
+          _id: each.brand._id.toString()
+        })), "_id").map(each => ({...each, count: data.filter(prod => prod.brand._id.toString() === each._id).length}));
+
+        return {
+          products: data.slice(skip, skip + take).map(each => {
+            let {meanStar, commentCount, ...rest} = each;
+            return {
+              info: rest,
+              meanStar,
+              commentCount
+            }
+          }),
+          total: data.length,
+          execTime: (Date.now() - startTime).toString(),
+          productFilters: {
+            categories: {
+              _id: currentCateIsParent !== null ? currentCateIsParent ? categoryID : allCates.find(each => each._id.toString() === currentCate.parent)._id : null,
+              name: currentCateIsParent !== null ? currentCateIsParent ? currentCate.name : allCates.find(each => each._id.toString() === currentCate.parent).name : null,
+              childs: allCates.filter(each => uniq(data.map(prod => prod.categories.toString())).includes(each._id.toString())).map(each => ({
+                ...each,
+                count: data.filter(item => item.categories.toString() === each._id.toString()).length
+              }))
+            },
+            providers,
+            brands
+          }
+        }
+      });
 
     })
-
-
 
 
 };
 const findByKeyword = keywords => {
   return Product.find({
-    $text: { $search: keywords }
+    $text: {$search: keywords}
   })
     .then(products => {
       let prodsId = [];
@@ -717,7 +724,7 @@ const findByKeyword = keywords => {
       });
       let pipeline = [];
       pipeline.push(
-        { $match: { _id: { $in: prodsId } } },
+        {$match: {_id: {$in: prodsId}}},
         {
           $addFields: {
             meanStar: {
@@ -726,13 +733,13 @@ const findByKeyword = keywords => {
                   $reduce: {
                     input: "$comments",
                     initialValue: 0,
-                    in: { $add: ["$$value", "$$this.rating"] }
+                    in: {$add: ["$$value", "$$this.rating"]}
                   }
                 },
                 {
                   $cond: [
-                    { $ne: [{ $size: "$comments" }, 0] },
-                    { $size: "$comments" },
+                    {$ne: [{$size: "$comments"}, 0]},
+                    {$size: "$comments"},
                     1
                   ]
                 }
@@ -751,8 +758,8 @@ const findByKeyword = keywords => {
             as: "categories"
           }
         },
-        { $unwind: "$provider" },
-        { $unwind: "$provider.options" },
+        {$unwind: "$provider"},
+        {$unwind: "$provider.options"},
         {
           $lookup: {
             from: "users",
@@ -782,22 +789,22 @@ const findByKeyword = keywords => {
         {
           $group: {
             _id: "$_id",
-            name: { $first: "$name" },
-            categories: { $first: "$categories" },
-            deal: { $first: "$deal" },
-            regularDiscount: { $first: "$regularDiscount" },
-            provider: { $first: "$provider" },
-            meanStar: { $first: "$meanStar" },
-            commentCount: { $first: "$commentCount" }
+            name: {$first: "$name"},
+            categories: {$first: "$categories"},
+            deal: {$first: "$deal"},
+            regularDiscount: {$first: "$regularDiscount"},
+            provider: {$push: "$provider"},
+            meanStar: {$first: "$meanStar"},
+            commentCount: {$first: "$commentCount"}
           }
         },
         {
           $project: {
             _id: 1,
             name: 1,
-            categories: { $arrayElemAt: ["$categories", 0] },
+            categories: {$arrayElemAt: ["$categories", 0]},
             provider: {
-              owner: { $arrayElemAt: ["$provider.owner", 0] },
+              owner: {$arrayElemAt: ["$provider.owner", 0]},
               options: "$provider.options",
               discountWithCode: "$provider.discountWithCode",
               _id: "$provider._id"
@@ -813,16 +820,25 @@ const findByKeyword = keywords => {
       return Product.aggregate(pipeline)
         .exec()
         .then(data => {
-          console.log(data);
+          // console.log(data);
           // data.forEach(p => {
           //   console.log(p.name, "/////", p.provider.options);
           // });
           // console.log(data[0].provider.options);
+          console.log(data);
+          return {
+            products: data.map(each => ({
+              info: {
+                ...omit(each, ["meanStar", "commentCount"])
+              },
+              meanStar: each.meanStar,
+              commentCount: each.commentCount
+            }))
+          }
         });
     })
     .catch(err => console.log(err));
 };
-
 
 
 module.exports = {

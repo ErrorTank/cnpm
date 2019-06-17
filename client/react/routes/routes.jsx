@@ -18,7 +18,7 @@ const CartRoute =  lazy(delayLoad(() => import("./common/cart-route/cart-route")
 const ProductsRoute =  lazy(delayLoad(() => import("./guest-route/products-route/products-route")));
 const ShopRoute =  lazy(delayLoad(() => import("./guest-route/shop-route/shop-route")));
 const AccountRoute =  lazy(delayLoad(() => import("./authen-route/account-route/account-route")));
-
+const SearchRoute = lazy(delayLoad(() => import("./common/search-route/search-route")));
 
 
 // const NotFoundRoute = () => {
@@ -67,6 +67,7 @@ export class MainRoute extends KComponent {
               <WithLocationRoute exact path="/product/:productID" render={props => (<ProductRoute {...props} />)}/>
               <WithLocationRoute exact path="/cart" render={props => (<CartRoute {...props} />)} />
               <WithLocationRoute exact path="/products" render={props => (<ProductsRoute {...props} />)} />
+              <WithLocationRoute exact path="/search" render={props => (<SearchRoute {...props} />)} />
               <WithLocationRoute exact path="/shop/:shopID" render={props => (<ShopRoute {...props} />)} />
               <AuthenRoute exact path="/customer/account" render={props => (<AccountRoute {...props} />)} />
             </Switch>

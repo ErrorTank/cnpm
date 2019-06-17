@@ -15,7 +15,7 @@ export class Navbar extends React.Component {
   };
 
   handleSearchGlobal = (val) => {
-
+    customHistory.push(`/search?keyword=${encodeURIComponent(val)}`)
   };
 
 

@@ -171,12 +171,29 @@ const getBasicProductInfo = gql`
 
 `;
 
+const searchProducts = gql`
+    query($keyword: String){
+        searchProducts(keyword: $keyword){
+            products{
+                info{
+                    ...ProductCacheInfo
+                }
+
+                meanStar
+                commentCount
+            }
+            
+        }
+    }
+    ${ProductCacheFragment}
+`;
 
 export {
-  fetchIndexDealProducts,
-  getFullProductDetails,
-  getBasicProductInfo,
-  getProductComments,
-  replyComment,
-  getProducts
+    fetchIndexDealProducts,
+    getFullProductDetails,
+    getBasicProductInfo,
+    getProductComments,
+    replyComment,
+    getProducts,
+    searchProducts
 }

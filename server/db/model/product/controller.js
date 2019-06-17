@@ -859,6 +859,14 @@ const findByKeyword = keywords => {
           }
         },
         {
+          $lookup: {
+            from: "discountwithcodes",
+            localField: "provider.discountWithCode",
+            foreignField: "_id",
+            as: "provider.discountWithCode"
+          }
+        },
+        {
           $project: {
             _id: 1,
             provider: 1,
@@ -897,7 +905,9 @@ const findByKeyword = keywords => {
               {
                 owner: { $arrayElemAt: ["$provider.owner", 0] },
                 options: ["$provider.options"],
-                discountWithCode: "$provider.discountWithCode",
+                discountWithCode: {
+                  $arrayElemAt: ["$provider.discountWithCode", 0]
+                },
                 _id: "$provider._id"
               }
             ],

@@ -78,35 +78,42 @@ class CheckoutCart extends KComponent {
            cartItemList: item
        })
     }
-    handleQtyChange = (newQty, product) => {
+    handleQtyChange = (newQty, product,qty) => {
         // Set qty moi vao du lieu cua dung san pham dang thay doi
         // userCart.setState();
-        let {productID: _id, provider} = product;
+        let {_id : productID} = product;
+        let provider = product.provider;
+        let finalQty = newQty - qty;
         let info = userInfo.getState();
-        let {_id: optionID} = provider[0].option[0];
+        let {_id: optionID} = provider[0].options[0];
+        console.log(provider[0].options[0]);
         if(info){
             return client.mutate({
                     mutation: addToCart,
                     variables: {
                         pID: productID,
                         uID: info._id,
-                        newQty,
+                        finalQty,
                         option: optionID
                     }
                 }).then(({ data }) => {
                     userCart.setState(data.addToCart.carts).then(() => {
-                        //this.setState({ pushing: false })
-                        publishInfo()
+                        let CartItemList = this.state.cartItemList;
+                        CartItemList.quantity = finalQty;
+                        this.setState({ cartItemList: CartItemList})
+                        //publishInfo()
                     });
                 });
-        } else{
+        } else {
             createUserCartCacheFunction("set")({
                 product: productID,
-                quantity: newQty,
+                quantity: finalQty,
                 option: optionID
             }).then(() => {
-               // this.setState({ pushing: false });
-                publishInfo()
+                let CartItemList = this.state.cartItemList;
+                CartItemList.quantity = finalQty;
+                this.setState({ cartItemList: CartItemList })
+                //publishInfo()
             });
         }
     };
@@ -133,7 +140,7 @@ class CheckoutCart extends KComponent {
                                             let discountedPrice = (options[0].price / 100) * (100 - product.regularDiscount);
                                             
                                             return (
-                                                <div className="row shopping-cart-item" key={_id}>
+                                                <div className="row shopping-cart-item" key={options[0]._id}>
                                                     <div className="col-3 img-item-thumnail">
                                                         <img src={options[0].picture[0]} alt="item-logo"/>
                                                     </div>
@@ -156,7 +163,7 @@ class CheckoutCart extends KComponent {
                                                             <div className="col-2 quantity text-right">
                                                             <QuantityController
                                                                 value={quantity}
-                                                                onChange={(qty) => this.handleQtyChange(qty, product)}
+                                                                onChange={(qty) => this.handleQtyChange(qty, product,quantity)}
                                                                 label={"Số lượng:"}
                                                             />
                                                             </div>

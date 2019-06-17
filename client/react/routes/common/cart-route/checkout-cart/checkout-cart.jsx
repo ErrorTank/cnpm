@@ -70,6 +70,28 @@ class CheckoutCart extends KComponent {
     };
 
     handleDelete = (id) => {
+        let info = userInfo.getState();
+        if (info) {
+                return client.mutate({
+                    mutation: addToCart,
+                    variables: {
+                        pID: productID,
+                        uID: info._id,
+                        finalQty,
+                        option: optionID
+                    }
+                }).then(({ data }) => {
+                
+                });
+            } else {
+            createUserCartCacheFunction("set")({
+                product: productID,
+                quantity: finalQty,
+                option: optionID
+            }).then(() => {
+               
+            });
+        }
         let newCartList = this.state.cartItemList.filter(item => {
             return item.product.provider[0].options[0]._id !== id;
         })
@@ -77,6 +99,8 @@ class CheckoutCart extends KComponent {
             cartItemList: item
         })
     }
+
+
     handleQtyChange = (newQty, product, qty) => {
         // Set qty moi vao du lieu cua dung san pham dang thay doi
         // userCart.setState();
@@ -135,6 +159,9 @@ class CheckoutCart extends KComponent {
         }
     };
 
+    handleSendBill = () =>{
+        console.log();
+    }
 
     render() {
         let info = userInfo.getState();
@@ -205,7 +232,7 @@ class CheckoutCart extends KComponent {
                                     <p className="VAT">(Đã bao gồm VAT)</p>
                                 </div>
                             </div>
-                            <button className="btn btn-danger checkout" type="button">Tiến hành đặt hàng</button>
+                            <button className="btn btn-danger checkout" type="button" onClick={() => this.handleSendBill()}>Tiến hành đặt hàng</button>
                         </div>
 
                     </div>

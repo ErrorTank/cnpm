@@ -116,7 +116,7 @@ class CheckoutCart extends KComponent {
                 variables: {
                     pID: productID,
                     uID: info._id,
-                    finalQty,
+                    qty: finalQty,
                     option: optionID
                 }
             }).then(({ data }) => {

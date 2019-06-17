@@ -3,7 +3,7 @@ import { createUserCartCacheFunction } from "../../../../../common/cache/cart-ca
 import { userCart, userInfo } from "../../../../../common/states/common";
 import { KComponent } from '../../../../common/k-component';
 import {client} from "../../../../../graphql";
-import {getCartItemByIdList} from "../../../../../graphql/queries/user";
+import { getCartItemByIdList, addToCart} from "../../../../../graphql/queries/user";
 import { QuantityController } from "../../../../common/quantity-controller/quantity-controller";
 import { customHistory } from "../../../routes";
 import { formatMoney } from "../../../../../common/products-utils";
@@ -19,7 +19,8 @@ class CheckoutCart extends KComponent {
         }))
         this.state = {
             cartItemList: [],
-            totalPrice: 0
+            totalPrice: 0,
+            cartCount:0
         }
         this.fetchItemList();
         
@@ -31,6 +32,7 @@ class CheckoutCart extends KComponent {
             let info = userInfo.getState();
             let rawCart = info ? userCart.getState() : createUserCartCacheFunction("get")({ async: false });
             let calculatePrice = 0;
+            let cartCounting = 0;
             //console.log(rawCart);
             client.query({
                 query: getCartItemByIdList,
@@ -48,14 +50,15 @@ class CheckoutCart extends KComponent {
                                 return true;
                             }
                         })
-                        // console.log(founded);
+                        // console.log(founded.quantity);
                         calculatePrice += ((e.product.provider[0].options[0].price / 100) * (100 - e.product.regularDiscount))*founded.quantity;
+                        cartCounting+=founded.quantity;
                         e = {...e, quantity: founded.quantity};
                         return e;
                     });
                     console.log(cartWithQuantity);
-                    console.log(calculatePrice);
-                    this.setState({ cartItemList: cartWithQuantity,totalPrice: calculatePrice, loading: false }, () => {
+                    //console.log(cartCounting);
+                    this.setState({ cartItemList: cartWithQuantity, totalPrice: calculatePrice, cartCount: cartCounting, loading: false }, () => {
                         resolve();
                     });
             }).catch(err =>{ 
@@ -75,32 +78,45 @@ class CheckoutCart extends KComponent {
            cartItemList: item
        })
     }
-    handleQtyChange = (newQty, option) => {
+    handleQtyChange = (newQty, product) => {
         // Set qty moi vao du lieu cua dung san pham dang thay doi
         // userCart.setState();
+        let {productID: _id, provider} = product;
         let info = userInfo.getState();
-        let {_id: optionID} = option;
+        let {_id: optionID} = provider[0].option[0];
         if(info){
-            let cart = userCart.getState()
-            newcart = cart.map((item) => {
-                if (item.option === optionID) {
-                    return { ...item, qty: newQty }
-                }
-                return item;
-            })
-            userCart.setState(newcart);
+            return client.mutate({
+                    mutation: addToCart,
+                    variables: {
+                        pID: productID,
+                        uID: info._id,
+                        newQty,
+                        option: optionID
+                    }
+                }).then(({ data }) => {
+                    userCart.setState(data.addToCart.carts).then(() => {
+                        //this.setState({ pushing: false })
+                        publishInfo()
+                    });
+                });
         } else{
-            //console.log(newQty);
-           // createUserCartCacheFunction("set")({...option, qty: newQty});
+            createUserCartCacheFunction("set")({
+                product: productID,
+                quantity: newQty,
+                option: optionID
+            }).then(() => {
+               // this.setState({ pushing: false });
+                publishInfo()
+            });
         }
     };
 
 
     render(){
         let info = userInfo.getState();
-        let cartCount = info ? userCart.getState().length : createUserCartCacheFunction("get")({ async: false }).length;
-        let rawCart = info ? userCart.getState() : createUserCartCacheFunction("get")({ async: false });
-        let { cartItemList, loading, totalPrice} = this.state;
+        let { cartItemList, loading, totalPrice, cartCount } = this.state;
+        //let rawCart = info ? userCart.getState() : createUserCartCacheFunction("get")({ async: false });
+        
 
         let checkOut = cartCount !== 0 ? (
             <div className="checkout ">
@@ -140,7 +156,7 @@ class CheckoutCart extends KComponent {
                                                             <div className="col-2 quantity text-right">
                                                             <QuantityController
                                                                 value={quantity}
-                                                                onChange={(qty) => this.handleQtyChange(qty, options[0])}
+                                                                onChange={(qty) => this.handleQtyChange(qty, product)}
                                                                 label={"Số lượng:"}
                                                             />
                                                             </div>

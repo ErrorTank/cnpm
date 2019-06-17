@@ -74,8 +74,12 @@ export class Actions extends KComponent {
   render() {
 
     let info = userInfo.getState();
-
-    let cartCount = info ? userCart.getState().length : createUserCartCacheFunction("get")({async: false}).length;
+    let rawCart = info ? userCart.getState() : createUserCartCacheFunction("get")({async: false});
+    let cartCount = 0;
+    rawCart.map(e => {
+      cartCount+=e.quantity;
+      return e;
+    })
     return (
       <div className="actions nav-section">
         <div className="nav-box"

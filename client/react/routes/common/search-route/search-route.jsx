@@ -7,6 +7,8 @@ import {LoadingInline} from "../../../common/loading-inline/loading-inline";
 import {client} from "../../../../graphql";
 import {searchProducts} from "../../../../graphql/queries/product";
 import isEqual from "lodash/isEqual";
+import {ProductsRow} from "../index-route/index-product-list/index-product-list";
+import minBy from "lodash/minBy";
 
 export default class SearchRoute extends React.Component {
   constructor(props) {
@@ -46,8 +48,19 @@ export default class SearchRoute extends React.Component {
     }
   }
 
+  getRenderList = (list) => {
+    if(!list.length) return [];
+    let rowsCount = Math.ceil(list.length / 5);
+    return Array.from(new Array(rowsCount)).map((each, i) => list.slice(i * 5, i * 5 + 5));
+  };
+
   render() {
     let {searching, products} = this.state;
+    let renderList = this.getRenderList(products.map(({info, ...temp}) => {
+      let {provider, ...rest} = info;
+      let minProvider = minBy(provider, each => minBy(each.options, op => op.price).price);
+      return {...rest, ...temp , discountWithCode: minProvider.discountWithCode, options: [minBy(minProvider.options, each => each.price)]}
+    }));
     return (
       <PageTitle
         title={!searching ? `${products.length} kết quả cho: ${decodeURIComponent(this.paramInfo.keyword)}` : "Đang tìm kiếm..."}
@@ -62,7 +75,21 @@ export default class SearchRoute extends React.Component {
               {searching && (
                 <LoadingInline/>
               )}
-
+              {products.length ? (
+                <div className="product-list">
+                  {renderList.map((each, i) => (
+                    <ProductsRow
+                      className="search-list"
+                      rowList={each}
+                      key={i}
+                      cols={5}
+                      animate={false}
+                      deal={false}
+                      showDetails={true}
+                    />
+                  ))}
+                </div>
+              ) : searching ?  null : <p className="empty-notify">Không có sản phẩm nào</p>}
             </div>
           </Breadcrumb>
         </AuthenLayout>

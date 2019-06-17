@@ -418,6 +418,24 @@ const getCartItemByIdList = (rawList) => {
   })
 };
 
+const removeFromCart = ({userID, option}) => {
+  return User.findOne({_id: userID}).lean()
+    .then(data => {
+      if (!data) {
+        return Promise.reject(new ApolloError("user_not_found"))
+      }
+      return true;
+    })
+    .then(() => {
+      return User.findOneAndUpdate({
+        _id: mongoose.Types.ObjectId(userID),
+      }, {$pull: {"carts": {"option": mongoose.Types.ObjectId(option)}}}, {
+        new: true,
+        fields: "-password"
+      }).lean()
+    })
+};
+
 const addToCart = ({userID, productID, qty, option}) => {
   return User.findOne({_id: userID}).lean()
     .then(data => {
@@ -567,5 +585,6 @@ module.exports = {
   addToFavorites,
   addToCart,
   getCartItemByIdList,
-  getCacheProvidersInfo
+  getCacheProvidersInfo,
+  removeFromCart
 };

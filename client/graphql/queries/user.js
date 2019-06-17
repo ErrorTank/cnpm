@@ -45,6 +45,20 @@ const addToCart = gql`
     }
 `;
 
+
+const removeFromCart = gql`
+    mutation ($uID: ID!, $option: ID!){
+        removeFromCart(userID: $uID, option: $option){
+            _id
+            carts{
+                product
+                option
+                quantity
+            }
+        }
+    }
+`;
+
 const getUserRecentVisited = gql`
   query($id: ID!){
     getUserRecentVisited(userID: $id){
@@ -243,5 +257,6 @@ export {
   addToFavorites,
   addToCart,
   getCartItemByIdList,
-  getCacheProvidersInfo
+  getCacheProvidersInfo,
+  removeFromCart
 }

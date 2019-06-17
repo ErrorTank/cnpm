@@ -42,7 +42,7 @@ export default class SearchRoute extends React.Component {
       this.paramInfo = {...nextParams};
       this.setState({searching: true});
       this.fetchData().then(products => {
-        this.setState({products});
+        this.setState({products, searching: false});
       })
 
     }

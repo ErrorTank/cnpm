@@ -10,7 +10,7 @@ const isLogin = () => {
 
 const mutateAppStores = (data) => {
   userInfo.setState(omit(data, ["favorites", "carts"]));
-  userCart.setState(pick(data, ["carts"]).carts);
+  userCart.setState(pick(data, ["carts"]).carts.map(each => omit(each, ["__typename"])));
   userFavorites.setState(pick(data, ["favorites"]).favorites);
 };
 

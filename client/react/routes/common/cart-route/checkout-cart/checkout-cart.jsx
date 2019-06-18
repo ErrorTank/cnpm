@@ -135,10 +135,10 @@ class CheckoutCart extends KComponent {
           let newCartList = this.state.cartItemList.filter(item => {
             return item.product.provider[0].options[0]._id !== optionID;
           })
-          console.log(newCartList);
+          //console.log(newCartList);
           this.setState({
             cartItemList: newCartList
-          });
+          },() => { this.updateError });
         });
       });
     } else {
@@ -148,8 +148,8 @@ class CheckoutCart extends KComponent {
       }).then(() => {
         let newCartList = this.state.cartItemList.filter(item => {
           return item.product.provider[0].options[0]._id !== optionID;
-        })
-        console.log(newCartList);
+        },() => {this.updateError})
+        //console.log(newCartList);
         this.setState({
           cartItemList: newCartList
         });
@@ -167,7 +167,7 @@ class CheckoutCart extends KComponent {
     let finalQty = newQty - qty;
     let info = userInfo.getState();
     let { _id: optionID } = provider[0].options[0];
-    console.log(provider[0].options[0]);
+   // console.log(provider[0].options[0]);
     if (info) {
       return client.mutate({
         mutation: addToCart,
@@ -182,6 +182,7 @@ class CheckoutCart extends KComponent {
           let CartItemList = this.state.cartItemList;
           let newCartCount = this.state.cartCount;
           let newPrice = this.state.totalPrice;
+
           CartItemList.map(p => {
             if (p.product.provider[0].options[0]._id === optionID) {
               p.quantity += finalQty;
@@ -190,7 +191,7 @@ class CheckoutCart extends KComponent {
             }
             return p;
           })
-          console.log(CartItemList)
+          console.log(CartItemList);
           this.setState({ cartItemList: CartItemList, cartCount: newCartCount, totalPrice: newPrice }, () => {
             this.setState({ errors: this.state.errors.filter(each => each.type !== "qtyExceed").concat(this.getExceedError()) })
           });
@@ -233,7 +234,7 @@ class CheckoutCart extends KComponent {
       return [...result, ...each.product.provider.filter(pro => pro.discountWithCode).map(pro => pro.discountWithCode)]
     }, []);
     let voucherObj = allVouchers.find(each => each.code === voucher);
-
+  
     if (!voucherObj) {
       this.setState({
         errors: errors.filter(each => each.type !== "voucherError").concat({
@@ -244,9 +245,13 @@ class CheckoutCart extends KComponent {
       })
     } else {
       if (!vouchers.find(each => each._id === voucherObj._id)) {
-        this.setState({ vouchers: vouchers.concat(voucherObj), errors: errors.filter(each => each.type !== "voucherError") })
+        this.setState({ vouchers: vouchers.concat(voucherObj), errors: errors.filter(each => each.type !== "voucherError") },() =>{
+          // let voucherNow = this.vouchers;
+          // console.log(voucherNow)
+        })
       }
     }
+   
   };
 
   render() {
@@ -296,7 +301,7 @@ class CheckoutCart extends KComponent {
                               </p>
                               <p className="seller-by">Cung cấp bởi <span className="span-button"
                                 onClick={() => customHistory.push(`/products?type=provider&provider=${owner._id}`)}>{owner.provider.name}</span>
-                              </p>      {/* seller-by who, did't found yet  */}
+                              </p>      
                               <p className="action">
                                 <span className="span-button" onClick={() => {
                                   this.handleDelete(owner._id, options[0]._id)

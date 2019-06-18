@@ -804,7 +804,7 @@ const getProducts = (
 };
 const findByKeyword = keywords => {
   return Product.find({
-    $text: { $search: keywords }
+    name: { $regex: keywords, $options: "i" }
   })
     .then(products => {
       let prodsId = [];

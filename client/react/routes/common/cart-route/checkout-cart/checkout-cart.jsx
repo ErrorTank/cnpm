@@ -219,13 +219,13 @@ class CheckoutCart extends KComponent {
   };
 
   handleApplyVoucher = (voucher) => {
-    console.log(voucher)
+
     let {cartItemList, errors, vouchers} = this.state;
     let allVouchers = cartItemList.reduce((result, each) => {
       return [...result, ...each.product.provider.filter(pro => pro.discountWithCode).map(pro => pro.discountWithCode)]
     }, []);
     let voucherObj = allVouchers.find(each => each.code === voucher);
-    console.log(voucherObj)
+
     if (!voucherObj) {
       this.setState({
         errors: errors.filter(each => each.type !== "voucherError").concat({

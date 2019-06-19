@@ -103,17 +103,12 @@ class CheckoutCart extends KComponent {
             }
           })
           // console.log(founded.quantity);
-          calculatePrice += ((e.product.provider[0].options[0].price / 100) * (100 - e.product.regularDiscount)) * founded.quantity;
-          cartCounting += founded.quantity;
           e = { ...e, quantity: founded.quantity };
           return e;
         });
         console.log(cartWithQuantity);
-        //console.log(cartCounting);
         this.setState({
           cartItemList: cartWithQuantity,
-          totalPrice: calculatePrice,
-          cartCount: cartCounting,
           loading: false
         }, () => {
           this.updateError();
@@ -168,13 +163,11 @@ class CheckoutCart extends KComponent {
 
   handleQtyChange = (newQty, product, qty) => {
     // Set qty moi vao du lieu cua dung san pham dang thay doi
-    // userCart.setState();
     let { _id: productID } = product;
     let provider = product.provider;
     let finalQty = newQty - qty;
     let info = userInfo.getState();
     let { _id: optionID } = provider[0].options[0];
-   // console.log(provider[0].options[0]);
     if (info) {
       return client.mutate({
         mutation: addToCart,
@@ -187,19 +180,13 @@ class CheckoutCart extends KComponent {
       }).then(({ data }) => {
         userCart.setState(data.addToCart.carts).then(() => {
           let CartItemList = this.state.cartItemList;
-          let newCartCount = this.state.cartCount;
-          let newPrice = this.state.totalPrice;
-
           CartItemList.map(p => {
             if (p.product.provider[0].options[0]._id === optionID) {
               p.quantity += finalQty;
-              newCartCount += finalQty;
-              newPrice += ((p.product.provider[0].options[0].price / 100) * (100 - p.product.regularDiscount)) * finalQty;
             }
             return p;
           })
-          console.log(CartItemList);
-          this.setState({ cartItemList: CartItemList, cartCount: newCartCount, totalPrice: newPrice }, () => {
+          this.setState({ cartItemList: CartItemList}, () => {
             this.setState({ errors: this.state.errors.filter(each => each.type !== "qtyExceed").concat(this.getExceedError()) })
           });
         });
@@ -211,19 +198,13 @@ class CheckoutCart extends KComponent {
         option: optionID
       }).then(() => {
         let CartItemList = this.state.cartItemList;
-        let newCartCount = this.state.cartCount;
-        let newPrice = this.state.totalPrice;
         CartItemList.map(p => {
           if (p.product.provider[0].options[0]._id === optionID) {
             p.quantity += finalQty;
-            newCartCount += finalQty;
-            newPrice += ((p.product.provider[0].options[0].price / 100) * (100 - p.product.regularDiscount)) * finalQty;
           }
           return p;
         })
-        console.log(CartItemList)
-
-        this.setState({ cartItemList: CartItemList, cartCount: newCartCount, totalPrice: newPrice }, () => {
+        this.setState({ cartItemList: CartItemList}, () => {
           this.setState({ errors: this.state.errors.filter(each => each.type !== "qtyExceed").concat(this.getExceedError()) })
         });
       });
@@ -231,7 +212,7 @@ class CheckoutCart extends KComponent {
   };
 
   handleSendBill = () => {
-    console.log();
+    console.log('done');
   };
 
   handleApplyVoucher = (voucher) => {
@@ -253,7 +234,7 @@ class CheckoutCart extends KComponent {
     } else {
       if (!vouchers.find(each => each._id === voucherObj._id)) {
         this.setState({ vouchers: vouchers.concat(voucherObj), errors: errors.filter(each => each.type !== "voucherError") },() =>{
-          // let voucherNow = this.vouchers;
+          // let voucherNow = this.state.vouchers;
           // console.log(voucherNow)
         })
       }
@@ -263,7 +244,27 @@ class CheckoutCart extends KComponent {
 
   render() {
     let info = userInfo.getState();
-    let { cartItemList, loading, totalPrice, cartCount } = this.state;
+    let { cartItemList, loading, vouchers} = this.state;
+    let totalPrice = 0, cartCount = 0, finalPrice = 0, voucherDiscount;
+    console.log(vouchers);
+    cartItemList.map(item => {
+      let { product, quantity } = item;
+      let { provider } = product;
+      let { options, discountWithCode } = provider[0];  
+      cartCount += quantity;
+      if (vouchers.length !== 0){
+        voucherDiscount = vouchers.find(e => e.code === discountWithCode.code);
+        totalPrice += ((options[0].price / 100) * (100 - product.regularDiscount)) * quantity;
+        finalPrice += ((options[0].price / 100) * (100 - product.regularDiscount - voucherDiscount.value)) * quantity;
+      }
+      else{
+        let discountedPrice = (options[0].price / 100) * (100 - product.regularDiscount);
+        totalPrice += (discountedPrice * quantity);
+        finalPrice = totalPrice;
+      }
+      
+      return item;
+      });
     //let rawCart = info ? userCart.getState() : createUserCartCacheFunction("get")({ async: false });
   
     let isDisabled = this.state.errors.find(each => each.type !== "voucherError");
@@ -292,7 +293,7 @@ class CheckoutCart extends KComponent {
                 {
                   cartItemList.map(item => {
                     let { product, quantity } = item;
-                    let { _id, provider } = product;
+                    let { provider } = product;
                     let { options, owner } = provider[0];
                     let discountedPrice = (options[0].price / 100) * (100 - product.regularDiscount);
 
@@ -350,8 +351,8 @@ class CheckoutCart extends KComponent {
               <div className="total-price">
                 <span>Thành Tiền:</span>
                 <div className="amount">
-                  <div className="VAT-price">{formatMoney(totalPrice)}₫</div>
-                  <p className="VAT">(Đã bao gồm VAT)</p>
+                  <div className="VAT-price">{formatMoney(finalPrice)}₫</div>
+                  <p className="VAT">(Đã bao gồm VAT + vourchers)</p>
                 </div>
               </div>
               <button className={`btn btn-danger checkout ${isDisabled ? `no-pointer-event disabled` : ""}`}

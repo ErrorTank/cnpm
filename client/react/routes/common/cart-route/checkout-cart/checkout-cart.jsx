@@ -19,15 +19,22 @@ class CheckoutCart extends KComponent {
     super(props);
     this.onUnmount(userInfo.onChange((newState, oldState) => {
       if (!newState || !oldState) {
-        this.forceUpdate();
+        this.setState({ ...this.defaultState }, () => this.fetchItemList());
+       
+      
       }
     }))
-    this.state = {
+ 
+    this.defaultState = {
       cartItemList: [],
       totalPrice: 0,
       cartCount: 0,
       errors: [],
       vouchers: []
+    }
+
+    this.state = {
+      ...this.defaultState
     }
     this.fetchItemList();
 
@@ -143,10 +150,8 @@ class CheckoutCart extends KComponent {
         });
       });
     } else {
-      createUserCartCacheFunction("set")({
-        product: productID,
-        quantity: finalQty,
-        option: optionID
+      createUserCartCacheFunction("deleteItem")((item)=>{
+        return item.option !== optionID;
       }).then(() => {
         let newCartList = this.state.cartItemList.filter(item => {
           return item.product.provider[0].options[0]._id !== optionID;
@@ -260,6 +265,7 @@ class CheckoutCart extends KComponent {
     let info = userInfo.getState();
     let { cartItemList, loading, totalPrice, cartCount } = this.state;
     //let rawCart = info ? userCart.getState() : createUserCartCacheFunction("get")({ async: false });
+  
     let isDisabled = this.state.errors.find(each => each.type !== "voucherError");
     console.log(this.state.errors)
     let checkOut = cartCount !== 0 ? (

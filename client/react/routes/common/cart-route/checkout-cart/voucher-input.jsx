@@ -18,7 +18,7 @@ export class VoucherInput extends React.Component {
                onKeyDown={e => {
                  if(e.keyCode === 13){
                    this.setState({value: ""})
-                   this.state.value.trim() && onChange(this.state.value.trim())
+                   this.state.value.trim() && onChange(this.state.value.trim().toUpperCase())
                  }
                }}
                onChange={e => this.setState({value: e.target.value})}
@@ -26,7 +26,7 @@ export class VoucherInput extends React.Component {
         <button className="submit-btn"
                 onClick={() => {
                   this.setState({value: ""})
-                  this.state.value.trim() && onChange(this.state.value.trim())
+                  this.state.value.trim() && onChange(this.state.value.trim().toUpperCase())
                 }}
 
         >

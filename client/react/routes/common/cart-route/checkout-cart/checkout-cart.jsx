@@ -1,6 +1,6 @@
 import React from 'react'
 import { createUserCartCacheFunction } from "../../../../../common/cache/cart-cache";
-import { userCart, userInfo } from "../../../../../common/states/common";
+import {userCart, userInfo, userCheckoutItemInfo} from "../../../../../common/states/common";
 import { KComponent } from '../../../../common/k-component';
 import { client } from "../../../../../graphql";
 import { getCartItemByIdList, addToCart,removeFromCart } from "../../../../../graphql/queries/user";
@@ -20,21 +20,23 @@ class CheckoutCart extends KComponent {
     this.onUnmount(userInfo.onChange((newState, oldState) => {
       if (!newState || !oldState) {
         this.setState({ ...this.defaultState }, () => this.fetchItemList());
-       
-      
+
+
       }
     }))
- 
+
     this.defaultState = {
       cartItemList: [],
       totalPrice: 0,
       cartCount: 0,
       errors: [],
-      vouchers: []
+      vouchers: [],
+
     }
 
     this.state = {
-      ...this.defaultState
+      ...this.defaultState,
+      checkout: false
     }
     this.fetchItemList();
 
@@ -212,7 +214,10 @@ class CheckoutCart extends KComponent {
   };
 
   handleSendBill = () => {
-    console.log('done');
+    this.setState({checkout: true});
+    userCheckoutItemInfo.setState({vouchers: this.state.vouchers, items: this.state.cartItemList}).then(() => {
+      customHistory.push("/checkout");
+    });
   };
 
   handleApplyVoucher = (voucher) => {
@@ -250,7 +255,7 @@ class CheckoutCart extends KComponent {
     cartItemList.map(item => {
       let { product, quantity } = item;
       let { provider } = product;
-      let { options, discountWithCode } = provider[0];  
+      let { options, discountWithCode } = provider[0];
       cartCount += quantity;
       if (vouchers.length !== 0){
         voucherDiscount = vouchers.find(e => e.code === discountWithCode.code);
@@ -262,11 +267,11 @@ class CheckoutCart extends KComponent {
         totalPrice += (discountedPrice * quantity);
         finalPrice = totalPrice;
       }
-      
+
       return item;
       });
     //let rawCart = info ? userCart.getState() : createUserCartCacheFunction("get")({ async: false });
-  
+
     let isDisabled = this.state.errors.find(each => each.type !== "voucherError");
     console.log(this.state.errors)
     let checkOut = cartCount !== 0 ? (
@@ -356,7 +361,9 @@ class CheckoutCart extends KComponent {
                 </div>
               </div>
               <button className={`btn btn-danger checkout ${isDisabled ? `no-pointer-event disabled` : ""}`}
-                type="button" disabled={isDisabled} onClick={() => this.handleSendBill()}>Tiến hành đặt hàng
+                type="button" disabled={isDisabled} onClick={() => this.handleSendBill()}>
+                {this.state.checkout && <LoadingInline/>}
+                Tiến hành đặt hàng
               </button>
               <div className="add-voucher">
                 <div className="av-head">

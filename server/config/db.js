@@ -13,6 +13,8 @@ const loadDbInstances = () => {
   require("../db/model/reset-password-token/reset-password-token");
   require("../db/model/user/user");
   require("../db/model/discount-with-code/discount-with-code");
+  require("../db/model/discount-with-code/discount-with-code");
+  const {City, Ward, District} = require("../db/model/location/location");
   console.log('\x1b[36m%s\x1b[32m', "Load all db instances successfully!");
 };
 

@@ -52,6 +52,7 @@ const userSchema = new Schema({
   dob: {type: Date},
   gender: {type: Boolean, default: false},
   picture: String,
+  address: String,
   subscribe: {type: Boolean, default: false},
   updatedAt: {type: Date},
   createdAt: {type: Date, default: Date.now},

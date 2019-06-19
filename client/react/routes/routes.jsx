@@ -11,6 +11,7 @@ const delayLoad = fn => () => new Promise(resolve => {
 const IndexRoute =  lazy(delayLoad(() => import("./common/index-route/index-route")));
 import {AuthenRoute, GuestRoute} from "./route-types/authen-routes";
 import {OverlayLoading} from "./guest-route/redirect-email-confirm/redirect-email-confirm";
+import {CheckoutRoute} from "./common/checkout-route/checkout-route";
 const RedirectEmailConfirm =  lazy(delayLoad(() => import("./guest-route/redirect-email-confirm/redirect-email-confirm")));
 const ResetPassword =  lazy(delayLoad(() => import("./guest-route/reset-password/reset-password")));
 const ProductRoute =  lazy(delayLoad(() => import("./common/product-route/product-route")));
@@ -69,6 +70,7 @@ export class MainRoute extends KComponent {
               <WithLocationRoute exact path="/products" render={props => (<ProductsRoute {...props} />)} />
               <WithLocationRoute exact path="/search" render={props => (<SearchRoute {...props} />)} />
               <WithLocationRoute exact path="/shop/:shopID" render={props => (<ShopRoute {...props} />)} />
+              <WithLocationRoute exact path="/checkout" render={props => (<CheckoutRoute {...props} />)} />
               <AuthenRoute exact path="/customer/account" render={props => (<AccountRoute {...props} />)} />
             </Switch>
           </Suspense>

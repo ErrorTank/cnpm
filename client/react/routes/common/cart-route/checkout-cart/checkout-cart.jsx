@@ -121,34 +121,36 @@ class CheckoutCart extends KComponent {
 
   };
 
-  handleDelete = (userID, optionID) => {
+  handleDelete = (optionID) => {
     let info = userInfo.getState();
     if (info) {
       return client.mutate({
         mutation: removeFromCart,
         variables: {
-          uID: userID,
+          uID: info._id,
           option: optionID
         }
       }).then(({ data }) => {
         userCart.setState(data.removeFromCart.carts).then(() => {
+          console.log('no',data.removeFromCart.carts);
           let newCartList = this.state.cartItemList.filter(item => {
             return item.product.provider[0].options[0]._id !== optionID;
           })
           //console.log(newCartList);
           this.setState({
             cartItemList: newCartList
-          },() => { this.updateError });
+          },() => { this.updateError() });
         });
       });
     } else {
       createUserCartCacheFunction("set")({
-        uID: userID,
+        product: productID,
+        quantity: finalQty,
         option: optionID
       }).then(() => {
         let newCartList = this.state.cartItemList.filter(item => {
           return item.product.provider[0].options[0]._id !== optionID;
-        },() => {this.updateError})
+        },() => {this.updateError()})
         //console.log(newCartList);
         this.setState({
           cartItemList: newCartList
@@ -304,7 +306,7 @@ class CheckoutCart extends KComponent {
                               </p>
                               <p className="action">
                                 <span className="span-button" onClick={() => {
-                                  this.handleDelete(owner._id, options[0]._id)
+                                  this.handleDelete(options[0]._id)
                                 }}>Xóa</span>
                               </p>
                             </div>

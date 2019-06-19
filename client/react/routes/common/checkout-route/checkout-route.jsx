@@ -28,13 +28,11 @@ export class CheckoutRoute extends KComponent {
         <AuthenLayout
           showCategories={true}
         >
-
           <div className="container content-container checkout-route">
 
           </div>
         </AuthenLayout>
       </PageTitle>
-
     );
   }
 }

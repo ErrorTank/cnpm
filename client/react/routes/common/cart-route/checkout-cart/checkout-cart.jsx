@@ -88,7 +88,7 @@ class CheckoutCart extends KComponent {
       }).then(({ data }) => {
         // console.log(this.state.cartItemList);
         let cartItemList = [...data.getCartItemByIdList];
-        //console.log('keke', cartItemList);
+
         let cartWithQuantity = cartItemList.map(e => {
           let founded = rawCart.find(prod => {
             if (prod.option === e.product.provider[0].options[0]._id.toString()) {
@@ -234,7 +234,7 @@ class CheckoutCart extends KComponent {
       return [...result, ...each.product.provider.filter(pro => pro.discountWithCode).map(pro => pro.discountWithCode)]
     }, []);
     let voucherObj = allVouchers.find(each => each.code === voucher);
-  
+
     if (!voucherObj) {
       this.setState({
         errors: errors.filter(each => each.type !== "voucherError").concat({
@@ -251,7 +251,7 @@ class CheckoutCart extends KComponent {
         })
       }
     }
-   
+
   };
 
   render() {
@@ -301,7 +301,7 @@ class CheckoutCart extends KComponent {
                               </p>
                               <p className="seller-by">Cung cấp bởi <span className="span-button"
                                 onClick={() => customHistory.push(`/products?type=provider&provider=${owner._id}`)}>{owner.provider.name}</span>
-                              </p>      
+                              </p>
                               <p className="action">
                                 <span className="span-button" onClick={() => {
                                   this.handleDelete(owner._id, options[0]._id)

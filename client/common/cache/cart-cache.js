@@ -23,6 +23,11 @@ const userCacheActions = {
     }
     return userCartCache.set([cartItem, ...previousItems]);
 
+  },
+  async deleteItem(filter){
+    let previousItems = await userCartCache.get();
+    let deletedItem = previousItems.filter(filter);
+    return userCartCache.set(deletedItem)
   }
 };
 

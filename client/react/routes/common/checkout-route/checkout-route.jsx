@@ -13,7 +13,7 @@ export class CheckoutRoute extends KComponent {
 
     };
     if(!userCheckoutItemInfo.getState()){
-      customHistory.push("/");
+      customHistory.push("/cart");
     }
   };
 

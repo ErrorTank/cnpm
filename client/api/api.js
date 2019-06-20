@@ -9,20 +9,20 @@ import {clearAppStores} from "../common/system/system";
 const authenApiConfig = {
   hostURL: "https://localhost:10000/api",
   onErrors: {
-    "token_expired": () => {
+    "token_expired": async () => {
       authenCache.clearAuthen();
-      clearAppStores();
+      await clearAppStores();
       TrackLocation.setProps(customHistory.location.pathname);
       customHistory.push("/")
     },
-    "account_not_found": () => {
+    "account_not_found": async () => {
       authenCache.clearAuthen();
-      clearAppStores();
+      await clearAppStores();
       customHistory.push("/")
     },
-    "must_authenticate": () => {
+    "must_authenticate": async () => {
       authenCache.clearAuthen();
-      clearAppStores();
+      await clearAppStores();
       TrackLocation.setProps(customHistory.location.pathname);
       customHistory.push("/")
     }

@@ -27,7 +27,7 @@ export default class RedirectEmailConfirm extends React.Component {
       }).then(async (res) => {
         this.setState({stage: 1});
         authenCache.setAuthen(res.data.checkConfirm.token, {expire: 30});
-        mutateAppStores({...res.data.checkConfirm.user});
+        await mutateAppStores({...res.data.checkConfirm.user});
         await wait(() => this.setState({stage: 2}));
         await wait(() => customHistory.push(res.data.checkConfirm.redirect || "/"));
       }).catch(async (err) => {

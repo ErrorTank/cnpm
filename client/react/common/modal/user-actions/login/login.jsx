@@ -74,8 +74,7 @@ export class Login extends KComponent {
     }).then(({data}) => {
       let {user, token} = data.regularLogin;
       authenCache.setAuthen(token, {expire: 30});
-      mutateAppStores({...user});
-      this.props.onLoginSuccess();
+      return mutateAppStores({...user}).then(() =>  this.props.onLoginSuccess());
     }).catch(err => this.setState({loading: false, error: getErrorObject(err).message}));
   };
 
@@ -132,8 +131,8 @@ export class Login extends KComponent {
       }).then(({data}) => {
         let {user, token} = data.getSocialUserInfo;
         authenCache.setAuthen(token, {expire: 30});
-        mutateAppStores({...user});
-        this.props.onLoginSuccess();
+        return mutateAppStores({...user}).then(() => this.props.onLoginSuccess());
+
       }).catch(err => {
         let errMsg = getErrorObject(err).message;
         if (errMsg === 'not_existed') {

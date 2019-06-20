@@ -12,18 +12,15 @@ import { cartErrors } from "./cart-errors";
 import { VoucherInput } from "./voucher-input";
 import { Badge } from "../../../../common/badge/badge";
 import { LoadingInline } from "../../../../common/loading-inline/loading-inline";
+import {appStoreController} from "../../../../../common/system/system";
 
 
 class CheckoutCart extends KComponent {
   constructor(props) {
     super(props);
-    this.onUnmount(userInfo.onChange((newState, oldState) => {
-      if (!newState || !oldState) {
-        this.setState({ ...this.defaultState }, () => this.fetchItemList());
-
-
-      }
-    }))
+    this.onUnmount(appStoreController.onChange(() => {
+      this.setState({ ...this.defaultState }, () => this.fetchItemList());
+    }));
 
     this.defaultState = {
       cartItemList: [],
@@ -87,7 +84,8 @@ class CheckoutCart extends KComponent {
       let rawCart = info ? userCart.getState() : createUserCartCacheFunction("get")({ async: false });
       let calculatePrice = 0;
       let cartCounting = 0;
-      //console.log(rawCart);
+      console.log(info)
+      console.log(rawCart);
       client.query({
         query: getCartItemByIdList,
         variables: {

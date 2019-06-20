@@ -33,8 +33,8 @@ export const authenCache = (() => {
             if (!data)
               reject();
             else {
-              mutateAppStores(data.getAuthenUser);
-              resolve();
+              return mutateAppStores(data.getAuthenUser).then(() => resolve());
+
             }
 
           }).catch(err => reject());

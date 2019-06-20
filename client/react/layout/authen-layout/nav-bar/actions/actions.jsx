@@ -61,9 +61,9 @@ export class Actions extends KComponent {
             Đăng xuất
           </span>
         ),
-        onClick: () => {
+        onClick: async () => {
           authenCache.clearAuthen();
-          clearAppStores();
+          await clearAppStores();
 
         },
         className: "sign-out-action"

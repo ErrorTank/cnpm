@@ -56,7 +56,8 @@ export class Register extends KComponent {
     client.mutate({
       mutation: sendMutation,
       variables: {
-        data: {...data, dob: strDob}
+        data: {...data, dob: strDob},
+        redirect: this.props.redirect
       }
     })
       .then((response) => {
@@ -68,7 +69,7 @@ export class Register extends KComponent {
 
           this.props.onConfirmSocial();
         } else{
-          this.handleServerResponse({message: response.data.register.message, data: this.form.getData()});
+          this.handleServerResponse({message: response.data.register.message, data: this.form.getData(), redirect: response.data.register.redirect});
         }
 
 

@@ -28,7 +28,8 @@ export class ResendModal extends React.Component {
     client.mutate({
       mutation: resendConfirmEmail,
       variables: {
-        email: this.props.email
+        email: this.props.email,
+        redirect: this.props.redirect
       }
     }).then(() => {
       this.setState({sending: false});

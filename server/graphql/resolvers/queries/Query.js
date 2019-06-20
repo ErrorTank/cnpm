@@ -27,7 +27,7 @@ const Query = {
       return getCartItemByIdList(args.list).then(data => data).catch(err => throw err);
     },
     checkConfirm: async (parent, args, {request}, info) => {
-      return checkConfirmToken(args.token).then(data => data).catch(err => throw err);
+      return checkConfirmToken(args).then(data => data).catch(err => throw err);
     },
     getSocialUserInfo: async (parent, args, {request}, info) => {
       return getSocialUserInfo(args).then(data => data).catch(err => throw err);

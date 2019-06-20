@@ -3,12 +3,12 @@ const {register, resendConfirmEmail, registerSocial, confirmForgotPassword, chan
 const {replyComment} = require("../../../db/model/product/controller");
 
 const Mutation = {
-  register: async (parent, {data}, {request}, info) => {
-    console.log(data);
-    return register(data).then(msg => msg).catch(err => throw err);
+  register: async (parent, args, {request}, info) => {
+
+    return register(args).then(msg => msg).catch(err => throw err);
   },
-  resendConfirmEmail: async (parent, {email}, {request}, info) => {
-    return resendConfirmEmail(email).then(msg => msg).catch(err => throw err);
+  resendConfirmEmail: async (parent, data, {request}, info) => {
+    return resendConfirmEmail(data).then(msg => msg).catch(err => throw err);
 
 
   },

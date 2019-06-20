@@ -41,6 +41,7 @@ export class UserActionsModal extends React.Component {
         <Register
           onRegistered={msg => this.props.onRegistered(msg)} confirmRegisterData={this.state.confirmRegister}
           onConfirmSocial={() => this.props.onLogin()}
+          redirect={this.props.redirect}
         />
     }
   ];
@@ -75,7 +76,8 @@ export class UserActionsModal extends React.Component {
 
 
 export const userActionModal = {
-  open() {
+  open(args) {
+    let redirect = args ? args.redirect : "/";
     let matcher = (cred) =>  ({
       "email_sent": {
         title: `Thông báo`,
@@ -99,9 +101,10 @@ export const userActionModal = {
           onRegistered={cred => {
             modal.close();
             let config = matcher(cred.data)[cred.message];
-            resendModal.open({...config, email: cred.data.email})
+            resendModal.open({...config, email: cred.data.email, redirect: cred.redirect})
           }}
           onLogin={() => modal.close(true)}
+          redirect={redirect}
         />
       )
     });

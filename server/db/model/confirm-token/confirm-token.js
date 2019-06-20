@@ -5,7 +5,7 @@ const tokenSchema =  new Schema({
   _userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
   token: { type: String, required: true },
   createdAt: { type: Date, required: true, default: Date.now, expires : 1800 },
-  redirectUrl: String
+  redirect: String
 });
 // tokenSchema.index({ createdAt: 1 }, { expires : "2m" });
 

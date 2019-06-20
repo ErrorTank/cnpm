@@ -21,6 +21,7 @@ export class Navbar extends React.Component {
 
   render() {
     let {showCategories} = this.props;
+    let {pathname, search} = customHistory.location;
     return (
       <Fragment>
         {this.state.show && (
@@ -42,7 +43,9 @@ export class Navbar extends React.Component {
                     onSearch={this.handleSearchGlobal}
                   />
                 </div>
-                <Actions/>
+                <Actions
+                  redirect={pathname + search}
+                />
               </div>
               {showCategories && (
                 <div className="bonus-actions col-12 px-0 m-0">

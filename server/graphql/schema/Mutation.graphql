@@ -1,7 +1,7 @@
 
 type Mutation{
-    register(data: CreateUserInput!): registerOuputType
-    resendConfirmEmail(email: String!): String
+    register(data: CreateUserInput!, redirect: String): registerOuputType
+    resendConfirmEmail(email: String!, redirect: String): String
     registerSocial(data: CreateUserInput!): loginOutputType
     confirmForgotPassword(email: String!): Boolean
     changePassword(payload: ResetPasswordInput!): Boolean

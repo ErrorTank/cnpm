@@ -16,6 +16,11 @@ import {VisitedSection} from "../index-route/visited-section/visited-section";
 import {CommentSection} from "./comment-section/comment-section";
 import {transformCategoriesToFuckingArray} from "../../../../common/products-utils";
 
+const LocationContext = React.createContext();
+export {
+  LocationContext
+}
+
 export default class ProductRoute extends React.Component {
   constructor(props) {
     super(props);
@@ -59,7 +64,6 @@ export default class ProductRoute extends React.Component {
   }
 
 
-
   render() {
     let {loading, product} = this.state;
     // console.log(product)
@@ -69,35 +73,40 @@ export default class ProductRoute extends React.Component {
       >
         <AuthenLayout
           showCategories={true}
-        >
-          <div className="product-route">
-            {(loading) ? (
-              <LoadingInline/>
-            ) : (
-              <Breadcrumb
-                items={[...transformCategoriesToFuckingArray(product.categories), {name: product.name, onClick:() => null}]}
-              >
-                <div className="container content-container">
-                  <ProductMainPanel
-                    {...product}
-                  />
-                  <ProductDetailFields
-                    {...product}
-                  />
-                  <ProductDescription
-                    {...product}
-                  />
-                  <VisitedSection
-                    filterList={list => list.filter(each => each._id !== product._id)}
-                  />
-                  <CommentSection
-                    productID={product._id}
-                  />
-                </div>
-              </Breadcrumb>
-            )}
-          </div>
 
+        >
+          <LocationContext.Provider value={{...this.props}}>
+            <div className="product-route">
+              {(loading) ? (
+                <LoadingInline/>
+              ) : (
+                <Breadcrumb
+                  items={[...transformCategoriesToFuckingArray(product.categories), {
+                    name: product.name,
+                    onClick: () => null
+                  }]}
+                >
+                  <div className="container content-container">
+                    <ProductMainPanel
+                      {...product}
+                    />
+                    <ProductDetailFields
+                      {...product}
+                    />
+                    <ProductDescription
+                      {...product}
+                    />
+                    <VisitedSection
+                      filterList={list => list.filter(each => each._id !== product._id)}
+                    />
+                    <CommentSection
+                      productID={product._id}
+                    />
+                  </div>
+                </Breadcrumb>
+              )}
+            </div>
+          </LocationContext.Provider>
 
         </AuthenLayout>
       </PageTitle>

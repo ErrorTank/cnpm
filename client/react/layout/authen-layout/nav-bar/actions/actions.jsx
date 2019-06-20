@@ -27,7 +27,7 @@ export class Actions extends KComponent {
   };
 
   handleClickLogin = () => {
-    userActionModal.open();
+    userActionModal.open({redirect: this.props.redirect});
   };
 
   handleClickShowBill = () => {
@@ -35,7 +35,7 @@ export class Actions extends KComponent {
     if (authen) {
       customHistory.push("/bills")
     } else {
-      userActionModal.open().then(status => status && customHistory.push("/bills"));
+      userActionModal.open({redirect: this.props.redirect}).then(status => status && customHistory.push("/bills"));
     }
   };
 

@@ -84,9 +84,10 @@ const getAuthenUser = gql`
 `;
 
 const register = gql`
-    mutation ($data: CreateUserInput!){
-        register(data: $data){
+    mutation ($data: CreateUserInput!, $redirect: String){
+        register(data: $data, redirect: $redirect){
             message
+            redirect
         }
     }
  
@@ -137,8 +138,8 @@ const checkEmailExisted = gql`
 `;
 
 const resendConfirmEmail = gql`
-    mutation ($email: String!){
-        resendConfirmEmail(email: $email)
+    mutation ($email: String!, $redirect: String){
+        resendConfirmEmail(email: $email, redirect: $redirect)
     }
 
 `;
@@ -150,6 +151,7 @@ const checkConfirm = gql`
               ...UserInfo
           }
           token
+          redirect
       }
       
   }

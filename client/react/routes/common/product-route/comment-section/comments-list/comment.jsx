@@ -22,10 +22,11 @@ export class  Comment extends React.Component {
 
 
   render() {
-    let {author, updatedAt, subComment, onReply, ...rest} = this.props;
+    let {author, updatedAt, subComment, onReply, redirect,  ...rest} = this.props;
     let {showSubForm} = this.state;
     let updatedVal = Number(updatedAt) ? Number(updatedAt) : updatedAt;
     return (
+
       <div className="comment">
         <div className="user-info">
           <UserCmtAvatar
@@ -42,7 +43,7 @@ export class  Comment extends React.Component {
               if (userInfo.getState()) {
                 this.setState({showSubForm: !showSubForm})
               } else {
-                userActionModal.open();
+                userActionModal.open({redirect});
               }
 
             }}>Gửi trả lời</span>

@@ -29,7 +29,7 @@ const getClientUserCache = (user) => {
 
 };
 
-const resendConfirmEmail = email => {
+const resendConfirmEmail = ({email, redirect}) => {
   return new Promise((resolve, reject) => {
     User.findOne({email}, (err, user) => {
       if (err) {
@@ -41,7 +41,8 @@ const resendConfirmEmail = email => {
           TokenConfirmation.deleteMany({_userId: user._id}).then(() => {
             let newToken = new TokenConfirmation({
               _userId: user._id,
-              token: crypto.randomBytes(16).toString('hex')
+              token: crypto.randomBytes(16).toString('hex'),
+              redirect
             });
             newToken.save((err) => {
               if (err) {
@@ -76,35 +77,39 @@ const resendConfirmEmail = email => {
   })
 };
 
-const checkConfirmToken = token => {
-  return TokenConfirmation.findOne({token}, "_userId")
+const checkConfirmToken = ({token}) => {
+  return TokenConfirmation.findOne({token}, "_userId redirect")
     .then(tokenObj => {
       if (!tokenObj) {
         return Promise.reject(new ApolloError("token_expire"));
       }
-      return tokenObj._userId;
+      return {userID: tokenObj._userId, redirect: tokenObj.redirect};
     })
-    .then(userID =>
+    .then(({userID, redirect}) =>
       TokenConfirmation.deleteMany({_userId: userID})
-        .then(() => userID)
+        .then(() => ({userID, redirect}))
         .catch(err => Promise.reject(err))
     )
-    .then(userID => User.findOneAndUpdate({_id: userID}, {$set: {isVerify: true}}, {
+    .then(({userID, redirect}) => User.findOneAndUpdate({_id: userID}, {$set: {isVerify: true}}, {
       new: true,
       fields: "-password"
-    }).lean())
-    .then(info =>
+    }).lean().then(info => ({info, redirect})))
+    .then(({info, redirect}) =>
       createAuthToken(pick(info, ["_id", "role", "email", "phone", "fullname", "isVerify"]), getPrivateKey(), {
         expiresIn: "30d",
         algorithm: "RS256"
       })
         .then(token => ({
           token,
-          user: info
+          user: info,
+          redirect
         }))
         .catch(err => Promise.reject(err))
     )
-    .then(data => data)
+    .then(data => {
+      console.log(data)
+      return data;
+    })
     .catch(err => Promise.reject(err))
 };
 
@@ -146,7 +151,7 @@ const registerSocial = user => {
     .catch(err => Promise.reject(err))
 };
 
-const register = (data) => {
+const register = ({data, redirect}) => {
   return new Promise((resolve, reject) => {
     let mockUser = new User(data);
     User.findOne({email: data.email}, (err, user) => {
@@ -158,7 +163,7 @@ const register = (data) => {
       } else {
         let msg = !user ? "email_sent" : "not_verify";
         if (msg === 'not_verify') {
-          resolve({message: msg});
+          resolve({message: msg, redirect});
         } else {
           mockUser.save((err) => {
             if (err) {
@@ -167,7 +172,8 @@ const register = (data) => {
             } else {
               let token = new TokenConfirmation({
                 _userId: mockUser._id,
-                token: crypto.randomBytes(16).toString('hex')
+                token: crypto.randomBytes(16).toString('hex'),
+                redirect
               });
               token.save(err => {
                 if (err)
@@ -182,7 +188,7 @@ const register = (data) => {
                     redirect: `${process.env.APP_URI}/email-confirmation?invitation_code=${token.token}`,
                     name: data.fullname
                   }
-                }).then(() => resolve({message: msg}))
+                }).then(() => resolve({message: msg, redirect}))
 
               });
             }

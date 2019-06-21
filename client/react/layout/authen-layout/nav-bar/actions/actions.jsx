@@ -54,7 +54,7 @@ export class Actions extends KComponent {
         label: () => (
           <Fragment><span className="ua-count">{userFavorites.getState().length}</span>Sản phẩm yêu thích</Fragment>
         ),
-        onClick: () => customHistory.push("/customer/wishlist")
+        onClick: () => customHistory.push("/wishlist")
       }, {
         label: () => (
           <span>

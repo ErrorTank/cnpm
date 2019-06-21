@@ -10,6 +10,7 @@ import {createUserCartCacheFunction} from "../../../../../../common/cache/cart-c
 import {LoadingInline} from "../../../../../common/loading-inline/loading-inline";
 import {cartChangePopup} from "../../../../../layout/authen-layout/nav-bar/cart/cart-btn/cart-change-popup";
 import {customHistory} from "../../../../routes";
+import omit from "lodash/omit"
 
 const POption = ({content, onClick, active}) => {
   return (
@@ -116,7 +117,7 @@ class BuyerAction extends KComponent {
           option: optionID
         }
       }).then(({data}) => {
-        userCart.setState(data.addToCart.carts).then(() => {
+        userCart.setState(data.addToCart.carts.map(each => omit(each,["__typename"]))).then(() => {
           this.setState({pushing: false})
           publishInfo()
         });

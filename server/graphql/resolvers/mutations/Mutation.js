@@ -1,5 +1,5 @@
 const {authorizationUser} = require("../../../authorization/auth");
-const {register, resendConfirmEmail, registerSocial, confirmForgotPassword, changePassword, addRecentVisit, addToFavorites, addToCart, removeFromCart} = require("../../../db/model/user/controller");
+const {register, resendConfirmEmail, registerSocial, confirmForgotPassword, changePassword, addRecentVisit, addToFavorites, addToCart, removeFromCart, mutateCart} = require("../../../db/model/user/controller");
 const {replyComment} = require("../../../db/model/product/controller");
 
 const Mutation = {
@@ -29,6 +29,9 @@ const Mutation = {
   },
   addToCart: async (parent, args, {request}, info) => {
     return addToCart(args).then(res => res).catch(err => throw err);
+  },
+  mutateCart: async (parent, args, {request}, info) => {
+    return mutateCart(args).then(res => res).catch(err => throw err);
   },
   removeFromCart: async (parent, args, {request}, info) => {
     return removeFromCart(args).then(res => res).catch(err => throw err);

@@ -32,6 +32,19 @@ const addToFavorites = gql`
     }
 `;
 
+const mutateCart = gql`
+  mutation ($cart: [CartInput], $uID: ID){
+    mutateCart(cart: $cart, uID: $uID){
+      _id
+      carts{
+        product
+        option
+        quantity
+      }
+    }
+  }
+`;
+
 const addToCart = gql`
     mutation ($uID: ID!, $pID: ID!, $qty: Int!, $option: ID!){
         addToCart(userID: $uID, productID: $pID, qty: $qty, option: $option){
@@ -260,5 +273,6 @@ export {
   addToCart,
   getCartItemByIdList,
   getCacheProvidersInfo,
-  removeFromCart
+  removeFromCart,
+  mutateCart
 }

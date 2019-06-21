@@ -1,5 +1,6 @@
 const getErrorObject = err => {
-  return JSON.parse(JSON.stringify(err)).graphQLErrors[0];
+  let errJson = JSON.parse(JSON.stringify(err));
+  return errJson ? graphQLErrors[0] : {};
 }
 
 export {

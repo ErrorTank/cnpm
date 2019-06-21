@@ -5,14 +5,15 @@ export class LineMultiSteps extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // step: props.steps[0].passCondition() ? 1 : 0
-      step: 1
+
+      // step: 1
     };
   };
 
+
   render() {
-    let {manualNavigate, steps} = this.props;
-    let {step} = this.state;
+    let {manualNavigate, steps, step, onChange} = this.props;
+
     let stepInfo = steps[step];
     return (
       <div className="line-multi-steps">
@@ -25,7 +26,7 @@ export class LineMultiSteps extends React.Component {
                   key={i}
                   index={i}
                   current={step}
-                  onChange={() => manualNavigate ? this.setState({step: i}) : null}
+                  onChange={() => manualNavigate ? onChange(i) : null}
                 />
               ))}
             </div>
@@ -37,7 +38,7 @@ export class LineMultiSteps extends React.Component {
             stepIndex: step,
             navigate: index => {
               if(Array.from(Array(steps.length), (x, i) => i).includes(index))
-                this.setState({step: index});
+                onChange(index);
             }
           })}
         </div>

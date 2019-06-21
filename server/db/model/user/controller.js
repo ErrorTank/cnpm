@@ -442,6 +442,20 @@ const removeFromCart = ({userID, option}) => {
     })
 };
 
+const mutateCart = ({cart, uID: userID}) => {
+  return User.findOne({_id: userID}).lean()
+    .then(data => {
+      if (!data) {
+        return Promise.reject(new ApolloError("user_not_found"))
+      }
+      return true;
+    }).then(() =>
+      User.findOneAndUpdate({_id: userID}, {carts: cart.map(each => ({...each, product: mongoose.Types.ObjectId(each.product), option: mongoose.Types.ObjectId(each.option)}))}, {new: true, fields: "-password"}).lean()
+    )
+
+
+};
+
 const addToCart = ({userID, productID, qty, option}) => {
   return User.findOne({_id: userID}).lean()
     .then(data => {
@@ -592,5 +606,6 @@ module.exports = {
   addToCart,
   getCartItemByIdList,
   getCacheProvidersInfo,
-  removeFromCart
+  removeFromCart,
+  mutateCart
 };

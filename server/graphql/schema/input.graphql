@@ -17,6 +17,13 @@ input SocialInput{
     type: SocialType!
 }
 
+input AddCartInput{
+    userID: ID!
+    productID: ID!
+    qty: Int!
+    option: ID!
+}
+
 input CartInput{
     product: ID
     quantity: Int

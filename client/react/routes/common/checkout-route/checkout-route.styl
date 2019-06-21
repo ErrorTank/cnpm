@@ -2,8 +2,61 @@
   white-space nowrap
   font-size 14px
   min-height 300px
-  background-color white
+  //background-color white
   position relative
   color tikiblack
   padding 0
+  .step-section{
+    margin-top 10px
+    .step-title{
+      margin 15px 0
+      font-size 18px
+      color #5f5f5f
+      font-weight bold
+    }
+    .step-body{
+      margin-top 20px
+      white-space nowrap
+      & > div{
+        display inline-block
+        vertical-align top
+      }
+      .left-panel{
+        width 790px
+      }
+      .separate{
+        width calc(100% - 1180px)
+      }
+      .section-box{
+        border 1px solid #ccc
+        background-color white
+        padding 15px 25px
+        border-radius 4px
+      }
+      .right-panel{
+        width 390px
+
+
+      }
+      .step-register{
+        height 200px
+
+        text-align center
+        .suggest{
+          text-align center
+          font-size 16px
+          margin-top 40px
+        }
+        .btn-login{
+          background-color tikiyellow
+          margin-top 20px
+          font-size 15px
+          padding 10px 30px
+          &:hover{
+            background-color darken(tikiyellow, 20%)
+          }
+        }
+      }
+    }
+  }
 }

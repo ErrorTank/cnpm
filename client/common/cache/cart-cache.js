@@ -28,6 +28,9 @@ const userCacheActions = {
     let previousItems = await userCartCache.get();
     let deletedItem = previousItems.filter(filter);
     return userCartCache.set(deletedItem)
+  },
+  async deleteAll(){
+    return userCartCache.set([])
   }
 };
 

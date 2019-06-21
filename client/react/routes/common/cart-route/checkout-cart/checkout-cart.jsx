@@ -12,8 +12,9 @@ import { cartErrors } from "./cart-errors";
 import { VoucherInput } from "./voucher-input";
 import { Badge } from "../../../../common/badge/badge";
 import { LoadingInline } from "../../../../common/loading-inline/loading-inline";
-import {appStoreController} from "../../../../../common/system/system";
-
+import {appStoreController, clearAppStores} from "../../../../../common/system/system";
+import omit from "lodash/omit"
+import {ResetComponent} from "../../with-reset/with-reset";
 
 class CheckoutCart extends KComponent {
   constructor(props) {
@@ -30,6 +31,7 @@ class CheckoutCart extends KComponent {
       vouchers: [],
 
     }
+
 
     this.state = {
       ...this.defaultState,
@@ -109,7 +111,8 @@ class CheckoutCart extends KComponent {
         console.log(cartWithQuantity);
         this.setState({
           cartItemList: cartWithQuantity,
-          loading: false
+          loading: false,
+          vouchers: userCheckoutItemInfo.getState() ? userCheckoutItemInfo.getState().vouchers : []
         }, () => {
           this.updateError();
           resolve();
@@ -133,7 +136,7 @@ class CheckoutCart extends KComponent {
           option: optionID
         }
       }).then(({ data }) => {
-        userCart.setState(data.removeFromCart.carts).then(() => {
+        userCart.setState(data.removeFromCart.carts.map(each => omit(each, ["__typename"]))).then(() => {
           console.log('no',data.removeFromCart.carts);
           let newCartList = this.state.cartItemList.filter(item => {
             return item.product.provider[0].options[0]._id !== optionID;
@@ -178,7 +181,7 @@ class CheckoutCart extends KComponent {
           option: optionID
         }
       }).then(({ data }) => {
-        userCart.setState(data.addToCart.carts).then(() => {
+        userCart.setState(data.addToCart.carts.map(each => omit(each, ["__typename"]))).then(() => {
           let CartItemList = this.state.cartItemList;
           CartItemList.map(p => {
             if (p.product.provider[0].options[0]._id === optionID) {
@@ -404,9 +407,14 @@ class CheckoutCart extends KComponent {
         </div>
       );
     return (
-      <div>
-        {checkOut}
-      </div>
+      <ResetComponent
+        render={() => (
+          <div>
+            {checkOut}
+          </div>
+        )}
+      />
+
     );
   }
 }

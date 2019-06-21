@@ -8,6 +8,7 @@ type Mutation{
     addRecentVisit(uID: ID!, pID: ID!): Boolean
     addToFavorites(userID: ID!, productID: ID!): User
     addToCart(userID: ID!, productID: ID!, qty: Int!, option: ID!): User
+    mutateCart(cart: [CartInput], uID: ID): User
     removeFromCart(userID: ID!, option: ID!): User
     replyComment(productID: String!, commentID: String!, data: SubCommentInput!): SubComment
 }

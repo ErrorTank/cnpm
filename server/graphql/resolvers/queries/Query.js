@@ -1,5 +1,5 @@
 const {authorizationUser,} = require("../../../authorization/auth");
-const {checkConfirmToken, getClientUserCache, getSocialUserInfo, regularLogin, checkEmailExisted, getUser, getUserRecentVisited, getCartItemByIdList, getCacheProvidersInfo} = require("../../../db/model/user/controller");
+const {checkConfirmToken, getClientUserCache, getSocialUserInfo, regularLogin, checkEmailExisted, getUser, getUserRecentVisited, getCartItemByIdList, getCacheProvidersInfo, getFavoriteItemByIdList} = require("../../../db/model/user/controller");
 const {getIndexDealProducts, getProduct, getBasicProduct, getProductComments, getProducts, findByKeyword} = require("../../../db/model/product/controller");
 const {getCacheCategoriesInfo, getCategories} = require("../../../db/model/category/controller");
 const {getCacheBrandsInfo} = require("../../../db/model/brand/controller");
@@ -13,6 +13,9 @@ const Query = {
           return getClientUserCache(creds)
         })
         .catch(err => throw err);
+    },
+    getFavItemsByIdList: async (parent, args, {request}, info) => {
+      return getFavoriteItemByIdList(args).then(data => data).catch(err => throw err);
     },
     searchProducts: async (parent, args, {request}, info) => {
       return findByKeyword(decodeURIComponent(args.keyword)).then(data => data).catch(err => throw err);

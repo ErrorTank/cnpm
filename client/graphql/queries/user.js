@@ -263,6 +263,52 @@ const getCartItemByIdList = gql`
     }
   }
 `;
+const getFavItemsByIdList = gql`
+    query ($list: [ID]){
+        getFavItemsByIdList(list: $list){
+            product{
+                _id
+                name
+                brand{
+                    _id
+                    name
+                    logo
+                }
+                regularDiscount
+                deal{
+                    last
+                }
+                provider{
+                    owner{
+                        _id
+                        fullname
+                        provider{
+                            name
+                            address
+                            phone
+                            email
+
+                        }
+                    }
+                    options{
+                        _id
+                        price
+                        description
+                        total
+                        sold
+                        picture
+                    }
+                    discountWithCode{
+                        _id
+                        code
+                        value
+                    }
+                }
+
+            }
+        }
+    }
+`;
 
 export {
   getBasicUserInfo,
@@ -284,5 +330,6 @@ export {
   getCacheProvidersInfo,
   removeFromCart,
   mutateCart,
+  getFavItemsByIdList
   // updateUserInfo
 }

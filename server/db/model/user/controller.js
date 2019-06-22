@@ -9,6 +9,7 @@ const {ApolloError, AuthenticationError} = require("apollo-server-express");
 const {createAuthToken} = require("../../../authorization/auth");
 const {getPrivateKey, getPublicKey} = require("../../../authorization/keys/keys");
 const omit = require("lodash/omit");
+const { getCategories } = require("../category/controller");
 const pick = require("lodash/pick");
 
 const getClientUserCache = (user) => {
@@ -321,6 +322,116 @@ const getUserRecentVisited = ({userID}) => {
   }).catch(err => Promise.reject(err))
 };
 
+const getFavoriteItemByIdList = ({list: rawList}) => {
+  let idList = rawList.map(each => mongoose.Types.ObjectId(each.product));
+  return Product.aggregate([
+    {
+      $match: {
+        "_id": {
+          $in: idList
+        }
+      }
+    },
+    {
+      $addFields: {
+        meanStar: {
+          $divide: [
+            {
+              $reduce: {
+                input: "$comments",
+                initialValue: 0,
+                in: { $add: ["$$value", "$$this.rating"] }
+              }
+            },
+            {
+              $cond: [
+                { $ne: [{ $size: "$comments" }, 0] },
+                { $size: "$comments" },
+                1
+              ]
+            }
+          ]
+        },
+      }
+    },
+    {
+      $lookup: {
+        from: "brands",
+        localField: "brand",
+        foreignField: "_id",
+        as: "brand"
+      }
+    },
+
+    {
+      $addFields: {
+        brand: {
+          $arrayElemAt: ["$brand", 0]
+        }
+      }
+    },
+    { $unwind: "$provider" },
+    {
+      $lookup: {
+        from: "users",
+        localField: "provider.owner",
+        foreignField: "_id",
+        as: "provider.owner"
+      }
+    },
+    {
+      $lookup: {
+        from: "discountwithcodes",
+        localField: "provider.discountWithCode",
+        foreignField: "_id",
+        as: "provider.discountWithCode"
+      }
+    },
+    {
+      $addFields: {
+        "provider.owner": {
+          $arrayElemAt: ["$provider.owner", 0]
+        },
+        "provider.discountWithCode": {
+          $arrayElemAt: ["$provider.discountWithCode", 0]
+        }
+      }
+    },
+    {
+      $group: {
+        _id: "$_id",
+        name: {
+          $first: "$name"
+        },
+        regularDiscount: {
+          $first: "$regularDiscount"
+        },
+        brand: {
+          $first: "$brand"
+        },
+        commentCount: {
+          $first: "$commentCount"
+        },
+        meanStar: {
+          $first: "$meanStar"
+        },
+        deal: {
+          $first: "$deal"
+        },
+        provider: { $push: "$provider" }
+      }
+    }
+
+  ]).exec()
+    .then((list) => {
+      return list.map(({meanStar, commentCount, ...rest}) => ({
+        info: {...rest},
+        commentCount,
+        meanStar
+      }))
+    });
+};
+
 const getCartItemByIdList = (rawList) => {
   let idList = rawList.map(each => mongoose.Types.ObjectId(each.product));
   let optionIdList = rawList.map(each => mongoose.Types.ObjectId(each.option));
@@ -613,5 +724,6 @@ module.exports = {
   getCacheProvidersInfo,
   removeFromCart,
   updateUserInfo,
-  mutateCart
+  mutateCart,
+  getFavoriteItemByIdList
 };

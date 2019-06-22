@@ -112,6 +112,7 @@ export class CheckoutRoute extends KComponent {
 
 const WithCartListAndAddress = props => {
   let {render, title} = props;
+  let {items, vouchers} = userCheckoutItemInfo.getState();
   return (
     <div className="step-section">
       <p className="step-title">{title}</p>
@@ -121,10 +122,32 @@ const WithCartListAndAddress = props => {
         </div>
         <div className={"separate"}></div>
         <div className="right-panel">
-
+          <CheckoutInfoBox
+            title={() => {
+              return `Đơn hàng (${items.reduce((total, cur) => total + cur.quantity,0)} sản phẩm)`
+            }}
+            content={() => {
+              return ``
+            }}
+          />
         </div>
       </div>
 
+    </div>
+  )
+};
+
+const CheckoutInfoBox = props =>{
+  let {title, onClick, content} = props;
+  return (
+    <div className="cart-list-section section-box">
+      <div className="cl-header">
+        <span className="cl-title">{title()}</span>
+        <button className="cl-btn btn" onClick={onClick}>Sửa</button>
+      </div>
+      <div className="cl-body">
+        {content()}
+      </div>
     </div>
   )
 };

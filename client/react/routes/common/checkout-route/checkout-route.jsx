@@ -13,7 +13,7 @@ export class CheckoutRoute extends KComponent {
   constructor(props) {
     super(props);
     this.state = {
-      step: this.steps[0].passCondition() ? 1 : 0
+      step: this.steps[0].passCondition() ? 1 : 0,
     };
     this.onUnmount(userInfo.onChange((nextState, oldState) => {
       if (!nextState && oldState) {
@@ -115,8 +115,20 @@ export class CheckoutRoute extends KComponent {
 }
 
 const WithCartListAndAddress = props => {
-  let {render, title} = props;
+  let {render, title, shipPayment = 0} = props;
   let {items, vouchers} = userCheckoutItemInfo.getState();
+  let lines = [
+    {
+      label: "Tạm tính",
+      value: items.reduce((total, cur) => total + (cur.product.provider[0].options[0].price * cur.quantity * (cur.product.regularDiscount ? (1 - cur.product.regularDiscount / 100) : 1)) , 0)
+    }, {
+      label: "Giảm giá (vouchers)",
+      value:  items.reduce((total, cur) => total + ((cur.product.provider[0].discountWithCode && vouchers.find(each => each._id === cur.product.provider[0].discountWithCode._id)) ? (cur.product.provider[0].discountWithCode.value / 100) * (cur.product.provider[0].options[0].price * cur.quantity * (cur.product.regularDiscount ? (1 - cur.product.regularDiscount / 100) : 1)) : 0) , 0)
+    }, {
+      label: "Phí vận chuyển",
+      value: shipPayment,
+    }
+  ];
   return (
     <div className="step-section">
       <p className="step-title">{title}</p>
@@ -130,21 +142,36 @@ const WithCartListAndAddress = props => {
             title={() => {
               return `Đơn hàng (${items.reduce((total, cur) => total + cur.quantity, 0)} sản phẩm)`
             }}
+            onClick={() => customHistory.push("/cart")}
             content={() => {
               return (
                 <div className="cart-list">
-                  {items.map((each, i) => (
-                    <div className="item" key={each.product.provider[0].options[0]._id}>
-                      <div className="info">
-                        <p className="name-qty">
-                          <strong className="qty">{each.quantity} x</strong>
-                          <a className="name" target={"_blank"} href={`/product/${each.product._id}`}>{each.product.name} - {each.product.provider[0].options[0].description}</a>
-                        </p>
-                        <p className="provider">Cung cấp bởi <strong>{each.product.provider[0].owner.provider.name}</strong></p>
+                  <div className="product-section">
+                    {items.map((each, i) => (
+                      <div className="item" key={each.product.provider[0].options[0]._id}>
+                        <div className="info">
+                          <p className="name-qty">
+                            <strong className="qty">{each.quantity} x</strong>
+                            <a className="name" target={"_blank"} href={`/product/${each.product._id}`}>{each.product.name} - {each.product.provider[0].options[0].description}</a>
+                          </p>
+                          <p className="provider">Cung cấp bởi <strong>{each.product.provider[0].owner.provider.name}</strong></p>
+                        </div>
+                        <span className="price">{formatMoney((each.product.provider[0].options[0].price * each.quantity * (each.product.regularDiscount ? (1 - each.product.regularDiscount / 100) : 1)))} ₫</span>
                       </div>
-                      <span className="price">{formatMoney((each.product.provider[0].options[0].price * each.quantity * (each.product.regularDiscount ? (1 - each.product.regularDiscount / 100) : 1)))} ₫</span>
-                    </div>
+                    ))}
+                  </div>
+                  {lines.map((each, i) => (
+                    <p className="price-line" key={i}>
+                      <span>{each.label}</span>
+                      <span>{formatMoney(each.value)} ₫</span>
+                    </p>
                   ))}
+
+                  <p className="total">
+                    <strong>Thành tiền:</strong>
+                    <span className="total-price">{formatMoney(lines[0].value + lines[2].value - lines[1].value)} ₫</span>
+                  </p>
+                  <p className="text-right" style={{"fontStyle": "italic", "fontSize": "13px"}}>(Đã bao gồm VAT)</p>
                 </div>
               )
             }}

@@ -46,7 +46,7 @@ export class Actions extends KComponent {
         onClick: () => customHistory.push("/bills")
       }, {
         label: () => "Tài khoản của tôi",
-        onClick: () => customHistory.push("/customer/account")
+        onClick: () => customHistory.push("/account")
       }, {
         label: () => "Sản phẩm đã xem",
         onClick: () => customHistory.push("/danh-rieng-cho-ban")

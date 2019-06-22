@@ -5,6 +5,7 @@ import {TrackLocation} from "../../common/location-tracker";
 import {AuthenLayout} from "../../layout/authen-layout/authen-layout";
 import {authenCache} from "../../../common/cache/authen-cache";
 import {KComponent} from "../../common/k-component";
+import {customHistory} from "../routes";
 
 
 export class GuestRoute extends KComponent {
@@ -61,7 +62,9 @@ export const AuthenRoute = ({component: Component, excludeRoles = null, ...rest}
     //   </AuthenLayout>
     // )
     return (
+      <AuthenCheck {...props}>
         <Component {...props}/>
+      </AuthenCheck>
     )
   };
   return (
@@ -80,3 +83,22 @@ export const AuthenRoute = ({component: Component, excludeRoles = null, ...rest}
     />
   );
 };
+
+
+export class AuthenCheck extends KComponent {
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.onUnmount(userInfo.onChange((newState, oldState) => {
+      if (!newState || !oldState) {
+        customHistory.push("/");
+      }
+
+
+    }))
+  };
+
+  render() {
+    return this.props.children
+  }
+}

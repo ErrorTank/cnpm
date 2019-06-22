@@ -71,7 +71,7 @@ export class MainRoute extends KComponent {
               <GuestRoute exact path="/confirm-reset-password" component={ResetPassword}/>
               <WithLocationRoute exact path="/product/:productID" render={props => (<ProductRoute {...props} />)}/>
               <WithLocationRoute exact path="/cart" render={props => (<CartRoute {...props} />)} />
-              <AuthenRoute exact path="/wishlist" render={props => (<FavoriteRoute {...props} />)} />
+              <AuthenRoute exact path="/wishlist" component={FavoriteRoute} />
               {/*  */}
               <WithLocationRoute exact path="/products" render={props => (<ProductsRoute {...props} />)} />
               <WithLocationRoute exact path="/search" render={props => (<SearchRoute {...props} />)} />

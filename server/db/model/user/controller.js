@@ -323,7 +323,8 @@ const getUserRecentVisited = ({userID}) => {
 };
 
 const getFavoriteItemByIdList = ({list: rawList}) => {
-  let idList = rawList.map(each => mongoose.Types.ObjectId(each.product));
+
+  let idList = rawList.map(each => mongoose.Types.ObjectId(each));
   return Product.aggregate([
     {
       $match: {
@@ -409,9 +410,6 @@ const getFavoriteItemByIdList = ({list: rawList}) => {
         brand: {
           $first: "$brand"
         },
-        commentCount: {
-          $first: "$commentCount"
-        },
         meanStar: {
           $first: "$meanStar"
         },
@@ -424,9 +422,9 @@ const getFavoriteItemByIdList = ({list: rawList}) => {
 
   ]).exec()
     .then((list) => {
-      return list.map(({meanStar, commentCount, ...rest}) => ({
+      console.log(list);
+      return list.map(({meanStar, ...rest}) => ({
         info: {...rest},
-        commentCount,
         meanStar
       }))
     });

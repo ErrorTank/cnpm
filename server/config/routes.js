@@ -41,7 +41,7 @@ module.exports = () => {
   router.post("/api/user/:userID/update",  restAuthMiddleware, upload.single("picture"), (req,res, next) => {
     let data = req.body;
     let file = req.file || null;
-    updateUserInfo({data: {...data}, file: null, userID: req.params.userID}).then((user) => {
+    updateUserInfo({data: {...data}, file, userID: req.params.userID}).then((user) => {
       res.status(200).json({user});
     }).catch(err => {
       console.log(err)

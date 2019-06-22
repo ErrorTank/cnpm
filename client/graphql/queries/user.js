@@ -266,7 +266,7 @@ const getCartItemByIdList = gql`
 const getFavItemsByIdList = gql`
     query ($list: [ID]){
         getFavItemsByIdList(list: $list){
-            product{
+            info{
                 _id
                 name
                 brand{
@@ -306,6 +306,8 @@ const getFavItemsByIdList = gql`
                 }
 
             }
+            meanStar
+            
         }
     }
 `;

@@ -3,7 +3,10 @@ import { PageTitle } from "../../../common/page-title/page-title";
 import { AuthenLayout } from "../../../layout/authen-layout/authen-layout";
 import Menu from "./menu/menu";
 
-class FavoriteRoute extends Component {
+export default class FavoriteRoute extends Component {
+    constructor(props){
+        super(props);
+    }
     render() {
         return (
             <PageTitle
@@ -14,7 +17,7 @@ class FavoriteRoute extends Component {
                 >
 
                     <div className="container content-container">
-                        <Menu/>
+                        {/*<Menu/>*/}
                     </div>
 
 
@@ -24,5 +27,3 @@ class FavoriteRoute extends Component {
         );
     }
 }
-
-export default FavoriteRoute;

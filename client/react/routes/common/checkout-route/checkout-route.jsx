@@ -127,7 +127,11 @@ const WithCartListAndAddress = props => {
               return `Đơn hàng (${items.reduce((total, cur) => total + cur.quantity,0)} sản phẩm)`
             }}
             content={() => {
-              return ``
+              return (
+                <div className="">
+
+                </div>
+              )
             }}
           />
         </div>

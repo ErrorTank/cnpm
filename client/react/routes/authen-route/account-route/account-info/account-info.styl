@@ -1,0 +1,99 @@
+label {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+.account-info-input {
+  padding-bottom: 0px !important;
+
+  .m-radio-list {
+    white-space: nowrap;
+
+    .radio-wrap {
+      display: inline-block;
+      width: 50%;
+    }
+
+    .m-radio {
+      margin: 0;
+
+      & > input:checked ~ span:after {
+        border-color: tikiblue !important;
+        background-color: tikiblue !important;
+      }
+
+      & > input:checked ~ span {
+        border-color: tikiblue !important;
+        border-width: 2px;
+      }
+
+      span {
+        border-color: lighten(tikiblue, 50%) !important;
+        width: 22px;
+        top: -2px;
+        height: 22px;
+      }
+    }
+  }
+
+  .form-control-feedback {
+    font-size: 12px;
+    margin-top: 5px;
+    font-weight: 500;
+  }
+
+  input {
+    font-size: 14px;
+  }
+
+  .bp-date-picker {
+    color: black;
+  }
+}
+
+.upload-img {
+  font-size: 13px;
+  color: tikiblue;
+  margin-left: 10px;
+  padding: 7px 16px;
+  border-radius: 4px;
+  background-color: white;
+  border: 1px solid tikiblue;
+  transition: all 0.1s ease;
+
+  &:disabled {
+    pointer-events: none;
+  }
+
+  &:hover {
+    color: white;
+    background-color: tikiblue;
+  }
+}
+
+.confirm-btn {
+  position: relative;
+  height: 40px;
+  font-size: 15px;
+  display: flex;
+  justify-content: center;
+  color: #4a4a4a;
+
+  &:disabled {
+    pointer-events: none;
+  }
+
+  width: 100%;
+  background-color: tikiyellow;
+
+  &:hover {
+    background-color: darken(tikiyellow, 20%);
+  }
+
+  align-items: center;
+
+  .registration-loading {
+    color: tikiblack;
+    font-size: 22px;
+  }
+}

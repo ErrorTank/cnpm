@@ -1,139 +1,156 @@
-.user-actions-modal{
-  white-space nowrap
-  border-radius 4px
-  overflow hidden
-  background-color: #f8f8f8
-  height 750px
-  & > .loading-inline{
-    i{
-      color tikiblack
-      font-size lg + 1rem
+.user-actions-modal {
+  white-space: nowrap;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: #f8f8f8;
+  height: 750px;
+
+  & > .loading-inline {
+    i {
+      color: tikiblack;
+      font-size: lg + 1rem;
     }
   }
-  .registration-btn{
-    position relative
-    height 40px
-    font-size 15px
-    display flex
-    justify-content center
-    color #4a4a4a
-    &:disabled{
-      pointer-events none
+
+  .registration-btn {
+    position: relative;
+    height: 40px;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    color: #4a4a4a;
+
+    &:disabled {
+      pointer-events: none;
     }
-    width 100%
-    background-color tikiyellow
-    &:hover{
-      background-color darken(tikiyellow, 20%)
+
+    width: 100%;
+    background-color: tikiyellow;
+
+    &:hover {
+      background-color: darken(tikiyellow, 20%);
     }
-    align-items center
-    .registration-loading{
-      color tikiblack
-      font-size 22px
+
+    align-items: center;
+
+    .registration-loading {
+      color: tikiblack;
+      font-size: 22px;
     }
   }
-  .server-error{
-    color #f4516c
-    font-size sm - 0.3rem
-    white-space normal
+
+  .server-error {
+    color: #f4516c;
+    font-size: sm - 0.3rem;
+    white-space: normal;
   }
-  .registration-input{
-    padding-bottom 0px !important
-    label{
-      font-size 14px
-      font-weight 500
-    }
-    .m-radio-list{
-      white-space nowrap
-      .radio-wrap{
-        display inline-block
-        width 50%
-      }
-      .m-radio{
 
-        margin 0
-        & > input:checked ~ span:after{
-          border-color tikiblue !important
+  .registration-input {
+    padding-bottom: 0px !important;
 
-          background-color tikiblue !important
-        }
-        & > input:checked ~ span{
-          border-color tikiblue !important
-          border-width 2px
-        }
-        span{
-          border-color lighten(tikiblue, 50%) !important
-          width 22px
-          top -2px
-          height 22px
-
-        }
-      }
+    label {
+      font-size: 14px;
+      font-weight: 500;
     }
 
-    .form-control-feedback
-    {
-      font-size 12px
-      margin-top 5px
-      font-weight 500
-    }
-    input{
-      font-size 14px
+    .m-radio-list {
+      white-space: nowrap;
 
-    }
-  }
-  .m-portlet__foot{
-    border-top none !important
-  }
-  .side{
-    display inline-block
-    vertical-align top
-    height 100%
-    text-align left
-  }
-  .left-side{
-    width 360px
-    padding 40px 20px
-    background-color white
-    height 100%
-
-    color tikiblack
-    .left-title{
-      font-size lg + 0.4rem
-    }
-    .left-description{
-      font-size sm
-      margin-top 15px
-      white-space normal
-    }
-  }
-  .right-side{
-    width 580px
-    margin 20px
-    .m-portlet__body{
-      max-height 600px
-      padding 20px 60px
-
-    }
-    height calc(100% - 40px)
-    .nav-item{
-
-      .nav-link{
-        padding 12px 25px
-        font-size sm
-        &:hover{
-          border-bottom-width 2px !important
-          border-bottom-color tikiblue !important
-          color tikiblue !important
-        }
-        &.active{
-          border-bottom-width 2px !important
-          border-bottom-color tikiblue !important
-          color tikiblue !important
-        }
-
+      .radio-wrap {
+        display: inline-block;
+        width: 50%;
       }
 
+      .m-radio {
+        margin: 0;
+
+        & > input:checked ~ span:after {
+          border-color: tikiblue !important;
+          background-color: tikiblue !important;
+        }
+
+        & > input:checked ~ span {
+          border-color: tikiblue !important;
+          border-width: 2px;
+        }
+
+        span {
+          border-color: lighten(tikiblue, 50%) !important;
+          width: 22px;
+          top: -2px;
+          height: 22px;
+        }
+      }
+    }
+
+    .form-control-feedback {
+      font-size: 12px;
+      margin-top: 5px;
+      font-weight: 500;
+    }
+
+    input {
+      font-size: 14px;
     }
   }
 
+  .m-portlet__foot {
+    border-top: none !important;
+  }
+
+  .side {
+    display: inline-block;
+    vertical-align: top;
+    height: 100%;
+    text-align: left;
+  }
+
+  .left-side {
+    width: 360px;
+    padding: 40px 20px;
+    background-color: white;
+    height: 100%;
+    color: tikiblack;
+
+    .left-title {
+      font-size: lg + 0.4rem;
+    }
+
+    .left-description {
+      font-size: sm;
+      margin-top: 15px;
+      white-space: normal;
+    }
+  }
+
+  .right-side {
+    width: 580px;
+    margin: 20px;
+
+    .m-portlet__body {
+      max-height: 600px;
+      padding: 20px 60px;
+    }
+
+    height: calc(100% - 40px);
+
+    .nav-item {
+      .nav-link {
+        padding: 12px 25px;
+        font-size: sm;
+
+        &:hover {
+          border-bottom-width: 2px !important;
+          border-bottom-color: tikiblue !important;
+          color: tikiblue !important;
+        }
+
+        &.active {
+          border-bottom-width: 2px !important;
+          border-bottom-color: tikiblue !important;
+          color: tikiblue !important;
+        }
+      }
+    }
+  }
 }

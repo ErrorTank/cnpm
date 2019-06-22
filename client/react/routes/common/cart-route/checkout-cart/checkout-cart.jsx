@@ -137,7 +137,7 @@ class CheckoutCart extends KComponent {
         }
       }).then(({ data }) => {
         userCart.setState(data.removeFromCart.carts.map(each => omit(each, ["__typename"]))).then(() => {
-          console.log('no',data.removeFromCart.carts);
+         // console.log('no',data.removeFromCart.carts);
           let newCartList = this.state.cartItemList.filter(item => {
             return item.product.provider[0].options[0]._id !== optionID;
           })
@@ -159,7 +159,7 @@ class CheckoutCart extends KComponent {
           cartItemList: newCartList
         });
       });
-      console.log('ok');
+     // console.log('ok');
     }
   }
 
@@ -183,7 +183,7 @@ class CheckoutCart extends KComponent {
       }).then(({ data }) => {
         userCart.setState(data.addToCart.carts.map(each => omit(each, ["__typename"]))).then(() => {
           let CartItemList = this.state.cartItemList;
-          CartItemList.map(p => {
+          CartItemList.forEach(p => {
             if (p.product.provider[0].options[0]._id === optionID) {
               p.quantity += finalQty;
             }
@@ -252,8 +252,8 @@ class CheckoutCart extends KComponent {
     let info = userInfo.getState();
     let { cartItemList, loading, vouchers} = this.state;
     let totalPrice = 0, cartCount = 0, finalPrice = 0, voucherDiscount;
-    console.log(vouchers);
-    cartItemList.map(item => {
+   // console.log(vouchers);
+    cartItemList.forEach(item => {
       let { product, quantity } = item;
       let { provider } = product;
       let { options, discountWithCode } = provider[0];

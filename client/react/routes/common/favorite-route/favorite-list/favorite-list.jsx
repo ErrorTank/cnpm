@@ -28,9 +28,6 @@ class FavoriteList extends KComponent{
               this.setState({
                   favoriteItemList: favoriteItemList,
                   loading: false,
-              }, () => {
-                  this.updateError();
-                  resolve();
               });
           }).catch(err => {
               // console.log(err);

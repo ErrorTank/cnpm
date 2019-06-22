@@ -76,7 +76,7 @@ export class MainRoute extends KComponent {
               <WithLocationRoute exact path="/search" render={props => (<SearchRoute {...props} />)} />
               <WithLocationRoute exact path="/shop/:shopID" render={props => (<ShopRoute {...props} />)} />
               <WithLocationRoute exact path="/checkout" render={props => (<CheckoutRoute {...props} />)} />
-              <AuthenRoute exact path="/account" render={props => (<AccountRoute {...props} />)} />
+              <AuthenRoute exact path="/account" component={AccountRoute} />
             </Switch>
           </Suspense>
         </Router>

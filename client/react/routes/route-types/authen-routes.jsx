@@ -55,17 +55,20 @@ export const AuthenRoute = ({component: Component, excludeRoles = null, ...rest}
         )
       }
     }
+    console.log("câcc")
+    // return (
+    //   <AuthenLayout location={props.location} match={props.match}>
+    //     <Component {...props}/>
+    //   </AuthenLayout>
+    // )
     return (
-      <AuthenLayout location={props.location} match={props.match}>
         <Component {...props}/>
-      </AuthenLayout>
     )
   };
   return (
     <Route
       {...rest}
       render={props => {
-
         return (
           <TrackLocation
             location={props.match.url}

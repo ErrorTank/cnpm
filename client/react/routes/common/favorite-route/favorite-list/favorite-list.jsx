@@ -40,9 +40,15 @@ class FavoriteList extends KComponent{
 
   render(){
       let rawCart = userFavorites.getState()
-      console.log(rawCart);
       return(
-          <div></div>
+          <div className="list-count">
+              "Danh sách yêu thích"({rawCart.length})
+          </div>
+          <div className="account-wishlist">
+              {
+                  let {}
+              }
+          </div>
       );
   }
 

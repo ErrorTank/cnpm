@@ -284,5 +284,5 @@ export {
   getCacheProvidersInfo,
   removeFromCart,
   mutateCart,
-  updateUserInfo
+  // updateUserInfo
 }

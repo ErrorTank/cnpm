@@ -4,7 +4,7 @@ const ResetPasswordToken = require("../db/model/reset-password-token/reset-passw
 const {restAuthMiddleware} = require("../authorization/auth");
 const upload = require("../utils/img-uploader");
 const {addNewComment} = require("../db/model/product/controller");
-
+const {updateUserInfo} = require("../db/model/user/controller");
 module.exports = () => {
   router.get("/confirm-reset-password", (req, res, next) => {
     let {reset_code = null} = req.query;
@@ -37,6 +37,18 @@ module.exports = () => {
       next(err)
     });
   });
+
+  router.post("/api/user/:userID/update",  restAuthMiddleware, upload.single("picture"), (req,res, next) => {
+    let data = req.body;
+    let file = req.file;
+    updateUserInfo({data: {...data}, file: {...file}, userID: req.params.userID}).then((user) => {
+      res.status(200).json({user});
+    }).catch(err => {
+      console.log(err)
+      next(err)
+    });
+  });
+
 
   return router;
 };

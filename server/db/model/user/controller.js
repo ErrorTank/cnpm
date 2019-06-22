@@ -588,8 +588,8 @@ const getCacheProvidersInfo = () => {
   ]);
 };
 
-const updateUserInfo = ({change, userID}) => {
-  return User.findOneAndUpdate({_id: mongoose.Types.ObjectId(userID)}, {...change}, {new: true, fields: "-password"}).lean()
+const updateUserInfo = ({data,file, userID}) => {
+  return User.findOneAndUpdate({_id: mongoose.Types.ObjectId(userID)}, {...data, picture:  process.env.APP_URI + "/uploads/img/" + file.filename}, {new: true, fields: "-password"}).lean()
 };
 
 module.exports = {

@@ -73,8 +73,7 @@ export class MainRoute extends KComponent {
               <WithLocationRoute exact path="/cart" render={props => (<CartRoute {...props} />)} />
               <AuthenRoute exact path="/wishlist" component={FavoriteRoute} />
               {/*  */}
-              <WithLocationRoute exact path="/products" render={props => (<ProductsRoute {...props} />)} />
-              <WithLocationRoute exact path="/search" render={props => (<SearchRoute {...props} />)} />
+              <WithLocationRoute exact path="/products" render={props => (<ProductsRoute {...props} />)} /><WithLocationRoute exact path="/search" render={props => (<SearchRoute {...props} />)} />
               <WithLocationRoute exact path="/shop/:shopID" render={props => (<ShopRoute {...props} />)} />
               <WithLocationRoute exact path="/checkout" render={props => (<CheckoutRoute {...props} />)} />
               <AuthenRoute exact path="/account" component={AccountRoute} />

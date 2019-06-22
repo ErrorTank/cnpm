@@ -6,6 +6,68 @@
   position relative
   color tikiblack
   padding 0
+  .checkout-info-box{
+    .cart-list{
+      .item{
+        padding 12px 0
+        border-bottom 1px solid #c9c9c9
+        &::after{
+          display table
+          content ""
+          clear both
+        }
+        .price{
+          float right
+          font-size 12px
+        }
+        .info{
+          display inline-block
+          width 200px
+          vertical-align top
+          .name-qty{
+            font-size 11px
+            white-space pre-wrap
+            .qty{
+              padding-right 10px
+              color tikiblack
+            }
+            .name{
+              color tikiblue
+            }
+          }
+          .provider{
+            font-size 12px
+            white-space pre-wrap
+            margin-top 5px
+          }
+        }
+
+      }
+    }
+    .cl-header{
+      border-bottom 1px solid #c9c9c9
+      padding-bottom 10px
+      .cl-title{
+        font-size 13px
+        line-height 31px
+      }
+      .cl-btn{
+        float right
+        border 1px solid #ccc
+        font-size 12px
+        padding 6px 14px
+        outline-color #ccc
+        border-radius 2px
+        height 31px
+        background-color white
+      }
+      &::after{
+        content ""
+        clear both
+        display table
+      }
+    }
+  }
   .step-section{
     margin-top 10px
     .step-title{

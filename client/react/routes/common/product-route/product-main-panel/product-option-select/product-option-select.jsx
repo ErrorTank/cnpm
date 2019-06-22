@@ -70,8 +70,6 @@ class BuyerAction extends KComponent {
       console.log(err);
       return;
     });
-
-
   };
 
   ensureLoginForAddToFav = () => {

@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import { PageTitle } from "../../../common/page-title/page-title";
 import { AuthenLayout } from "../../../layout/authen-layout/authen-layout";
-import Menu from "./menu/menu";
+import { Breadcrumb } from "../../../common/breadcrumb/breadcrumb";
+import FavoriteList from "./favorite-list/favorite-list";
 
-class FavoriteRoute extends Component {
+export default class FavoriteRoute extends Component {
+    constructor(props){
+        super(props);
+    }
     render() {
         return (
             <PageTitle
@@ -12,17 +16,17 @@ class FavoriteRoute extends Component {
                 <AuthenLayout
                     showCategories={true}
                 >
-
+                    <Breadcrumb
+                        items={[{ name: "Sản phẩm yêu thích", _id: "tha123", onClick: () => null }]}
+                    >
                     <div className="container content-container">
-                        <Menu/>
+                        <FavoriteList/>
                     </div>
 
 
-
+                    </Breadcrumb>
                 </AuthenLayout>
             </PageTitle>
         );
     }
 }
-
-export default FavoriteRoute;

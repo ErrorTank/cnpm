@@ -11,4 +11,5 @@ type Mutation{
     mutateCart(cart: [CartInput], uID: ID): User
     removeFromCart(userID: ID!, option: ID!): User
     replyComment(productID: String!, commentID: String!, data: SubCommentInput!): SubComment
+    updateUserInfo(change: UpdateUserInput, userID: ID): User
 }

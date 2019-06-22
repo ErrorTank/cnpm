@@ -45,6 +45,15 @@ const mutateCart = gql`
   }
 `;
 
+const updateUserInfo = gql`
+    mutation ($userID: ID, $mutation: UserUpdateInput){
+        mutateCart(userID: $userID, change: $mutation){
+            ...UserInfo
+        }
+    }
+    ${UserInfoFragment}
+`;
+
 const addToCart = gql`
     mutation ($uID: ID!, $pID: ID!, $qty: Int!, $option: ID!){
         addToCart(userID: $uID, productID: $pID, qty: $qty, option: $option){
@@ -274,5 +283,6 @@ export {
   getCartItemByIdList,
   getCacheProvidersInfo,
   removeFromCart,
-  mutateCart
+  mutateCart,
+  updateUserInfo
 }

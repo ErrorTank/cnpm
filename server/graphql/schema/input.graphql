@@ -12,6 +12,15 @@ input MainFilterInput{
     sort: ProductSortEnum
 }
 
+input UpdateUserInput{
+    fullname: String
+    email: String
+    phone: String
+    gender: Boolean
+    dob: String
+    picture: String
+}
+
 input SocialInput{
     id: String!
     type: SocialType!

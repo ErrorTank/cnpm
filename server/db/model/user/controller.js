@@ -588,6 +588,10 @@ const getCacheProvidersInfo = () => {
   ]);
 };
 
+const updateUserInfo = ({change, userID}) => {
+  return User.findOneAndUpdate({_id: mongoose.Types.ObjectId(userID)}, {...change}, {new: true, fields: "-password"}).lean()
+};
+
 module.exports = {
   register,
   getClientUserCache,
@@ -607,5 +611,6 @@ module.exports = {
   getCartItemByIdList,
   getCacheProvidersInfo,
   removeFromCart,
+  updateUserInfo,
   mutateCart
 };

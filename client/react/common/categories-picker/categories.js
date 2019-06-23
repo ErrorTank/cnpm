@@ -105,16 +105,16 @@ export const categories = [
         ]
       }, {
         label: "Máy giặt",
-        onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),
+        onClick: () => customHistory.push("/products?type=category&category=5cc1861d1d4db822d4b0bdf5"),
 
         subCategories: [
           {
             label: "Máy giặt inventer",
-            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),
+            onClick: () => customHistory.push("/products?type=category&category=5cc186d21d4db822d4b0bdf9"),
 
           }, {
             label: "Máy giặt bán chạy",
-            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),
+            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"), // considering
 
           }
         ]
@@ -310,27 +310,27 @@ export const categories = [
         subCategories: [
           {
             label: "Macbook",
-            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),         //don't have anything yet
+            onClick: () => customHistory.push("/products?type=category&category=5ce2716e9ecbfd1934c1156a"),         //don't have anything yet
 
           }, {
             label: "Dell",
-            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),         //don't have anything yet
+            onClick: () => customHistory.push("/products?type=category&category=5d0f8439fe9e9b1c58bc7d6b"),         //don't have anything yet
 
           }, {
             label: "Asus",
-            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),         //don't have anything yet
+            onClick: () => customHistory.push("/products?type=category&category=5d0f8454fe9e9b1c58bc7d6c"),         //don't have anything yet
 
           }, {
             label: "Acer",
-            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),         //don't have anything yet
+            onClick: () => customHistory.push("/products?type=category&category=5d0f8472fe9e9b1c58bc7d6d"),         //don't have anything yet
 
           }, {
             label: "HP",
-            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),         //don't have anything yet
+            onClick: () => customHistory.push("/products?type=category&category=5d0f848bfe9e9b1c58bc7d6e"),         //don't have anything yet
 
           }, {
             label: "Lenovo",
-            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),         //don't have anything yet
+            onClick: () => customHistory.push("/products?type=category&category=5d0f84a6fe9e9b1c58bc7d6f"),         //don't have anything yet
 
           }, {
             label: "MSI",
@@ -345,31 +345,31 @@ export const categories = [
         subCategories: [
           {
             label: "Bo mạch chủ",
-            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),        //
+            onClick: () => customHistory.push("/products?type=category&category=5d089f7a01f2d81f505dcaef"),        //
 
           }, {
             label: "Vi xử lý",
-            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),       //
+            onClick: () => customHistory.push("/products?type=category&category=5d0f8530fe9e9b1c58bc7d70"),       //
 
           }, {
             label: "Tản nhiệt",
-            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),       //
+            onClick: () => customHistory.push("/products?type=category&category=5d0f8543fe9e9b1c58bc7d71"),       //
 
           }, {
             label: "RAM",
-            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),       //
+            onClick: () => customHistory.push("/products?type=category&category=5d0f8562fe9e9b1c58bc7d72"),       //
 
           }, {
             label: "Nguồn máy tính",
-            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),       //
+            onClick: () => customHistory.push("/products?type=category&category=5d0f857afe9e9b1c58bc7d73"),       //
 
           }, {
             label: "Ổ cứng",
-            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),       //
+            onClick: () => customHistory.push("/products?type=category&category=5d0f8593fe9e9b1c58bc7d74"),       //
 
           }, {
             label: "Card đồ họa",
-            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),       //
+            onClick: () => customHistory.push("/products?type=category&category=5d08a34d01f2d81f505dcaf1"),       //
 
           }
         ]
@@ -382,7 +382,7 @@ export const categories = [
     subCategories: [
       {
         label: "Thương hiệu",
-        onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),
+        onClick: () => customHistory.push("/products?type=category&category=5cd6388e747b60029c4cdc96"),
 
         subCategories: [
           {
@@ -391,11 +391,11 @@ export const categories = [
 
           }, {
             label: "Sony",
-            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),  //
+            onClick: () => customHistory.push("/products?type=category&category=5d0f85fbfe9e9b1c58bc7d75"),  //
 
           }, {
             label: "Nikon",
-            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),  //
+            onClick: () => customHistory.push("/products?type=category&category=5d0f8613fe9e9b1c58bc7d76"),  //
 
           }, {
             label: "GoPro",
@@ -410,11 +410,11 @@ export const categories = [
         subCategories: [
           {
             label: "Lens Sony",
-            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),   //
+            onClick: () => customHistory.push("/products?type=category&category=5d0f864dfe9e9b1c58bc7d77"),   //
 
           }, {
             label: "Lens Canon",
-            onClick: () => customHistory.push("/products?type=category&category=5cc188c61d4db822d4b0be0b"),   //
+            onClick: () => customHistory.push("/products?type=category&category=5d0f8677fe9e9b1c58bc7d78"),   //
 
           }
         ]

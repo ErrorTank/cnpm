@@ -251,16 +251,17 @@ class CheckoutCart extends KComponent {
   render() {
     let info = userInfo.getState();
     let { cartItemList, loading, vouchers} = this.state;
-    let totalPrice = 0, cartCount = 0, finalPrice = 0, voucherDiscount;
+    let totalPrice = 0, cartCount = 0, finalPrice = 0;
    // console.log(vouchers);
     cartItemList.forEach(item => {
       let { product, quantity } = item;
       let { provider } = product;
       let { options, discountWithCode } = provider[0];
+      let voucherDiscount;
       cartCount += quantity;
       if (vouchers.length !== 0){
         voucherDiscount = vouchers.find(e => e.code === discountWithCode.code);
-        console.log(voucherDiscount)
+        // console.log('asd', voucherDiscount)
         totalPrice += ((options[0].price / 100) * (100 - product.regularDiscount)) * quantity;
         finalPrice += ((options[0].price / 100) * (100 - product.regularDiscount - voucherDiscount.value)) * quantity;
       }

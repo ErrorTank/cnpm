@@ -7,6 +7,7 @@
   color tikiblack
   padding 0
   .checkout-info-box{
+    margin-bottom 15px
     .product-section{
       margin-bottom 15px
     }
@@ -128,7 +129,18 @@
       }
       .right-panel{
         width 390px
-
+        .address-info{
+          color tikiblack
+          .name{
+            font-size 15px
+            font-weight bold
+            margin 12px 0
+          }
+          .line{
+            white-space pre-wrap
+            font-size 13px
+          }
+        }
 
       }
       .step-address{
@@ -252,6 +264,25 @@
               font-size 13px !important
             }
 
+          }
+        }
+      }
+      .step-checkout{
+        .shipment-select{
+          font-size 15px !important
+          & > label{
+
+            font-weight bold !important
+            margin-bottom 15px !important
+          }
+          .radio-wrap{
+            span{
+              border-color tikiblue !important
+              &::after{
+                background-color tikiblue !important
+                border-color tikiblue !important
+              }
+            }
           }
         }
       }

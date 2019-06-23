@@ -214,7 +214,8 @@ class CheckoutCart extends KComponent {
 
   handleSendBill = () => {
     this.setState({checkout: true});
-    userCheckoutItemInfo.setState({vouchers: this.state.vouchers, items: this.state.cartItemList}).then(() => {
+    let oldState = userCheckoutItemInfo.getState();
+    userCheckoutItemInfo.setState({vouchers: this.state.vouchers, items: this.state.cartItemList, quickShip: oldState !== null ? oldState : true}).then(() => {
       customHistory.push("/checkout");
     });
   };

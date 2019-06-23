@@ -44,14 +44,24 @@ class FavoriteList extends KComponent{
 
   }
 
+  handleRating = (e) => {
+      console.log("sd",e);
+      let ratingStar = document.getElementsByClassName("fa fa-star");
+      for (let i = 0; i < e; i++) {
+          ratingStar[i].classList.add('checked');
+          console.log('22')
+      }
+  }
+
+
   render(){
       let rawCart = userFavorites.getState();
       let { favoriteItemList } = this.state;
       return(
           <div className="wrap">
-            <div className="list-count">
+            <h1 className="list-count">
                 Danh sách yêu thích ({rawCart.length})
-            </div>
+            </h1>
             <div className="account-wishlist">
                 {
                     favoriteItemList.map(each => {
@@ -59,24 +69,25 @@ class FavoriteList extends KComponent{
                         let {regularDiscount, name, provider } = info;
                         let {options} = provider[0];
                         let discountedPrice = (options[0].price / 100) * (100 - regularDiscount);
+                        this.handleRating(meanstar);
                         return (
-                            <div className="wishlist-item">
-                                <div className="item-col-1">
+                            <div className="row wishlist-item" key={info._id}>
+                                <div className="item-col-1 col-2">
                                     <div className="wishlist-icon">
                                         <img src={options[0].picture} alt="wishlist-logo"/>
                                     </div>
                                 </div>
-                                <div className="item-col-2">
-                                    <p className="title">{name}</p>
+                                <div className="item-col-2 col-7">
+                                    <p className="title"><span onClick={() => customHistory.push("/product/" + product._id)}>{name}</span></p>
                                     <p className="rating">
-                                        <span className="fa fa-star checked"></span>
-                                        <span className="fa fa-star checked"></span>
-                                        <span className="fa fa-star checked"></span>
+                                        <span className="fa fa-star"></span>
+                                        <span className="fa fa-star"></span>
+                                        <span className="fa fa-star"></span>
                                         <span className="fa fa-star"></span>
                                         <span className="fa fa-star"></span>
                                     </p>
                                 </div>
-                                <div className="item-col-3">
+                                <div className="item-col-3 col-3">
                                     <div className="price-1">{formatMoney(discountedPrice)}₫</div>
                                     <div className="price-2">
                                         <span className="full-price">{formatMoney(options[0].price)}₫</span>

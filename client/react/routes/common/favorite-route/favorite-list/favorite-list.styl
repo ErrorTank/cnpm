@@ -1,10 +1,61 @@
 .wrap{
+  font-style: normal;
+  font-stretch: normal;
+  color: #242424;
+  font-family: Roboto;
+  .list-count{
     margin: 20px 0px 15px;
-    font-family: Roboto;
     font-size: 19px;
     font-weight: 300;
-    font-style: normal;
-    font-stretch: normal;
-    color: #242424;
-    
+  }
+
+  .account-wishlist{
+    display: inline-block;
+    width: 100%;
+    .wishlist-item{
+      background-color: white;
+      padding: 20px 10px;
+      margin-bottom: 1px !important;
+      border-radius: 5px;
+      .item-col-1{
+        .wishlist-icon{
+          width: 150px;
+          height: 130px;
+          overflow hidden;
+          position: relative;
+          img {
+            height: 100%;
+            max-width: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+        }
+      }
+      .item-col-2{
+        .title {
+          margin-bottom: 7px;
+          line-height: 20px;
+          padding-top: 0;
+
+          span {
+            color: #242424;
+            font-weight: 400;
+          }
+
+          span:hover {
+            color: #007ff0;
+            text-decoration: none;
+            cursor: pointer;
+          }
+        }
+        .rating {
+          .checked{
+            color: orange;
+          }
+        }
+      }
+    }
+  }
 }

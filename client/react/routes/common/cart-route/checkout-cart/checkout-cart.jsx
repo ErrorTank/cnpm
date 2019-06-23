@@ -84,8 +84,6 @@ class CheckoutCart extends KComponent {
     return new Promise((resolve, reject) => {
       let info = userInfo.getState();
       let rawCart = info ? userCart.getState() : createUserCartCacheFunction("get")({ async: false });
-      let calculatePrice = 0;
-      let cartCounting = 0;
       console.log(info)
       console.log(rawCart);
       client.query({
@@ -290,7 +288,6 @@ class CheckoutCart extends KComponent {
                     let { provider } = product;
                     let { options, owner } = provider[0];
                     let discountedPrice = (options[0].price / 100) * (100 - product.regularDiscount);
-
                     return (
                       <div className="row shopping-cart-item" key={options[0]._id}>
                         <div className="col-3 img-item-thumnail">

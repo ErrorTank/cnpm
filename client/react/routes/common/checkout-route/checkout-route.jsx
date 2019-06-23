@@ -8,6 +8,7 @@ import {LineMultiSteps} from "../../../common/line-multi-steps/line-multi-steps"
 import {userActionModal} from "../../../common/modal/user-actions/user-actions";
 import {ResetComponent} from "../with-reset/with-reset";
 import {formatMoney} from "../../../../common/products-utils";
+import {StepAddress} from "./step-address";
 
 export class CheckoutRoute extends KComponent {
   constructor(props) {
@@ -60,12 +61,7 @@ export class CheckoutRoute extends KComponent {
           <WithCartListAndAddress
             title={stepIndex + 1 + ". Địa chỉ giao hàng"}
             render={() => (
-              <div className="step-address">
-                <p className="suggest">Chọn địa chỉ giao hàng có sẵn bên dưới:</p>
-                <div className="dash-box">
-
-                </div>
-              </div>
+              <StepAddress/>
             )}
           />
         )

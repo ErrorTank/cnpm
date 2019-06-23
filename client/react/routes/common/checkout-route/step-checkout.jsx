@@ -39,6 +39,9 @@ export class StepCheckout extends React.Component {
 
 
         />
+        <div className="actions">
+          <button className="btn btn-confirm">Đặt hàng</button>
+        </div>
       </div>
     );
   }

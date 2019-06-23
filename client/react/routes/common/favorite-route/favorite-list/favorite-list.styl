@@ -50,10 +50,85 @@
             cursor: pointer;
           }
         }
-        .rating {
-          .checked{
-            color: orange;
+        .stars-outer {
+          display: inline-block;
+          position: relative;
+          font-family: 'Font Awesome\ 5 Free';
+          font-size 17px
+          cursor pointer
+          font-weight 900
+
+          &.editable{
+            cursor pointer
           }
+          & > span::before {
+            content: "\f005";
+            color #b8b8b8
+          }
+          .stars-inner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            white-space: nowrap;
+            pointer-events none
+            overflow: hidden;
+            width: 0;
+
+            & > span::before {
+              content: "\f005";
+              color: #f8ce0b;
+
+            }
+          }
+
+        }
+      }
+
+      .item-col-3 {
+        width: 150px;
+        text-align: right;
+
+        .price-1 {
+          font-size: 20px !important;
+          margin-bottom: 5px;
+          padding-top: 0;
+          color: #333;
+          font-size: 16px;
+          font-weight: 700;
+          margin-right: 45px;
+        }
+
+        .price-2 {
+          margin-bottom: 8px;
+          line-height: 20px;
+          display: inline-block;
+          margin-right: 45px;
+          .full-price {
+            font-size: 12px;
+            color: #a2a2a2;
+            text-decoration: line-through;
+            float: left;
+            margin: 0px;
+            padding-top: 2px;
+          }
+
+          .sale {
+            border-radius: 2px;
+            margin: 0;
+            text-transform: uppercase;
+            background: 0 0;
+            color: #242424;
+            font-weight: 700;
+            font-size: 12px;
+            margin-left: 5px;
+            padding-bottom: 10px;
+            display: inline;
+          }
+        }
+
+        .close{
+          font-size: 25px;
+          top: 0px;
         }
       }
     }

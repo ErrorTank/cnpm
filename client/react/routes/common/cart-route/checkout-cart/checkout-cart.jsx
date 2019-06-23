@@ -251,7 +251,10 @@ class CheckoutCart extends KComponent {
   render() {
     let info = userInfo.getState();
     let { cartItemList, loading, vouchers} = this.state;
+    let vDiscount = cartItemList.filter(each => each.product.provider[0].discountWithCode).map(each => each.product.provider[0].discountWithCode.code);
+    console.log(vDiscount);
     let totalPrice = 0, cartCount = 0, finalPrice = 0;
+
     cartItemList.forEach(item => {
       let { product, quantity } = item;
       let { provider } = product;
@@ -264,7 +267,7 @@ class CheckoutCart extends KComponent {
       else{
         let discountedPrice = (options[0].price / 100) * (100 - product.regularDiscount);
         totalPrice += (discountedPrice * quantity);
-        finalPrice = totalPrice;
+        finalPrice += (discountedPrice * quantity);
       }
 
       return item;

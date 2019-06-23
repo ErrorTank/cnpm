@@ -253,25 +253,12 @@ class CheckoutCart extends KComponent {
     let { cartItemList, loading, vouchers} = this.state;
     let vDiscount = cartItemList.filter(each => each.product.provider[0].discountWithCode).map(each => each.product.provider[0].discountWithCode.code);
     console.log(vDiscount);
-    let totalPrice = 0, cartCount = 0, finalPrice = 0;
-
-    cartItemList.forEach(item => {
-      let { product, quantity } = item;
-      let { provider } = product;
-      let { options, discountWithCode } = provider[0];
-      cartCount += quantity;
-      if (discountWithCode && vouchers.find(e => e.code === discountWithCode.code)){
-        totalPrice += ((options[0].price / 100) * (100 - product.regularDiscount)) * quantity;
-        finalPrice += ((options[0].price / 100) * (100 - product.regularDiscount - discountWithCode.value)) * quantity;
-      }
-      else{
-        let discountedPrice = (options[0].price / 100) * (100 - product.regularDiscount);
-        totalPrice += (discountedPrice * quantity);
-        finalPrice += (discountedPrice * quantity);
-      }
-
-      return item;
-      });
+    let totalPrice, cartCount, finalPrice;
+    totalPrice = cartItemList.reduce((total, cur) => total + (cur.product.provider[0].options[0].price * cur.quantity * (cur.product.regularDiscount ? (1 - cur.product.regularDiscount / 100) : 1)), 0);
+    let allDiscount = cartItemList.reduce((total, cur) => total + ((cur.product.provider[0].discountWithCode && vouchers.find(each => each._id === cur.product.provider[0].discountWithCode._id)) ? (cur.product.provider[0].discountWithCode.value / 100) * (cur.product.provider[0].options[0].price * cur.quantity * (cur.product.regularDiscount ? (1 - cur.product.regularDiscount / 100) : 1)) : 0), 0);
+    finalPrice = totalPrice - allDiscount;
+    cartCount = cartItemList.reduce((total, cur) => total + cur.quantity,0);
+    //console.log('asdasd',totalPrice, finalPrice, cartCount);
     //let rawCart = info ? userCart.getState() : createUserCartCacheFunction("get")({ async: false });
 
     let isDisabled = this.state.errors.find(each => each.type !== "voucherError");

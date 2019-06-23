@@ -153,5 +153,8 @@ type Query {
     getCacheProvidersInfo: [PlainProviderInfo]
     getProducts(mainFilter: MainFilterInput , productFilter: ProductFilterInput, categoryID: ID, skip: Int, take: Int, rating: Int, brand: ID, provider: ID, priceRange: String): ProductsListInfo
     getFavItemsByIdList(list: [ID]): [BasicProduct]
+    fetchCities: [City]
+    fetchWards(parent: String): [Ward]
+    fetchDistricts(parent: String): [District]
 }
 

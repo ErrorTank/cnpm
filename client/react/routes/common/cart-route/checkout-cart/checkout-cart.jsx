@@ -29,6 +29,7 @@ class CheckoutCart extends KComponent {
       cartCount: 0,
       errors: [],
       vouchers: [],
+      fetchingStatus: true
 
     }
 
@@ -107,14 +108,20 @@ class CheckoutCart extends KComponent {
           return e;
         });
         console.log(cartWithQuantity);
-        this.setState({
-          cartItemList: cartWithQuantity,
-          loading: false,
-          vouchers: userCheckoutItemInfo.getState() ? userCheckoutItemInfo.getState().vouchers : []
-        }, () => {
-          this.updateError();
-          resolve();
-        });
+        this.setState(
+          {
+            cartItemList: cartWithQuantity,
+            fetchingStatus: false,
+            loading: false,
+            vouchers: userCheckoutItemInfo.getState()
+              ? userCheckoutItemInfo.getState().vouchers
+              : []
+          },
+          () => {
+            this.updateError();
+            resolve();
+          }
+        );
       }).catch(err => {
         // console.log(err);
         reject();
@@ -214,7 +221,8 @@ class CheckoutCart extends KComponent {
 
   handleSendBill = () => {
     this.setState({checkout: true});
-    userCheckoutItemInfo.setState({vouchers: this.state.vouchers, items: this.state.cartItemList}).then(() => {
+    let oldState = userCheckoutItemInfo.getState();
+    userCheckoutItemInfo.setState({vouchers: this.state.vouchers, items: this.state.cartItemList, quickShip: oldState !== null ? oldState : true}).then(() => {
       customHistory.push("/checkout");
     });
   };
@@ -395,7 +403,7 @@ class CheckoutCart extends KComponent {
       <ResetComponent
         render={() => (
           <div>
-            {checkOut}
+            {this.state.fetchingStatus ? (<LoadingInline></LoadingInline>) : checkOut}
           </div>
         )}
       />

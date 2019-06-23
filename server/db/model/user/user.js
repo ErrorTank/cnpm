@@ -54,16 +54,21 @@ const userSchema = new Schema({
   picture: String,
   address: {
     city: {
-      type: "String",
-      ref: "City"
+      name: String,
+      name_with_type: String,
+      code: String
     },
     district: {
-      type: "String",
-      ref: "District"
+      name: String,
+      name_with_type: String,
+      code: String,
+      parent_code: String
     },
     ward: {
-      type: "String",
-      ref: "Ward"
+      name: String,
+      name_with_type: String,
+      code: String,
+      parent_code: String
     },
     description: String
   },

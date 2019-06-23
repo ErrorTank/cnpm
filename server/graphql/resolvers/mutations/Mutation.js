@@ -13,7 +13,8 @@ const Mutation = {
 
   },
   updateUserInfo: async (parent, data, {request}, info) => {
-    return updateUserInfo(data).then(msg => msg).catch(err => throw err);
+
+    return updateUserInfo({data: data.change, userID: data.userID}).then(msg => msg).catch(err => throw err);
 
 
   },

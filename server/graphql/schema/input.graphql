@@ -12,6 +12,36 @@ input MainFilterInput{
     sort: ProductSortEnum
 }
 
+input CityInput{
+    name: String
+    name_with_type: String
+    type: String
+    code: String
+}
+input WardInput{
+    name: String
+    name_with_type: String
+    type: String
+    code: String
+    parent_code: String
+}
+input DistrictInput{
+    name: String
+    name_with_type: String
+    type: String
+    code: String
+    parent_code: String
+}
+
+
+
+input AddressInput{
+    city: CityInput
+    ward: WardInput
+    district: DistrictInput
+    description: String
+}
+
 input UpdateUserInput{
     fullname: String
     email: String
@@ -19,6 +49,7 @@ input UpdateUserInput{
     gender: Boolean
     dob: String
     picture: String
+    address: AddressInput
 }
 
 input SocialInput{

@@ -11,7 +11,7 @@ export default class FavoriteRoute extends Component {
     render() {
         return (
             <PageTitle
-                title={"Giỏ Hàng"}
+                title={"Sản phẩm ưu thích"}
             >
                 <AuthenLayout
                     showCategories={true}

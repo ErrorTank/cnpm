@@ -699,6 +699,7 @@ const getCacheProvidersInfo = () => {
 
 const updateUserInfo = ({data,file, userID}) => {
   let saveData = !file ? omit(data, ["picture"]) : {...data, picture: process.env.APP_URI + "/uploads/img/" + file.filename};
+  console.log(saveData)
   return User.findOneAndUpdate({_id: mongoose.Types.ObjectId(userID)}, {...saveData}, {new: true, fields: "-password"}).lean()
 };
 

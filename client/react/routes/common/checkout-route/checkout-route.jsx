@@ -61,7 +61,9 @@ export class CheckoutRoute extends KComponent {
           <WithCartListAndAddress
             title={stepIndex + 1 + ". Địa chỉ giao hàng"}
             render={() => (
-              <StepAddress/>
+              <StepAddress
+                onFinish={() => navigate(2)}
+              />
             )}
           />
         )

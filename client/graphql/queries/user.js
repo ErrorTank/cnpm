@@ -46,8 +46,8 @@ const mutateCart = gql`
 `;
 
 const updateUserInfo = gql`
-    mutation ($userID: ID, $mutation: UserUpdateInput){
-        mutateCart(userID: $userID, change: $mutation){
+    mutation ($userID: ID, $mutation: UpdateUserInput){
+        updateUserInfo(userID: $userID, change: $mutation){
             ...UserInfo
         }
     }
@@ -332,6 +332,6 @@ export {
   getCacheProvidersInfo,
   removeFromCart,
   mutateCart,
-  getFavItemsByIdList
-  // updateUserInfo
+  getFavItemsByIdList,
+  updateUserInfo
 }

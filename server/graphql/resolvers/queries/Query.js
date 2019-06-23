@@ -3,6 +3,7 @@ const {checkConfirmToken, getClientUserCache, getSocialUserInfo, regularLogin, c
 const {getIndexDealProducts, getProduct, getBasicProduct, getProductComments, getProducts, findByKeyword} = require("../../../db/model/product/controller");
 const {getCacheCategoriesInfo, getCategories} = require("../../../db/model/category/controller");
 const {getCacheBrandsInfo} = require("../../../db/model/brand/controller");
+const {fetchDistricts, fetchWards, fetchCities} = require("../../../db/model/location/controller");
 
 const Query = {
     getAuthenUser: (parent, args, {request}, info) => {
@@ -25,6 +26,17 @@ const Query = {
     },
     getProductComments: async (parent, args, {request}, info) => {
       return getProductComments(args).then(data => data).catch(err => throw err);
+    },
+    fetchDistricts: async (parent, args, {request}, info) => {
+      return fetchDistricts(args).then(data => data).catch(err => throw err);
+    },
+    fetchWards: async (parent, args, {request}, info) => {
+      return fetchWards(args).then(data => data).catch(err => throw err);
+    },
+    fetchCities: async (parent, args, {request}, info) => {
+      return fetchCities(args).then(data => {
+        return data;
+      }).catch(err => throw err);
     },
     getCartItemByIdList: async (parent, args, {request}, info) => {
       return getCartItemByIdList(args.list).then(data => data).catch(err => throw err);

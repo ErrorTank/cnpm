@@ -28,6 +28,34 @@ type CartItem{
     option: ID
 }
 
+type City{
+    name: String
+    name_with_type: String
+    type: String
+    code: String
+}
+type Ward{
+    name: String
+    name_with_type: String
+    type: String
+    code: String
+    parent_code: String
+}
+type District{
+    name: String
+    name_with_type: String
+    type: String
+    code: String
+    parent_code: String
+}
+
+type Address{
+    city: City
+    ward: Ward
+    district: District
+    description: String
+}
+
 type User implements Node{
     _id: ID!
     fullname: String!
@@ -43,6 +71,7 @@ type User implements Node{
     isVerify: Boolean!
     picture: String
     social: Social
+    address: Address
     provider: Provider
     recentVisit: [recentVisitedOuput]!
     favorites: [ID]!

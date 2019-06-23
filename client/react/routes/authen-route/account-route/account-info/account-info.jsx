@@ -14,6 +14,7 @@ import { RadioGroup } from "../../../../common/radio-group/radio-group";
 import { UploadBtn } from "../../../../common/upload-btn/upload-btn";
 import { UploadImagesDisplay } from "../../../../common/upload-btn/upload-images-display/upload-images-display";
 import { userApi } from "../../../../../api/common/user-api";
+import { Avatar } from "../../../../common/avatar/avatar";
 
 export default class AccountInfo extends KComponent {
   constructor(props) {
@@ -28,7 +29,7 @@ export default class AccountInfo extends KComponent {
     let initData = omit(info, ["role", "subscribe", "isVerify"]);
     let initialDoB = new Date(+info.dob);
     // initialDoB.setHours(initialDoB.getHours() + 7);
-    console.log(initialDoB);
+    // console.log(info);
     let dob = {
       day: initialDoB.getDate(),
       month: initialDoB.getMonth() + 1,
@@ -57,12 +58,26 @@ export default class AccountInfo extends KComponent {
     this.setState({ loading: true });
     let strDob = new Date(dob.year, dob.month - 1, dob.day).toISOString();
     let sendData = { ...data, dob: strDob };
-    sendData.picture = sendData.picture[0] ? sendData.picture[0] : null;
-    console.log(sendData);
+    sendData.picture = sendData.picture[0] ? sendData.picture[0].file : null;
+    const info = userInfo.getState();
+    console.log("state", userInfo.getState());
     userApi
       .updateUserInfo({ userID: sendData._id, change: sendData })
       .then(user => {
-        console.log(data);
+        console.log(user);
+        userInfo.setState({
+          _id: info._id,
+          dob: sendData.dob ? new Date(sendData.dob).getTime() : info.dob,
+          email: sendData.email ? sendData.email : info.email,
+          fullname: sendData.fullname ? sendData.fullname : info.fullname,
+          gender: sendData.gender ? sendData.gender : info.gender,
+          isVerify: info.isVerify,
+          phone: sendData.phone ? sendData.phone : info.phone,
+          picture: user.user.picture,
+          role: info.role,
+          subscribe: info.subscribe
+        });
+        console.log(userInfo.getState());
         customHistory.push("/");
       })
       .catch(err => {
@@ -181,6 +196,11 @@ export default class AccountInfo extends KComponent {
             ({ error, onChange, value, ...others }) => (
               <Fragment>
                 <label className="form-control-label">Avatar: </label>
+                {(value === info.picture || !value) && (
+                  <div className="avatar">
+                    <Avatar url={info.picture} name={info.fullname} />
+                  </div>
+                )}
                 {value != info.picture && (
                   <UploadImagesDisplay
                     images={value}

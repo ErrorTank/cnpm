@@ -52,7 +52,21 @@ const userSchema = new Schema({
   dob: {type: Date},
   gender: {type: Boolean, default: false},
   picture: String,
-  address: String,
+  address: {
+    city: {
+      type: "String",
+      ref: "City"
+    },
+    district: {
+      type: "String",
+      ref: "District"
+    },
+    ward: {
+      type: "String",
+      ref: "Ward"
+    },
+    description: String
+  },
   subscribe: {type: Boolean, default: false},
   updatedAt: {type: Date},
   createdAt: {type: Date, default: Date.now},

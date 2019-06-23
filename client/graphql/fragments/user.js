@@ -8,6 +8,30 @@ const UserInfoFragment = gql`
         email
         gender
         dob
+        address{
+            city{
+                name
+                name_with_type
+                type
+                code
+            }
+            district{
+                name
+                name_with_type
+                type
+                code
+                parent_code
+            }
+            description
+            ward{
+                name
+                name_with_type
+                type
+                code
+                parent_code
+            }
+            
+        }
         role
         isVerify
         picture

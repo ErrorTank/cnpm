@@ -58,9 +58,13 @@ export class CheckoutRoute extends KComponent {
       render: ({step, stepIndex, navigate}) => {
         return (
           <WithCartListAndAddress
+            title={stepIndex + 1 + ". Địa chỉ giao hàng"}
             render={() => (
               <div className="step-address">
+                <p className="suggest">Chọn địa chỉ giao hàng có sẵn bên dưới:</p>
+                <div className="dash-box">
 
+                </div>
               </div>
             )}
           />

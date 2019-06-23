@@ -260,6 +260,7 @@ class CheckoutCart extends KComponent {
       cartCount += quantity;
       if (vouchers.length !== 0){
         voucherDiscount = vouchers.find(e => e.code === discountWithCode.code);
+        console.log(voucherDiscount)
         totalPrice += ((options[0].price / 100) * (100 - product.regularDiscount)) * quantity;
         finalPrice += ((options[0].price / 100) * (100 - product.regularDiscount - voucherDiscount.value)) * quantity;
       }

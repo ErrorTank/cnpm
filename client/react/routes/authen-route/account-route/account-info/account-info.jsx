@@ -5,8 +5,7 @@ import { createSimpleForm } from "../../../../common/form-validator/form-validat
 import { userInfo } from "../../../../../common/states/common";
 import omit from "lodash/omit";
 
-import { client } from "../../../../../graphql";
-// import { updateUserInfo } from "../../../../../graphql/queries/user";
+import { customHistory } from "../../../../routes/routes";
 
 import { userUpdateSchema } from "./schema";
 import { InputBase } from "../../../../common/base-input/base-input";
@@ -14,6 +13,7 @@ import { BirthPicker } from "../../../../common/birth-picker/birth-picker";
 import { RadioGroup } from "../../../../common/radio-group/radio-group";
 import { UploadBtn } from "../../../../common/upload-btn/upload-btn";
 import { UploadImagesDisplay } from "../../../../common/upload-btn/upload-images-display/upload-images-display";
+import { userApi } from "../../../../../api/common/user-api";
 
 export default class AccountInfo extends KComponent {
   constructor(props) {
@@ -59,25 +59,19 @@ export default class AccountInfo extends KComponent {
     let sendData = { ...data, dob: strDob };
     sendData.picture = sendData.picture[0] ? sendData.picture[0] : null;
     console.log(sendData);
-    // return client
-    //   .mutate({
-    //     mutation: updateUserInfo,
-    //     variables: {
-    //       change: sendData,
-    //       uID: info._id
-    //     }
-    //   })
-    //   .then(data => {
-    //     this.setState({ loading: false });
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //     let errMsg = getErrorObject(err).message;
-    //     this.setState({ loading: false, serverError: errMsg });
-    //   });
+    userApi
+      .updateUserInfo({ userID: sendData._id, change: sendData })
+      .then(user => {
+        console.log(data);
+        customHistory.push("/");
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   render() {
+    const info = userInfo.getState();
     let isValidForm = this.form.getInvalidPaths().length === 0;
     return (
       <div className="account-info">
@@ -187,20 +181,22 @@ export default class AccountInfo extends KComponent {
             ({ error, onChange, value, ...others }) => (
               <Fragment>
                 <label className="form-control-label">Avatar: </label>
-                <UploadImagesDisplay
-                  images={value}
-                  onRemove={data => {
-                    this.setState({ uploadErr: null });
-                    onChange(data);
-                  }}
-                />
+                {value != info.picture && (
+                  <UploadImagesDisplay
+                    images={value}
+                    onRemove={data => {
+                      this.setState({ uploadErr: null });
+                      onChange(data);
+                    }}
+                  />
+                )}
                 <UploadBtn
                   onError={err => this.setState({ uploadErr: err })}
-                  limit={1}
+                  limit={5}
                   onChange={files => {
                     onChange(files);
                   }}
-                  value={value}
+                  value={[]}
                   renderBtn={({ onClick }) => (
                     <button className="btn upload-img" onClick={onClick}>
                       Chọn hình

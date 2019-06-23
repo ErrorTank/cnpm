@@ -12,7 +12,6 @@ export class UploadBtn extends React.Component {
     let { value: imagesPreview, onChange, onError, limit = 2 } = this.props;
     const files = [...e.target.files];
     e.target.value = "";
-
     if (files.length + imagesPreview.length > limit) {
       onError("Số lượng file không được vượt quá " + limit);
       return;
